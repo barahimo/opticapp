@@ -58,10 +58,10 @@
                         <td>{{$client->adresse}}</td>
                         <td>{{$client->telephone}}</td>
                         <td>
-                            <a href="{{ action('ClientController@show',['client'=> $client])}}" class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                            <a href="{{ action('ClientController@show',['client'=> $client])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                             @if( Auth::user()->is_admin )
-                            <a href="{{route('client.edit',['client'=> $client])}}"class="btn btn-outline-success btn-md"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-outline-danger btn-flat btn-md remove-client" 
+                            <a href="{{route('client.edit',['client'=> $client])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-outline-danger btn-sm remove-client" 
                                 data-id="{{ $client->id }}" 
                                 data-action="{{ route('client.destroy',$client->id) }}"> 
                                 <i class="fas fa-trash"></i>
@@ -102,10 +102,10 @@
                     var url_show = "{{action('ClientController@show',['client'=> ":id"])}}".replace(':id', client.id);
                     var url_edit = "{{route('client.edit',['client'=> ":id"])}}".replace(':id', client.id);
                     var url_destroy = "{{ route('client.destroy',":id") }}".replace(':id', client.id);
-                    var action = `<a href=${url_show} class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                    var action = `<a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                             @if(Auth::user()->is_admin)
-                            <a href=${url_edit} class="btn btn-outline-success btn-md"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-outline-danger btn-flat btn-md remove-client" 
+                            <a href=${url_edit} class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-outline-danger btn-sm remove-client" 
                                 data-id="${client.id}" 
                                 data-action=${url_destroy}> 
                                 <i class="fas fa-trash"></i>

@@ -4165,6 +4165,7 @@ table.text-center, table.text-center td, table.text-center th {
 	color: #444
 }
 .login-page, .register-page {
+	/* background: url(../img/body-bg.jpg) no-repeat center top; */
 	background: url(../img/body-bg.jpg) no-repeat center top;
 	background-size: cover;
 }

@@ -49,12 +49,16 @@
                         <tr>
                             <td>{{$key+1 }}</td>
                             <td>{{$categorie->nom_categorie}}</td>
-                            <td>{{$categorie->description}}</td>
                             <td>
-                                <a href="{{ action('CategorieController@show',['categorie'=> $categorie])}}" class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                                @if($categorie->description)
+                                {{substr($categorie->description,0,25)}}...
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ action('CategorieController@show',['categorie'=> $categorie])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                 @if( Auth::user()->is_admin )
-                                <a href="{{route('categorie.edit',['categorie'=> $categorie])}}"class="btn btn-outline-success btn-md"><i class="fas fa-edit"></i></a>
-                                <button class="btn btn-outline-danger btn-flat btn-md remove-categorie" 
+                                <a href="{{route('categorie.edit',['categorie'=> $categorie])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                <button class="btn btn-outline-danger btn-sm remove-categorie" 
                                 data-id="{{ $categorie->id }}" 
                                 data-action="{{ route('categorie.destroy',$categorie->id) }}"> 
                                 <i class="fas fa-trash"></i>
@@ -96,10 +100,10 @@
                     var url_edit = "{{route('categorie.edit',['categorie'=> ":id"])}}".replace(':id', categorie.id);
                     var url_destroy = "{{ route('categorie.destroy',":id") }}".replace(':id', categorie.id);
                     var url_show = "{{action('CategorieController@show',['categorie'=> ":id"])}}".replace(':id', categorie.id);
-                    var action = `<a href=${url_show} class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                    var action = `<a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                             @if(Auth::user()->is_admin)
-                            <a href=${url_edit} class="btn btn-outline-success btn-md"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-outline-danger btn-flat btn-md remove-categorie" 
+                            <a href=${url_edit} class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-outline-danger btn-sm remove-categorie" 
                                 data-id="${categorie.id}" 
                                 data-action=${url_destroy}> 
                                 <i class="fas fa-trash"></i>
@@ -107,7 +111,7 @@
                             @endif `;
                     var description = '';
                     if(categorie.description != null)
-                        description = categorie.description;
+                        description = categorie.description.substring(0,25)+'...';
                     lignes += `<tr>
                         <td>${i+1}</td>
                         <td>${categorie.nom_categorie}</td>
@@ -125,13 +129,14 @@
     $("body").on("click",".remove-categorie",function(){
         var current_object = $(this);
         Swal.fire({
-            title: 'Un categorie est sur le point de être DÉTRUITE ',
-            text: "vous voulez vraiment la supprimer !",
+            title: "Une catégorie est sur le point d'être détruite ",
+            text: "Est-ce que vous êtes d'accord ?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'oui, je suis sur!'
+            cancelButtonText: 'Annuler',
+            confirmButtonText: 'Oui, supprimez-le!'
         }).then((result) => {
             if (result.isConfirmed) {
                 // begin destroy

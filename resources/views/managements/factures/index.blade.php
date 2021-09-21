@@ -57,9 +57,9 @@
                             <td>{{$facture->total_TVA}}</td>
                             <td>{{$facture->total_TTC}}</td>
                             <td>
-                                <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                                <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                 @if( Auth::user()->is_admin )
-                                <button class="btn btn-outline-danger btn-flat btn-md remove-facture" 
+                                <button class="btn btn-outline-danger btn-sm remove-facture" 
                                     data-id="{{ $facture->id }}" 
                                     data-action="{{ route('facture.destroy',$facture->id) }}"> 
                                     <i class="fas fa-trash"></i>
@@ -100,9 +100,9 @@
                     var url_show = "{{ action('FactureController@show',['facture'=> ":id"])}}".replace(':id', facture.id);
                     var url_destroy = "{{ route('facture.destroy',":id")}}".replace(':id', facture.id);
                     var action = `
-                        <a href=${url_show} class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                        <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                         @if( Auth::user()->is_admin )
-                        <button class="btn btn-outline-danger btn-flat btn-md remove-facture" 
+                        <button class="btn btn-outline-danger btn-sm remove-facture" 
                         data-id="${facture.id}"
                         data-action=${url_destroy} > 
                         <i class="fas fa-trash"></i>

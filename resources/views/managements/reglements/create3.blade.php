@@ -1,6 +1,16 @@
 @extends('layout.dashboard')
 @section('contenu')
-<!-- ##################################################################### -->
+{{-- ################## --}}
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+  <h1>Créer un règlement</h1>
+  <ol class="breadcrumb">
+      <li><a href="{{route('app.home')}}">Home</a></li>
+      <li><i class="fa fa-angle-right"></i> Règlement</li>
+  </ol>
+</div>
+{{-- ################## --}}
+<br>
 <div class="container">
   <div class="row">
     <div class="col-6">
@@ -16,11 +26,10 @@
     </div>
   </div>
   <br>
-  <br>
   <!-- Begin Reglement  -->
   <div class="card text-left">
     <div class="card-body">
-      <h4 class="card-title">Règlement :</h4>
+      <h5 class="card-title">Règlement :</h5>
       <div class="card-text">
         <div class="form-row">
           <div class="col-3">
@@ -38,11 +47,11 @@
           </div>
           <div class="col-3">
             <label for="nom">Avance :</label>
-            <input type="number" id="avance" name="avance" min="0" class="form-control" placeholder="0.00" value="0.00">
+            <input type="number" id="avance" name="avance" min="0" step="0.01" class="form-control" placeholder="0.00" value="0.00">
           </div>
           <div class="col-3">
             <label for="reste">Reste :</label>
-            <input type="number" id="reste" name="reste" class="form-control" placeholder="reste" min="0" value="0.00" disabled>
+            <input type="number" id="reste" name="reste" class="form-control" placeholder="reste" min="0" step="0.01" value="0.00" disabled>
 
           </div>
           <div class="col-3">
@@ -56,7 +65,7 @@
   <!-- End Reglement  -->
   <!-- Begin TABLE -->
   <br>
-  <div class="card" style="background-color: rgba(241, 241, 241, 0.842)">
+  <div class="card">
     <div class="card-body">
       <table class="table" id="table">
         <thead>
@@ -79,13 +88,13 @@
               <td>{{$commande->code}}</td>
               <td>{{$commande->date}}</td>
               {{-- <td id="client">{{$commande->client->nom_client}}</td> --}}
-              <td id="total">{{$commande->total}}</td>
-              <td id="avance1">{{$commande->avance}}</td>
-              <td id="reste1">{{$commande->reste}}</td>
+              <td id="total">{{number_format($commande->total, 2, '.', '')}}</td>
+              <td id="avance1">{{number_format($commande->avance, 2, '.', '')}}</td>
+              <td id="reste1">{{number_format($commande->reste, 2, '.', '')}}</td>
               <td id="avance2">
-                <input type="number" min="0" style="width: 50%" value="0.00" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
+                <input type="number" min="0" style="width: 50%" value="0.00" step="0.01" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
               </td>
-              <td id="reste2">{{$commande->reste}}</td>
+              <td id="reste2">{{number_format($commande->reste, 2, '.', '')}}</td>
               <td id="status2">NR</td>
           </tr>
         </tbody>
@@ -95,7 +104,11 @@
     </div>
   </div>
   <!-- End TABLE -->
-  <button class="btn btn-secondary" id="valider">Effectuer le règlement</button>
+  <br>
+  <div class="text-right">
+    <button class="btn btn-secondary" id="valider">Effectuer le règlement</button>
+  </div>
+  <br>
 </div>
 <!-- ---------  BEGIN SCRIPT --------- -->
 <script type="text/javascript">
@@ -133,11 +146,24 @@
       // --------------
       getTfoot();
     });
+    $(document).on('click','#avance',function(){
+      var navance = parseFloat(avance.val());
+      if(navance > sommeReste())
+        avance.val(sommeReste());
+      if(avance.val()=="")
+        avance.val(0);
+      // --------------
+      calculs();
+      calculsLignes();
+      // --------------
+      getTfoot();
+    });
     // -----------End keyup Avance--------------//
     // -----------Begin valider--------------//
     $(document).on('click','#valider',function(e){
-      // var _token=$('input[name=_token]'); //Envoi des information via method POST
-      var _token = $('meta[name="csrf-token"]').attr('content');
+      //---> Envoi des information via method POST
+      var _token=$('input[name=_token]'); 
+      // var _token = $('meta[name="csrf-token"]').attr('content');
       // ***** BEGIN variables lignes ******** //
       var list = tbody.find('tr');
       var i = 0;
@@ -169,8 +195,8 @@
         type:'post',
         url:'{!!URL::to('storeReglements3')!!}',
         data:{
-          // _token : _token.val(),
-          _token : _token,
+          _token : _token.val(),
+          // _token : _token,
           date : date.val(),
           mode:mode.val(),
           lignes : array,
@@ -290,7 +316,8 @@
       // av.html(pay);
       av.find('input').val(pay.toFixed(2));
       nres = nreste_cmd - pay;
-      res.html(nres);
+      // res.html(nres);
+      res.html(parseFloat(nres).toFixed(2));
       // reg -= parseFloat(av.html());
       reg -= parseFloat(av.find('input').val());
       (nres>0)?stat.html('NR'):stat.html('R');

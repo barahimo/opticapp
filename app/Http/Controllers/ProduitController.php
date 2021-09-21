@@ -31,22 +31,24 @@ class ProduitController extends Controller
     
     public function store(Request $request)
     {  
-        $validateData = $request->validate([
-            'nom_produit' => 'required',
-            'code_produit' => 'required',
-            'TVA' => 'required' ,
-            'prix_produit_HT' => 'required',
-            // 'nom_categorie' => 'required' 
-        ]);
-        $tva = $request->input('TVA');
-        $ht = $request->input('prix_produit_HT');
+        // $validateData = $request->validate([
+        //     'nom_produit' => 'required',
+        //     'code_produit' => 'required',
+        //     'TVA' => 'required' ,
+        //     'prix_produit_HT' => 'required',
+        //     // 'nom_categorie' => 'required' 
+        // ]);
+        $tva = $request->input('tva');
+        // $ht = $request->input('prix_produit_HT');
         $ttc = $request->input('prix_produit_TTC');
         $produit = new Produit();
         $produit->nom_produit = $request->input('nom_produit');
         $produit->code_produit = $request->input('code_produit');
         $produit->TVA = $tva;
-        $produit->prix_produit_HT = $ht ;
-        $produit->prix_produit_TTC = $ht + ($ht * $tva/100) ;
+        // $produit->prix_produit_HT = $ht ;
+        // $produit->prix_produit_TTC = $ht + ($ht * $tva/100) ;
+        $produit->prix_produit_HT = $ttc / (1 + $tva/100); 
+        $produit->prix_produit_TTC = $ttc ;
         $produit->description = $request->input('description');
         // $produit->nom_categorie =  $request->input('nom_categorie');
         $produit->categorie_id =  $request->input('nom_categorie');
@@ -59,7 +61,7 @@ class ProduitController extends Controller
         // $name = $categorieligne->nom_categorie;
         // $produit->nom_categorie = $name;
         $produit->save();
-        $request->session()->flash('status','le produit a été bien enregistré !');
+        $request->session()->flash('status','Le produit a été bien enregistré !');
         return redirect()->route('produit.index');
     }
 
@@ -82,8 +84,8 @@ class ProduitController extends Controller
     public function edit(Produit $produit)
     {
         return view('managements.produits.edit')->with([
-           "produit" => $produit,
-           'categories' => Categorie::all()
+            "produit" => $produit,
+            'categories' => Categorie::all()
         ]);
     }
 
@@ -99,10 +101,18 @@ class ProduitController extends Controller
         //         // 'nom_categorie' => 'required|min:4|max:100' 
                         
         // ]);
+        $tva = $request->input('tva');
+        $ttc = $request->input('prix_produit_TTC');
+
+        
         $produit->nom_produit = $request->input('nom_produit');
         $produit->code_produit = $request->input('code_produit');
-        $produit->TVA = $request->input('TVA');
-        $produit->prix_produit_HT = $request->input('prix_produit_HT');
+        // $produit->TVA = $request->input('tva');
+        $produit->TVA = $tva;
+        // $produit->prix_produit_HT = $request->input('prix_produit_HT');
+        // $produit->prix_produit_TTC = $request->input('prix_produit_TTC');
+        $produit->prix_produit_HT = $ttc / (1 + $tva/100); 
+        $produit->prix_produit_TTC = $ttc ;
         $produit->description = $request->input('description');
         // $produit->nom_categorie =  $request->input('nom_categorie');
         $produit->categorie_id =  $request->input('nom_categorie');
@@ -125,7 +135,7 @@ class ProduitController extends Controller
         // $produit->categorie_id = $id;
         // --------------------------------------------------------
         $produit->save();
-        $request->session()->flash('status','le produit a été bien modifié !');
+        $request->session()->flash('status','Le produit a été bien modifié !');
         return redirect()->route('produit.index');
     }
 
@@ -143,12 +153,11 @@ class ProduitController extends Controller
             if($existe){
                 $msg = " Attention !! le produit ne peut pas être supprimée car déja appartient à une commande";
             }
-           
         
             else{
             
             $produit->delete();
-            $msg = "produit a été supprimer avec succès !";
+            $msg = "Le produit a été supprimé avec succès !";
             }
 
         // Post::destroy($id); supression directement

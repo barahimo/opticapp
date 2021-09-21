@@ -1,53 +1,71 @@
 @extends('layout.dashboard')
 @section('contenu')
+{{-- ################## --}}
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+  <h1>Modification de la commande</h1>
+  <ol class="breadcrumb">
+      <li><a href="{{route('app.home')}}">Home</a></li>
+      <li><i class="fa fa-angle-right"></i> Commandes</li>
+  </ol>
+</div>
+{{-- ################## --}}
 <!-- ##################################################################### -->
 <div class="container">
+  <br>
   <!-- Begin Commande_Client  -->
   <div class="card text-left">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
-      <h4 class="card-title">Modification de la commande :</h4>
+      {{-- <h4 class="card-title">Modification de la commande :</h4> --}}
       <div class="card-text">
-        <!-- <form id="commandeForm"> -->
-            <!-- @csrf -->
-            <div class="form-row">
-              <div class="col-3">
-                <label for="date">Date</label>
-                <input type="date" 
-                class="form-control" 
-                name="date" 
-                id="date" 
-                value="{{old('date',$commande->date)}}"
-                placeholder="date">
-              </div>
-              <div class="col-3">     
-                <label for="client">Client</label>
-                <select class="form-control" name="client" id="client">
-                @foreach($clients as $client)
-                <option value="{{$client->id}}" @if ($client->id == old('client_id',$commande->client_id)) selected="selected" @endif>{{ $client->nom_client}}</option>
-                @endforeach
-                </select>
-              </div>
-              <div class="col-3">
-                <label for="gauche">Oeil gauche</label>
-                <input type="text" class="form-control" name="oeil_gauche" id="gauche" placeholder="oeil_gauche" value="{{old('oeil_gauche',$commande->oeil_gauche ?? null)}}">
-              </div>
-              <div class="col-3">
-                <label for="droite">Oeil droite</label>
-                <input type="text" class="form-control" name="oeil_droite" id="droite" placeholder="oeil_droite" value="{{old('oeil_droite',$commande->oeil_droite ?? null)}}">
-              </div>
-            </div>
-            <!-- <button type="submit" class="btn btn-success">Submit</button> -->
-        <!-- </form> -->
+        <div class="form-row">
+          <div class="col-6">
+            <label for="date">Date</label>
+            <input type="date" 
+            class="form-control" 
+            name="date" 
+            id="date" 
+            value="{{old('date',$commande->date)}}"
+            placeholder="date">
+          </div>
+          <div class="col-6">     
+            <label for="client">Client</label>
+            <select class="form-control" name="client" id="client">
+            @foreach($clients as $client)
+            <option value="{{$client->id}}" @if ($client->id == old('client_id',$commande->client_id)) selected="selected" @endif>{{ $client->nom_client}}</option>
+            @endforeach
+            </select>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <!-- End Commande_Client  -->
+  <br>
+  <!-- Begin Mesures_Client  -->
+  <div class="card text-left">
+    <div class="card-body">
+      <h5 class="card-title">Mesures :</h5>
+      <div class="card-text">
+            <div class="form-row">
+              <div class="col-6">
+                <label for="gauche">Oeil gauche</label>
+                <input type="text" class="form-control" name="oeil_gauche" id="gauche" placeholder="oeil_gauche" value="{{old('oeil_gauche',$commande->oeil_gauche ?? null)}}">
+              </div>
+              <div class="col-6">
+                <label for="droite">Oeil droite</label>
+                <input type="text" class="form-control" name="oeil_droite" id="droite" placeholder="oeil_droite" value="{{old('oeil_droite',$commande->oeil_droite ?? null)}}">
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Mesures_Client  -->
+  <br>
   <!-- Begin Category_Product  -->
   <div class="card text-left">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
-      <h4 class="card-title">Choisir un produit :</h4>
+      <h5 class="card-title">Choisir un produit :</h5>
       <div class="card-text">
         <div class="form-row">
           <div class="col-6">
@@ -68,21 +86,21 @@
     </div>
   </div>
   <!-- End Category_Product  -->
+  <br>
   <!-- Begin Infos_product  -->
   <div class="card text-left">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
-      <h4 class="card-title">Les informations de produit :</h4>
+      <h5 class="card-title">Les informations de produit :</h5>
       <input type="hidden" name="prod_id" id="prod_id">
       <div class="card-text">
         <div class="form-row">
           <div class="col-3">
-            <label for="nom">Nom :</label>
-            <input type="text" class="form-control" name="libelle" id="libelle" placeholder="nom de produit" disabled>
+            <label for="nom">Libelle :</label>
+            <input type="text" class="form-control" name="libelle" id="libelle" placeholder="libelle" disabled>
           </div>
           <div class="col-3">
-            <label for="prix">prix :</label>
-            <input type="number" class="form-control" name="prix" id="prix" value="0.00" min="0">
+            <label for="prix">Prix :</label>
+            <input type="number" class="form-control" name="prix" id="prix" value="0.00" min="0" step="0.01">
           </div>
           <div class="col-3">
             <label for="qte">Qté :</label>
@@ -96,16 +114,16 @@
         <br>
         <button class='btn btn-success' id="addLigne"><i class="fas fa-plus-circle"></i>&nbsp;Ligne&nbsp;<i class="fas fa-arrow-down"></i></button>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <button class='btn btn-warning' id="updateLigne"><i class="fas fa-retweet"></i>&nbsp;à jour&nbsp;<i class="fas fa-arrow-down"></i></button>
+        <button class='btn btn-warning text-white' id="updateLigne"><i class="fas fa-retweet"></i>&nbsp;à jour&nbsp;<i class="fas fa-arrow-down"></i></button>
       </div>
     </div>
   </div>
   <!-- End Infos_product  -->
+  <br>
   <!-- Begin LigneCommande  -->
   <div class="card text-left">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
-      <h4 class="card-title">Les Lignes des commandes :</h4>
+      <h5 class="card-title">Les Lignes des commandes :</h5>
       <div class="card-text">
         <table class="table" id="lignes">
           <thead>
@@ -134,65 +152,69 @@
     </div>
   </div>
   <!-- End LigneCommande  -->
+  <br>
   <!-- Begin Reglement  -->
-    <div class="card text-left">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
-    <div class="card-body">
-      <h4 class="card-title">Les règlements :</h4>
-      <div class="card-text">
-        <div class="form-row">
-          <div class="col-3">
-              <label for="mode">Date de règlement :</label>
-          </div>
-          <div class="col-3">
-            <label for="mode">Mode de règlement :</label>
-          </div>
-          <div class="col-2">
-            <label for="nom">Montant payer :</label>
-          </div>
-          <div class="col-2">
-            <label for="reste">Reste à payer :</label>
-          </div>
-          <div class="col-2">
-            <label for="status">Status :</label>
-          </div>
-        </div>
-        <div id="reglements">
-        @foreach($commande->reglements as $reglement)
-          @php
-          ($reglement->avance>0) ? $style="" : $style = "display: none;"; 
-          @endphp
-          <div style="@php echo $style; @endphp">
-            <div class="form-row">
-              <input type="hidden" value="{{$reglement->id}}">
-              <input type="hidden" value="{{$reglement->reste}}">
-              <div class="col-3">
-                <input type="text" class="form-control" name="reg_date" placeholder="reg_date" value="{{$reglement->date}}" disabled>
-              </div>
-              <div class="col-3">
-                <input type="text" class="form-control" name="mode" placeholder="mode" value="{{$reglement->mode_reglement}}" disabled>
-              </div>
-              <div class="col-2">
-                {{-- <input type="text" class="form-control" name="avance" placeholder="avance" value="{{number_format($reglement->avance,2)}}" disabled> --}}
-                <input type="text" class="form-control" name="avance" placeholder="avance" value="{{$reglement->avance}}" disabled>
-              </div>
-              <div class="col-2">
-                {{-- <input type="text" class="form-control" name="reste"  placeholder="reste" value="{{number_format($reglement->reste,2)}}" disabled> --}}
-                <input type="text" class="form-control" name="reste"  placeholder="reste" value="{{$reglement->reste}}" disabled>
-              </div>
-              <div class="col-2">
-                <input type="text" class="form-control" name="status"  placeholder="status" value="{{$reglement->status}}" disabled>
-              </div>
+  <div class="card text-left">
+      <div class="card-body">
+        <h5 class="card-title">Les règlements :</h5>
+        <div class="card-text">
+          <div class="form-row">
+            <div class="col-3">
+                <label for="mode">Date de règlement :</label>
             </div>
-            <br>
+            <div class="col-3">
+              <label for="mode">Mode de règlement :</label>
+            </div>
+            <div class="col-2">
+              <label for="nom">Montant payer :</label>
+            </div>
+            <div class="col-2">
+              <label for="reste">Reste à payer :</label>
+            </div>
+            <div class="col-2">
+              <label for="status">Status :</label>
+            </div>
           </div>
-        @endforeach
+          <div id="reglements">
+          @foreach($commande->reglements as $reglement)
+            @php
+            ($reglement->avance>0) ? $style="" : $style = "display: none;"; 
+            @endphp
+            <div style="@php echo $style; @endphp">
+              <div class="form-row">
+                <input type="hidden" value="{{$reglement->id}}">
+                <input type="hidden" value="{{$reglement->reste}}">
+                <div class="col-3">
+                  <input type="text" class="form-control" name="reg_date" placeholder="reg_date" value="{{$reglement->date}}" disabled>
+                </div>
+                <div class="col-3">
+                  <input type="text" class="form-control" name="mode" placeholder="mode" value="{{$reglement->mode_reglement}}" disabled>
+                </div>
+                <div class="col-2">
+                  {{-- <input type="text" class="form-control" name="avance" placeholder="avance" value="{{number_format($reglement->avance,2)}}" disabled> --}}
+                  <input type="text" class="form-control" name="avance" placeholder="avance" value="{{$reglement->avance}}" disabled>
+                </div>
+                <div class="col-2">
+                  {{-- <input type="text" class="form-control" name="reste"  placeholder="reste" value="{{number_format($reglement->reste,2)}}" disabled> --}}
+                  <input type="text" class="form-control" name="reste"  placeholder="reste" value="{{$reglement->reste}}" disabled>
+                </div>
+                <div class="col-2">
+                  <input type="text" class="form-control" name="status"  placeholder="status" value="{{$reglement->status}}" disabled>
+                </div>
+              </div>
+              <br>
+            </div>
+          @endforeach
+          </div>
         </div>
       </div>
-    </div>
   </div>  
   <!-- End Reglement  -->
-  <button class="btn btn-secondary" id="valider">Valider les modifications</button>
+  <br>
+  <div class="text-right">
+    <button class="btn btn-secondary" id="valider">Valider les modifications</button>
+  </div>
+  <br>
 </div>
 
 <!-- ---------  BEGIN SCRIPT --------- -->
@@ -209,9 +231,11 @@
         data:{'id':cat_id},
         success:function(data){
           var options = '<option value="0" disabled="true" selected="true">-Product-</option>';
-          for(var i=0;i<data.length;i++){
-            options+=`<option value="${data[i].id}">${data[i].code_produit} | ${data[i].nom_produit.substring(0, 15)}... | ${parseFloat(data[i].prix_produit_TTC).toFixed(2)}</option>`;
-          }  
+          if(data.length>0){
+            for(var i=0;i<data.length;i++){
+              options+=`<option value="${data[i].id}">${data[i].code_produit} | ${data[i].nom_produit.substring(0, 15)}... | ${parseFloat(data[i].prix_produit_TTC).toFixed(2)}</option>`;
+            }  
+          }
           product.html("");        
           product.append(options);        
         },
@@ -233,11 +257,14 @@
         url:'{!!Route('commande.infosProducts')!!}',
         data:{'id':id},
         success:function(data){
-          prod_id.val(data.id) ;        
-          libelle.val(data.code_produit+' | '+data.nom_produit.substring(0,15)+'...') ;   
-          prix.val(parseFloat(data.prix_produit_TTC).toFixed(2));           
-          total.val(parseFloat(data.prix_produit_TTC).toFixed(2)); 
-          qte.val("1");
+          if (Object.keys(data).length>0) {
+            prod_id.val(data.id) ;        
+            libelle.val(data.code_produit+' | '+data.nom_produit.substring(0,15)+'...');   
+            // (data.nom_produit) ? libelle.val(data.code_produit+' | '+data.nom_produit.substring(0,15)+'...') : libelle.val('');   
+            prix.val(parseFloat(data.prix_produit_TTC).toFixed(2));           
+            total.val(parseFloat(data.prix_produit_TTC).toFixed(2)); 
+            qte.val("1");
+          }
         },
         error:function(){
         }
@@ -277,9 +304,9 @@
                     <td>${qte.val()}</td>
                     <td>${parseFloat(total.val()).toFixed(2)}</td>
                     <td>
-                      <button class="btn btn-success" onclick="edit(${prod_id.val()})"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-outline-success" onclick="edit(${prod_id.val()})"><i class="fas fa-edit"></i></button>
                       &nbsp;&nbsp;&nbsp;
-                      <button class="btn btn-danger" onclick="remove(${prod_id.val()})"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-outline-danger" onclick="remove(${prod_id.val()})"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>`;
         table.find('tbody').append(ligne);
@@ -326,9 +353,23 @@
       NTotal = parseFloat(prix.val())*parseFloat(qte.val());
       total.val(NTotal.toFixed(2));
     });
+    $(document).on('click','#prix',function(){
+      var prix=$(this);
+      var qte=$('#qte');
+      var total=$('#total');
+      NTotal = parseFloat(prix.val())*parseFloat(qte.val());
+      total.val(NTotal.toFixed(2));
+    });
     // -----------End keyup Prix--------------//
     // -----------keyup Avance--------------//
     $(document).on('keyup','#avance',function(){
+      var avance=$(this);
+      var NAvance = parseFloat(avance.val());
+      if(NAvance > calculSomme())
+        avance.val(calculSomme());
+      // calculReste();
+    });
+    $(document).on('click','#avance',function(){
       var avance=$(this);
       var NAvance = parseFloat(avance.val());
       if(NAvance > calculSomme())
@@ -578,9 +619,9 @@
                     <td>${ligne.quantite}</td>
                     <td>${parseFloat(ligne.total_produit).toFixed(2)}</td>
                     <td>
-                      <button class="btn btn-success" onclick="edit(${ligne.produit_id})"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-outline-success" onclick="edit(${ligne.produit_id})"><i class="fas fa-edit"></i></button>
                       &nbsp;&nbsp;&nbsp;
-                      <button class="btn btn-danger" onclick="remove(${ligne.produit_id})"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-outline-danger" onclick="remove(${ligne.produit_id})"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>`;
           });

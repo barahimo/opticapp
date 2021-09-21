@@ -6,13 +6,12 @@
     <h1>Ajout d'un client</h1>
     <ol class="breadcrumb">
         <li><a href="{{route('app.home')}}">Home</a></li>
-        <li><i class="fa fa-angle-right"></i> client</li>
+        <li><i class="fa fa-angle-right"></i> Client</li>
     </ol>
 </div>
 {{-- ################## --}}
 <!-- Main content -->
 <div class="content">
-    {{-- ---------------- --}}
     <div class="row m-t-3">
         <div class="col-lg-12">
             <div class="card">

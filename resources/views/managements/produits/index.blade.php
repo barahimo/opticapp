@@ -59,10 +59,10 @@
                             <td>{{number_format($produit->prix_produit_TTC,2)}}</td>
                             <td>{{$produit->categorie->nom_categorie}}</td>
                             <td>
-                                <a href="{{ action('ProduitController@show',['produit'=> $produit])}}" class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                                <a href="{{ action('ProduitController@show',['produit'=> $produit])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                 @if( Auth::user()->is_admin )
-                                <a href="{{route('produit.edit',['produit'=> $produit])}}"class="btn btn-outline-success btn-md"><i class="fas fa-edit"></i></a>
-                                <button class="btn btn-outline-danger btn-flat btn-md remove-produit" 
+                                <a href="{{route('produit.edit',['produit'=> $produit])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                <button class="btn btn-outline-danger btn-sm remove-produit" 
                                 data-id="{{ $produit->id }}" 
                                 data-action="{{ route('produit.destroy',$produit->id) }}"> 
                                 <i class="fas fa-trash"></i>
@@ -104,10 +104,10 @@
                     var url_edit = "{{route('produit.edit',['produit'=> ":id"])}}".replace(':id', produit.id);
                     var url_destroy = "{{ route('produit.destroy',":id") }}".replace(':id', produit.id);
                     var action = `
-                        <a href=${url_show} class="btn btn-outline-secondary btn-md"><i class="fas fa-info"></i></a>
+                        <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                         @if( Auth::user()->is_admin )
-                        <a href=${url_edit} class="btn btn-outline-success btn-md"><i class="fas fa-edit"></i></a>
-                        <button class="btn btn-outline-danger btn-flat btn-md remove-produit" 
+                        <a href=${url_edit} class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                        <button class="btn btn-outline-danger btn-sm remove-produit" 
                         data-id="${produit.id}"
                         data-action=${url_destroy} > 
                         <i class="fas fa-trash"></i>
@@ -135,13 +135,14 @@
     $("body").on("click",".remove-produit",function(){
         var current_object = $(this);
         Swal.fire({
-            title: 'Un produit est sur le point de être DÉTRUITE ',
-            text: "vous voulez vraiment la supprimer !",
+            title: "Un produit est sur le point d'être détruite",
+            text: "Est-ce que vous êtes d'accord ?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'oui, je suis sur!'
+            cancelButtonText: 'Annuler',
+            confirmButtonText: 'Oui, supprimez-le!'
             }).then((result) => {
                 if (result.isConfirmed) {
                 // begin destroy

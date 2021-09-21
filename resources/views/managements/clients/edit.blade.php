@@ -3,10 +3,10 @@
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
-    <h1>Ajout d'un client</h1>
+    <h1>Modification de client</h1>
     <ol class="breadcrumb">
         <li><a href="{{route('app.home')}}">Home</a></li>
-        <li><i class="fa fa-angle-right"></i> client</li>
+        <li><i class="fa fa-angle-right"></i> Client</li>
     </ol>
 </div>
 {{-- ################## --}}

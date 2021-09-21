@@ -755,7 +755,6 @@ class CommandeController extends Controller
         // ------------------------------------
         return response()->json($commandes);
     }
-   
 
     public function productsCategory(Request $request){
         $data=Produit::select('id','code_produit','nom_produit','prix_produit_TTC')->where('categorie_id',$request->id)->get();

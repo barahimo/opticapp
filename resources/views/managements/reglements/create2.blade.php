@@ -1,6 +1,16 @@
 @extends('layout.dashboard')
 @section('contenu')
-<!-- ##################################################################### -->
+{{-- ################## --}}
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+  <h1>Créer un règlement</h1>
+  <ol class="breadcrumb">
+      <li><a href="{{route('app.home')}}">Home</a></li>
+      <li><i class="fa fa-angle-right"></i> Règlement</li>
+  </ol>
+</div>
+{{-- ################## --}}
+<br>
 <div class="container">
   <div class="row">
     <div class="col-6">
@@ -21,12 +31,10 @@
     </div>
   </div>
   <br>
-  <br>
   <!-- Begin Reglement  -->
   <div class="card text-left">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
-      <h4 class="card-title">Règlement :</h4>
+      <h5 class="card-title">Règlement :</h5>
       <div class="card-text">
         <div class="form-row">
           <div class="col-3">
@@ -44,11 +52,11 @@
           </div>
           <div class="col-3">
             <label for="nom">Avance :</label>
-            <input type="number" id="avance" name="avance" min="0" class="form-control" placeholder="0.00" value="0.00">
+            <input type="number" id="avance" name="avance" min="0" step="0.01" class="form-control" placeholder="0.00" value="0.00">
           </div>
           <div class="col-3">
             <label for="reste">Reste :</label>
-            <input type="number" id="reste" name="reste" class="form-control" placeholder="reste" min="0" value="0.00" disabled>
+            <input type="number" id="reste" name="reste" class="form-control" placeholder="reste" min="0" step="0.01" value="0.00" disabled>
 
           </div>
           <div class="col-3">
@@ -62,7 +70,7 @@
   <!-- End Reglement  -->
   <!-- Begin TABLE -->
   <br>
-  <div class="card" style="background-color: rgba(241, 241, 241, 0.842)">
+  <div class="card">
     <div class="card-body">
       <table class="table" id="table">
         <thead>
@@ -91,7 +99,7 @@
               <td id="reste1{{$key}}">{{$commande->reste}}</td>
               <td id="avance2{{$key}}">
                 <!-- 0.00 -->
-                <input type="number" min="0" style="width: 50%" value="0.00" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
+                <input type="number" min="0" step="0.01" style="width: 50%" value="0.00" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
               </td>
               <td id="reste2{{$key}}">{{$commande->reste}}</td>
               <td id="status{{$key}}">NR</td>
@@ -125,7 +133,11 @@
     </div>
   </div>
   <!-- End TABLE -->
-  <button class="btn btn-secondary" id="valider">Effectuer le règlement</button>
+  <br>
+  <div class="text-right">
+    <button class="btn btn-secondary" id="valider">Effectuer le règlement</button>
+  </div>
+  <br>
 </div>
 <!-- ---------  BEGIN SCRIPT --------- -->
 <script type="text/javascript">
@@ -166,6 +178,18 @@
       // --------------
       getTfoot();
     });
+    $(document).on('click','#avance',function(){
+      var navance = parseFloat(avance.val());
+      if(navance > sommeReste())
+        avance.val(sommeReste());
+      if(avance.val()=="")
+        avance.val(0);
+      // --------------
+      calculs();
+      calculsLignes();
+      // --------------
+      getTfoot();
+    });
     // -----------End keyup Avance--------------//
     // -----------Begin valider--------------//
     $(document).on('click','#valider',function(e){
@@ -174,8 +198,9 @@
         return;
       }
       var client_id = parseInt(client.val());
-      // var _token=$('input[name=_token]'); //Envoi des information via method POST
-      var _token = $('meta[name="csrf-token"]').attr('content');
+      //--->Envoi des information via method POST
+      var _token=$('input[name=_token]'); 
+      // var _token = $('meta[name="csrf-token"]').attr('content');
       // ***** BEGIN variables lignes ******** //
       var list = tbody.find('tr');
       var array = [];
@@ -204,8 +229,8 @@
         type:'post',
         url:'{!!URL::to('storeReglements')!!}',
         data:{
-          // _token : _token.val(),
-          _token : _token,
+          _token : _token.val(),
+          // _token : _token,
           date : date.val(),
           mode:mode.val(),
           client : client_id,
@@ -215,7 +240,6 @@
           Swal.fire(data.message);
           if(data.status == "success"){
             setTimeout(() => {
-              // window.location.assign("/reglements2")
               window.location.assign('{{route('commande.index')}}')
             }, 2000);
           }
@@ -328,7 +352,8 @@
       // av.html(pay);
       av.find('input').val(pay.toFixed(2));
       nres = nreste_cmd - pay;
-      res.html(nres);
+      // res.html(nres);
+      res.html(parseFloat(nres).toFixed(2));
       // reg -= parseFloat(av.html());
       reg -= parseFloat(av.find('input').val());
       (nres>0)?stat.html('NR'):stat.html('R');
@@ -400,34 +425,34 @@
     avance2.html(sommeAvance2().toFixed(2));
     reste2.html(sommeReste2().toFixed(2));
   }
-  function getReglements(param){
-    $.ajax({
-      type:'get',
-      url:'{!!URL::to('getReglements')!!}',
-      data:{'client':param,'status':'nr'},
-      success:function(data){
-        var table = $('#table');
-          table.find('tbody').html("");
-          var lignes = '';
-          data.forEach(ligne => {
-            lignes+=`<tr>
-                        <td>${ligne.id}</td>
-                        <td>${ligne.date}</td>
-                        <td>Cmd ${ligne.commande_id}</td>
-                        <td>${ligne.client.nom_client}</td>
-                        <td>${ligne.commande.total}</td>
-                        <td>${ligne.avance}</td>
-                        <td>${ligne.reste}</td>
-                        <td></td>
-                    </tr>`;
-          });
-          table.find('tbody').append(lignes);
-      },
-      error:function(){
-        console.log([]);    
-      }
-    });
-  }
+  // function getReglements(param){
+  //   $.ajax({
+  //     type:'get',
+  //     url:'{!!URL::to('getReglements')!!}',
+  //     data:{'client':param,'status':'nr'},
+  //     success:function(data){
+  //       var table = $('#table');
+  //         table.find('tbody').html("");
+  //         var lignes = '';
+  //         data.forEach(ligne => {
+  //           lignes+=`<tr>
+  //                       <td>${ligne.id}</td>
+  //                       <td>${ligne.date}</td>
+  //                       <td>Cmd ${ligne.commande_id}</td>
+  //                       <td>${ligne.client.nom_client}</td>
+  //                       <td>${ligne.commande.total}</td>
+  //                       <td>${ligne.avance}</td>
+  //                       <td>${ligne.reste}</td>
+  //                       <td></td>
+  //                   </tr>`;
+  //         });
+  //         table.find('tbody').append(lignes);
+  //     },
+  //     error:function(){
+  //       console.log([]);    
+  //     }
+  //   });
+  // }
   function getReglements3(param){
     $.ajax({
       type:'get',
@@ -443,13 +468,13 @@
                       <td>${ligne.code}</td>
                       <td>${ligne.date}</td>
                       <td>${ligne.client.nom_client}</td>
-                      <td id="total${index}">${ligne.total}</td>
-                      <td id="avance1${index}">${ligne.avance}</td>
-                      <td id="reste1${index}">${ligne.reste}</td>
+                      <td id="total${index}">${parseFloat(ligne.total).toFixed(2)}</td>
+                      <td id="avance1${index}">${parseFloat(ligne.avance).toFixed(2)}</td>
+                      <td id="reste1${index}">${parseFloat(ligne.reste).toFixed(2)}</td>
                       <td id="avance2${index}">
-                        <input type="number" min="0" style="width: 50%" value="0.00" onclick="setAvances(${ligne.id})" onkeyup="setAvances(${ligne.id})">
+                        <input type="number" min="0" step="0.01" style="width: 50%" value="0.00" onclick="setAvances(${ligne.id})" onkeyup="setAvances(${ligne.id})">
                       </td>
-                      <td id="reste2${index}">${ligne.reste}</td>
+                      <td id="reste2${index}">${parseFloat(ligne.reste).toFixed(2)}</td>
                       <td id="status${index}">NR</td>
                     </tr>`;
           });

@@ -88,14 +88,14 @@
                         cmd_avance: ${parseFloat(commande.avance).toFixed(2)}, 
                         cmd_reste: ${parseFloat(commande.reste).toFixed(2)}
                       })"
-                      class="btn btn-outline-success">Avoir</button>`;
+                      class="btn btn-outline-success btn-sm">Avoir</button>`;
                 }
                 var url_show2 = "{{route('reglement.show2',['id'=>":id"])}}".replace(':id', reglement.id);
                 var url_delete2 = "{{route('reglement.delete',['reglement'=>":reglement"])}}".replace(':reglement', reglement.id);
-                var btnPrint = `<a class="btn btn-outline-info" href=${url_show2}><i class="fas fa-print"></i></a>`;
-                // var btnDelete2 = `<a class="btn btn-outline-danger" href=${url_delete2}><i class="fas fa-trash"></i></a>`;
+                var btnPrint = `<a class="btn btn-outline-info  btn-sm" href=${url_show2}><i class="fas fa-print"></i></a>`;
+                // var btnDelete2 = `<a class="btn btn-outline-danger  btn-sm" href=${url_delete2}><i class="fas fa-trash"></i></a>`;
                 var btnDelete2 = `<button 
-                    class="btn btn-outline-danger" 
+                    class="btn btn-outline-danger btn-sm" 
                     id="btnDelete2${index}${i}" 
                     data-id="${reglement.id}" 
                     data-route="${url_delete2}" 
@@ -121,17 +121,17 @@
               }) ;
               // ------ end reglements ------
             // ************************ //
-            // <button id="btnDelete1${index}" class="btn btn-outline-danger" onclick="window.location.assign('${url_delete1}')"><i class="fas fa-trash-alt fa-0.5px"></i></button>
+            // <button id="btnDelete1${index}" class="btn btn-outline-danger btn-sm" onclick="window.location.assign('${url_delete1}')"><i class="fas fa-trash-alt fa-0.5px"></i></button>
             actions = `
               <div class="row">
                 <div class="col-8">
                   <span>[${commande.code}]</span>
                   <button id="btnFacture${index}" class="btn btn-link" onclick="window.location.assign('${url_fac}')"><i class="fa fa-plus-square"></i>&nbsp;Facture&nbsp;<i class="fas fa-receipt"></i></button>
                   <button id="btnStatus${index}" class="btn btn-link" onclick="window.location.assign('${url_reg}')"><i class="fa fa-plus-square"></i>&nbsp;Règlement&nbsp;<i class="fas fa-hand-holding-usd"></i></button>
-                  <a class="btn btn-outline-info" href=${url_show1}><i class="fas fa-print"></i></a>
-                  <a class="btn btn-outline-success" id="btnEdit${index}" href=${url_edit}><i class="fas fa-edit"></i></a>
+                  <a class="btn btn-outline-info btn-sm" href=${url_show1}><i class="fas fa-print"></i></a>
+                  <a class="btn btn-outline-success btn-sm" id="btnEdit${index}" href=${url_edit}><i class="fas fa-edit"></i></a>
                   <a 
-                    class="btn btn-outline-danger" 
+                    class="btn btn-outline-danger btn-sm" 
                     id="btnDelete1${index}" 
                     data-id="${commande.id}" 
                     data-route="${url_delete1}" 
@@ -140,7 +140,7 @@
                   </a>
                 </div>
                 <div class="col-4 text-right">
-                    <button class="btn btn-outline-success"
+                    <button class="btn btn-outline-success btn-sm"
                       id="btnDetails${index}"
                       data-index="${index}" 
                       data-status="false" 

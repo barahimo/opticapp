@@ -1,11 +1,20 @@
 @extends('layout.dashboard')
 @section('contenu')
-<!-- ##################################################################### -->
+{{-- ################## --}}
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+  <h1>Ajout d'une nouvelle facture</h1>
+  <ol class="breadcrumb">
+      <li><a href="{{route('app.home')}}">Home</a></li>
+      <li><i class="fa fa-angle-right"></i> Facture</li>
+  </ol>
+</div>
+{{-- ################## --}}
 <div class="container">
+  <br>
   <!-- Begin Commande_Client  -->
   <div class="card text-left">
     <div class="card-body">
-      <h4 class="card-title">Ajout d'une nouvelle facture :</h4>
       <div class="card-text">
             <div class="form-row">
               <div class="col-4"> 
@@ -25,6 +34,7 @@
     </div>
   </div>
   <!-- End Commande_Client  -->
+  <br>
   <!-- Begin Code_Facture  -->
   <div class="card text-left">
     <div class="card-body">
@@ -50,20 +60,15 @@
     </div>
   </div>
   <!-- End Code_Facture  -->
+  <br>
   <!-- Begin LigneCommande  -->
   <div class="card text-left">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
-      <h4 class="card-title">Les Lignes des commandes :</h4>
+      <h5 class="card-title">Les Lignes des commandes :</h5>
       <div class="card-text">
         <table class="table" id="lignes">
           <thead>
             <tr>
-                {{-- <th>#</th>
-                <th>Libelle</th>
-                <th>Prix</th>
-                <th>Qté</th>
-                <th>Total</th> --}}
                 <th>#</th>
                 <th>Libelle</th>
                 <th>Qté</th>
@@ -76,13 +81,6 @@
           <tbody>
           </tbody>
           <tfoot>
-            {{-- <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th>Total a payer</th>
-              <th id="somme">0.00</th>
-            </tr> --}}
             <tr></tr>
             <tr>
               <th></th>
@@ -118,8 +116,9 @@
   </div>
   <!-- End LigneCommande  -->
 
+  <br>
   <!-- Begin FORM  -->
-  <div class="text-center">
+  <div class="text-right">
     <form  method="POST" action="{{route('facture.store2')}}">
         @csrf 
         <input type="hidden" name="commande_id" value="{{$commande->id}}">
@@ -133,145 +132,124 @@
     </form>
 </div>
   <!-- End FORM  -->
+  <br>
 </div>
 
 <!-- ---------  BEGIN SCRIPT --------- -->
 <script type="text/javascript">
-    $(document).ready(function(){
-        getLignes();
-        // -----------BEGIN Generation de  Code--------------//
-        $(document).on('change','#date',function(){
-            $.ajax({
-                type:'get',
-                url:'{{Route('commande.codeFacture')}}',
-                data:{
-                    date : $('#date').val(),
-                },
-                success: function(res){
-                    $('#code').val(res);
-                    $('#newCode').val(res);
-                } ,
-                error:function(err){
-                    Swal.fire("Erreur de généralisation de code !");
-                },
-            });
-        });
-        // -----------END Generation de  Code--------------//
-        // -----------BEGIN Generation de  Code--------------//
-        $(document).on('keyup','#code',function(){
-            $('#newCode').val($(this).val());
-        });
-        // -----------END Generation de  Code--------------//
-    });
+  $(document).ready(function(){
+      getLignes();
+      // -----------BEGIN Generation de  Code--------------//
+      $(document).on('change','#date',function(){
+          $.ajax({
+              type:'get',
+              url:'{{Route('commande.codeFacture')}}',
+              data:{
+                  date : $('#date').val(),
+              },
+              success: function(res){
+                  $('#code').val(res);
+                  $('#newCode').val(res);
+              } ,
+              error:function(err){
+                  Swal.fire("Erreur de généralisation de code !");
+              },
+          });
+      });
+      // -----------END Generation de  Code--------------//
+      // -----------BEGIN Generation de  Code--------------//
+      $(document).on('keyup','#code',function(){
+          $('#newCode').val($(this).val());
+      });
+      // -----------END Generation de  Code--------------//
+  });
   // -----------My function--------------//
-    function check(id){
-        var existe = false;
-        var table=$('#lignes');
-        var list = table.find('tbody').find('tr'); 
-        for (let i = 0; i < list.length; i++) {
-            var prod_id = list.eq(i).find('td').eq(0).html();
-            if(prod_id == id){
-                existe = true;
-                break;
-            }
-        }
-        return existe;
+  function check(id){
+    var existe = false;
+    var table=$('#lignes');
+    var list = table.find('tbody').find('tr'); 
+    for (let i = 0; i < list.length; i++) {
+      var prod_id = list.eq(i).find('td').eq(0).html();
+      if(prod_id == id){
+          existe = true;
+          break;
+      }
     }
+    return existe;
+  }
 
-    function checkIndex(id){
-        var index = -1;
-        var table=$('#lignes');
-        var list = table.find('tbody').find('tr'); 
-        for (let i = 0; i < list.length; i++) {
-        var prod_id = list.eq(i).find('td').eq(0).html();
-        if(prod_id == id){
-            index = i;
-            break;
-        }
-        }
-        return index;
+  function checkIndex(id){
+    var index = -1;
+    var table=$('#lignes');
+    var list = table.find('tbody').find('tr'); 
+    for (let i = 0; i < list.length; i++) {
+      var prod_id = list.eq(i).find('td').eq(0).html();
+      if(prod_id == id){
+        index = i;
+        break;
+      }
     }
+    return index;
+  }
 
-    function calculSomme(){
-        var table=$('#lignes');
-        var list = table.find('tbody').find('tr'); 
-        var somme = 0.0;
-        for (let i = 0; i < list.length; i++) {
-            var total = list.eq(i).find('td').eq(4).html();
-            var NTotal = parseFloat(total);
-            somme+=NTotal;
-        }
-        return somme.toFixed(2);
+  function calculSomme(){
+    var table=$('#lignes');
+    var list = table.find('tbody').find('tr'); 
+    var somme = 0.0;
+    for (let i = 0; i < list.length; i++) {
+        var total = list.eq(i).find('td').eq(4).html();
+        var NTotal = parseFloat(total);
+        somme+=NTotal;
     }
+    return somme.toFixed(2);
+  }
     
-    function getLignes(){
-        var cmd_id = <?php echo $commande->id;?>;
-        $.ajax({
-            type:'get',
-            // url:'{!!URL::to('editCommande')!!}',
-            url:'{!!route('commande.editCommande')!!}',
-            data:{'id' : cmd_id},
-            success: function(data){
-            var lignecommandes = data.lignecommandes
-            var reglement = data.reglement
-            // -----------BEGIN lignes--------------//
-            var table = $('#lignes');
-            table.find('tbody').html("");
-            var lignes = '';
-            // lignecommandes.forEach(ligne => {
-            //     var prix = ligne.total_produit/parseFloat(ligne.quantite);
-            //     lignes+=`<tr>
-            //             <td>${ligne.produit.code_produit}</td>
-            //             <td>${ligne.produit.nom_produit}</td>
-            //             <td>${prix.toFixed(2)}</td>
-            //             <td>${ligne.quantite}</td>
-            //             <td>${parseFloat(ligne.total_produit).toFixed(2)}</td>
-            //         </tr>`;
-            // });
-            var montant_HT = 0;
-            var prix_unit_HT = 0;
-            var HT = 0;
-            var TTC = 0;
-            lignecommandes.forEach(ligne => {
-                montant_HT = ligne.total_produit / (1 + ligne.produit.TVA/100);
-                prix_unit_HT = montant_HT / ligne.quantite;
-                HT += montant_HT;
-                TTC += ligne.total_produit;
-                lignes+=`<tr>
-                        <td>${ligne.produit.code_produit}</td>
-                        <td>${ligne.produit.nom_produit}</td>
-                        <td>${ligne.quantite}</td>
-                        <td>${parseFloat(prix_unit_HT).toFixed(2)}</td>
-                        <td>${parseFloat(montant_HT).toFixed(2)}</td>
-                        <td>${ligne.produit.TVA}</td>
-                        <td>${parseFloat(ligne.total_produit).toFixed(2)}</td>
-                    </tr>`;
-            });
-            table.find('tbody').append(lignes);
-            // var somme=$('#somme');
-            // somme.html(calculSomme());
-            var TVA = TTC - HT;
-            $('#ht').html(parseFloat(HT).toFixed(2));
-            $('#tva').html(parseFloat(TVA).toFixed(2));
-            $('#ttc').html(parseFloat(TTC).toFixed(2));
-            // -----------END lignes--------------//
-            // -----------BEGIN Reglement--------------//
-            // var mode=$("#mode");
-            // var avance=$("#avance");
-            // var reste=$('#reste');
-            // var status=$("#status");
-            // mode.val(reglement.mode_reglement);
-            // avance.val(parseFloat(reglement.avance).toFixed(2));
-            // reste.val(parseFloat(reglement.reste).toFixed(2));
-            // status.val(reglement.reglement);
-            // -----------END Reglement--------------//
-            
-            } ,
-            error:function(err){
-                Swal.fire(err);
-            },
+  function getLignes(){
+    var cmd_id = <?php echo $commande->id;?>;
+    $.ajax({
+      type:'get',
+      url:'{!!route('commande.editCommande')!!}',
+      data:{'id' : cmd_id},
+      success: function(data){
+        var lignecommandes = data.lignecommandes
+        var reglement = data.reglement
+        // -----------BEGIN lignes--------------//
+        var table = $('#lignes');
+        table.find('tbody').html("");
+        var lignes = '';
+        var montant_HT = 0;
+        var prix_unit_HT = 0;
+        var HT = 0;
+        var TTC = 0;
+        lignecommandes.forEach(ligne => {
+            montant_HT = ligne.total_produit / (1 + ligne.produit.TVA/100);
+            prix_unit_HT = montant_HT / ligne.quantite;
+            HT += montant_HT;
+            TTC += ligne.total_produit;
+            lignes+=`<tr>
+                    <td>${ligne.produit.code_produit}</td>
+                    <td>${ligne.produit.nom_produit}</td>
+                    <td>${ligne.quantite}</td>
+                    <td>${parseFloat(prix_unit_HT).toFixed(2)}</td>
+                    <td>${parseFloat(montant_HT).toFixed(2)}</td>
+                    <td>${ligne.produit.TVA}</td>
+                    <td>${parseFloat(ligne.total_produit).toFixed(2)}</td>
+                </tr>`;
         });
-    }
+        table.find('tbody').append(lignes);
+        // var somme=$('#somme');
+        // somme.html(calculSomme());
+        var TVA = TTC - HT;
+        $('#ht').html(parseFloat(HT).toFixed(2));
+        $('#tva').html(parseFloat(TVA).toFixed(2));
+        $('#ttc').html(parseFloat(TTC).toFixed(2));
+        // -----------END lignes--------------// 
+      } ,
+      error:function(err){
+          Swal.fire(err);
+      },
+    });
+  }
 </script>
 @endsection
 

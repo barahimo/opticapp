@@ -239,11 +239,13 @@ class ReglementController extends Controller
                             $query->where('nom_client',$nom_client);
                         })
                         ->where('reste', '>', 0)
+                        ->orderBy('id','desc')
                         ->get();
         }
         else{
             $commandes = Commande::with(['client','reglements'])
                         ->where('reste', '>', 0)
+                        ->orderBy('id','desc')
                         ->get();
         }
         return response()->json($commandes);

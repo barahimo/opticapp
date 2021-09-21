@@ -43,7 +43,7 @@ class CategorieController extends Controller
 
         $categorie->save();
 
-        $request->session()->flash('status','Categorie a été bien enregistré !');
+        $request->session()->flash('status','La catégorie a été bien enregistrée !');
         return redirect()->route('categorie.index');
     }
 
@@ -51,12 +51,10 @@ class CategorieController extends Controller
     
     public function show(Categorie $categorie)
     {
-        $produits =  Produit::where('categorie_id', '=', $categorie->id)
-        ->paginate(100);
+        $produits =  Produit::where('categorie_id', '=', $categorie->id)->get();
         return view('managements.categories.show', [
             "categorie" => $categorie,
             "produits" => $produits 
-
         ]);
     }
 
@@ -88,7 +86,7 @@ class CategorieController extends Controller
         $categorie->save();
 
 
-        $request->session()->flash('status','Categorie a été bien modifié !');
+        $request->session()->flash('status','La catégorie a été bien modifiée !');
 
 
         return redirect()->route('categorie.index');
@@ -121,7 +119,7 @@ class CategorieController extends Controller
                 $msg = "La catégorie ne peut pas être supprimée car ses produits sont déja appartient à une commande";
             }
             else{
-                $msg = "la catègorie et ses produits tous sont supprimées avec succès !";
+                $msg = "La catègorie et ses produits sont supprimées avec succès !";
                 foreach ($produits as $produit) {
                     $produit->delete();
                 }
@@ -130,7 +128,7 @@ class CategorieController extends Controller
         }
         else{
             $categorie->delete();
-            $msg = "categorie a été supprimer avec succès !";
+            $msg = "La catégorie a été supprimée avec succès !";
         }
 
         // Post::destroy($id); supression directement

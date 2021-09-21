@@ -1,330 +1,164 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-
-    {{-- monstyle --}}
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <title>Document</title>
-    <style>
-    :root{
-        --main-color: #027581;
-        --color-dark:  #1D2231;
-        --text-grey: #8390A2;
-    }
-
-    * {
-         font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-         margin: 0;
-         padding: 0;
-         text-decoration: none;
-         list-style-type : none;
-         box-sizing : border-box;
-     }
-     
-
-     #sidebar-toggle {
-            display: none;
-        }
-
-            .sidebar {
-
-    height: 100%;
-    width: 240px;
-    position: fixed;
-    left: 0;
-    top:0;
-    z-index: 100;
-    background: var(--main-color);
-    color:#fff;
-    overflow-y: auto;
-    transition: width 500ms;
-    }
-    .sidebar-header {
-    display: flex ;
-    justify-content:space-between;
-    align-items: center;
-    height: 60px;
-    padding: auto;
-    margin: auto;
-    }
-
-    /* .brand{
-    padding: auto;
-    margin: auto;
-    } */
-
-    .sidebar-menu{
-    padding: 1rem;
-    }
-    .sidebar li {
-    margin-bottom: 2rem;
-    }
-    .sidebar a {
-    color: #fff;
-    font-size: 1.2rem; 
-    }
-    .sidebar  a span:last-child {
-
-    padding-left: .5rem;
-
-    }
-    #sidebar-toggle:checked ~ .sidebar{
-    width:5%;
-    }
-
-    #sidebar-toggle:checked ~ .sidebar .sidebar-header h3 span:last-child,
-    #sidebar-toggle:checked ~ .sidebar li span:last-child
-    {
-    display: none;
-
-    }
-    #sidebar-toggle:checked ~ .sidebar .sidebar-header,
-    #sidebar-toggle:checked ~ .sidebar li 
-    {
-    display: flex;
-    justify-content: center;
-
-    }
-
-    #sidebar-toggle:checked ~ .main-content{
-    margin-left:auto;
-    }
-
-    .main-content {
-    position: relative;
-    margin-left:240px;
-    transition: margin-left 500ms;
-    } 
-
-        
-        header {
-           position: fixed;
-           top: 0;
-           z-index:100 ;    
-           width: calc(100% - 240px);
-           background:#fff;
-           height:60px ;
-           padding: 0rem 1rem;
-           display: flex;
-           align-items: center;
-           justify-content: space-between;
-           border-bottom: 1px solid #ccc;
-        }
-
-        .search-wrapper{
-           display: flex;
-           align-items: center;
-
-        }
-        .search-wrapper input{
-            border: 0;
-            outline: 0;
-            padding: 1rem;
-            height: 38px;
-        }
-        .social-icons{
-            display: flex;
-            align-items: center;
-        }
-
-        .solcial-icons span,
-        .social-icons div {
-
-            margin-left: 1.2rem;
-        }
-
-        .social-icons div{ 
-            height: 38px;
-            width: 38px;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-image: url(https://www.l4mcdn.fr/5/8/580429.jpg);
-            border-radius: 50%;
-        }
-        
-        .image{
-            width:80%;
-            height:200px;
-            margin-left: 10%;
-            margin-right: 5%;
-            margin-bottom: 3%;
-        }
-
-        /* style formulaire */
-
-
-    </style>
-
-
-</head>
-<body>
-
-
-    <input type="checkbox" id="sidebar-toggle">
-    <div class="sidebar">
-        <div class="sidebar-header">
-         <h3 class="brand">
-            <span class="ti-unlink"></span>
-            <span>Gestion-Optic </span>
-         </h3>
-         <label for="sidebar-toggle" class="ti-menu-alt"></label>
-           
-        </div>
-
-        <div class="sidebar-menu">
-            <ul>
-                <li>   
-                    <a href="{{ route('app.home')}}">
-                        <span class="ti-home"></span>
-                        <span>Home</span>
-                     </a>
-                </li>
-                <li>   
-                    <a href="{{ route('client.index')}}">
-                        <span ><i class="fas fa-users"></i></span>
-                        <span>Clients</span>
-                     </a>
-                </li>
-                @if( Auth::user()->is_admin )
-                <li>   
-                    <a href="{{ route('commande.index')}}">
-                        <span ><i class="fab fa-shopify"></i></span>
-                        <span>Commandes</span>
-                     </a>
-                </li>
-                <li>   
-                    <a href="{{ route('produit.index')}}">
-                        <span ><i class="fab fa-product-hunt"></i></span>
-                        <span>Produits</span>
-                       
-                     </a>
-                </li>
-                <li>   
-                    <a href="{{ route('categorie.index')}}">
-                        <span class="ti-folder"></span>
-                        <span>Catégories</span>
-                     </a>
-                </li>
-               
-                <li>   
-                    <a href="{{ route('facture.index')}}"">
-                        <span ><i class="fas fa-money-check-alt"></i></span>
-                        <span>Factures</span>
-                        
-                     </a>
-                </li>
-                <li>   
-                    <a href="{{ route('reglement.index')}}">
-                        <span ><i class="fab fa-cc-amazon-pay"></i></span>
-                        <span> Règlement</span>
-                     </a>
-                </li>
-               @endif
-
-            </ul>
-        </div>
-    </div>
-
-
-
-
-    <div class="main-content">
-        
-        <main id="hadi"  class="py-4">
-            {{-- <div class="dash-image">
-            <img class="image" src="https://krys-krys-storage.omn.proximis.com/Imagestorage/images/2560/1600/602a299825ad8_Header_G_n_rique_Optique_v2.jpg" >
-            </div> --}}
-            <div  class="container">
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6 transparence">
-                        <h1 class="text-center">Modifier Produit</h1>
-
-                        <form  method="POST" action="{{route('produit.update',['produit'=> $produit])}}">
-                            @csrf {{-- génère un toke pur protéger le formulaie --}}
-                            
-                            @method('PUT')
-                            <label class="label col-md-9 control-label">Nom Produit :</label>
-                            <div class="col-md-12">
-                                <input type="text" class="form-control" name="nom_produit" placeholder="nom_produit" value="{{ old('nom_produit', $produit->nom_produit?? null) }}"  >
+@extends('layout.dashboard')
+@section('contenu')
+{{-- ################## --}}
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+    <h1>Modification de produit</h1>
+    <ol class="breadcrumb">
+        <li><a href="{{route('app.home')}}">Home</a></li>
+        <li><i class="fa fa-angle-right"></i> Produit</li>
+    </ol>
+</div>
+{{-- ################## --}}
+<!-- Main content -->
+<div class="content">
+    {{-- ---------------- --}}
+    <div class="row m-t-3">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-blue">
+                    <h5 class="text-white m-b-0">Produit</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{route('produit.update',['produit'=> $produit])}}" method="POST">
+                        @csrf 
+                        @method('PUT')
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                <label class="control-label" for="code_produit"">Code produit</label>
+                                <input class="form-control" placeholder="Code produit" type="text" id="code_produit" name="code_produit" value="{{ old('code_produit', $produit->code_produit?? null) }}">
+                                <span class="fa fa-barcode form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
-    
-                            <label class="label col-md-9 control-label">Code Produit :</label>
-                            <div class="col-md-12">
-                                <input type="text" class="form-control" name="code_produit" placeholder="code_produit" value="{{ old('code_produit', $produit->code_produit?? null) }}" >
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                <label class="control-label" for="nom_produit">Nom produit</label>
+                                <input class="form-control" placeholder="Nom produit" type="text" id="nom_produit" name="nom_produit" value="{{ old('nom_produit', $produit->nom_produit?? null) }}">
+                                <span class="fa fa-bookmark form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
-                            <label class="label col-md-9 control-label">TVA:</label>
-                            <div class="col-md-12">
-                                <select name="TVA" id="TVA" class="form-control">
-                                    <option value="">---TVA---</option>
-                                    <option value="20" @if ($produit->TVA == old('TVA',"20" ?? null)) selected="selected" @endif>20</option>
-                                    <option value="14" @if ($produit->TVA == old('TVA',"14" ?? null)) selected="selected" @endif>14</option>
-                                    <option value="10" @if ($produit->TVA == old('TVA',"10" ?? null)) selected="selected" @endif>10</option>
-                                    <option value="7" @if ($produit->TVA == old('TVA',"7" ?? null)) selected="selected" @endif>7</option>
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                <label class="control-label" for="nom_categorie">Catégorie</label>
+                                <select class="form-control" id="nom_categorie" name="nom_categorie">
+                                    <option value="">-- Catégorie --</option>
+                                    @foreach($categories as $categorie)
+                                        <option value="{{$categorie->id }}" @if ($categorie->id == old('nom_categorie',$produit->categorie_id ?? null)) selected="selected" @endif> {{ $categorie->nom_categorie}}</option>
+                                    @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control" name="TVA" placeholder="TVA" value="{{ old('TVA', $produit->TVA ?? null) }}"  > --}}
+                                <span class="fa fa-tags form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
-                            <label class="label col-md-9 control-label">Prix produit HT :</label>
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                <label class="control-label" for="tva">TVA</label>
+                                <select  class="form-control" id="tva" name="tva" class="form-control">
+                                    <option value="">-- TVA --</option>
+                                    <option value="20" @if ($produit->TVA == old('tva',20 ?? null)) selected="selected" @endif>20%</option>
+                                    <option value="14" @if ($produit->TVA == old('tva',14 ?? null)) selected="selected" @endif>14%</option>
+                                    <option value="10" @if ($produit->TVA == old('tva',10 ?? null)) selected="selected" @endif>10%</option>
+                                    <option value="7" @if ($produit->TVA == old('tva',7 ?? null)) selected="selected" @endif>7%</option>
+                                </select>
+                                <span class="fa fa-wrench form-control-feedback" aria-hidden="true"></span> </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                <label class="control-label" for="prix_produit_HT">Prix produit HT</label>
+                                <input class="form-control" placeholder="" type="number" step="0.01" min="0" id="prix_produit_HT" name="prix_produit_HT" value="{{ old('prix_produit_HT', $produit->prix_produit_HT?? null) }}">
+                                <span class="fa fa-money form-control-feedback" aria-hidden="true"></span> </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                <label class="control-label" for="prix_produit_TTC">Prix produit TTC</label>
+                                <input class="form-control" placeholder="" type="number" step="0.01" min="0" id="prix_produit_TTC" name="prix_produit_TTC" value="{{ old('prix_produit_TTC', $produit->prix_produit_TTC?? null) }}">
+                                <span class="fa fa-money form-control-feedback" aria-hidden="true"></span> </div>
+                            </div>
+                            <div class="col-md-6">
+                                <fieldset class="form-group">
+                                    <label class="control-label" for="description">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $produit->description?? null) }}</textarea>
+                                </fieldset>
+                            </div>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="prix_produit_HT" placeholder="prix_produit_HT" value="{{ old('prix_produit_HT', $produit->prix_produit_HT ?? null) }}"   >
+                                <button type="submit" class="btn btn-warning text-white" name="updateProduit">Modifier</button>
+                                &nbsp;
+                                <a href="{{action('ProduitController@index')}}" class="btn btn-info">Retour</a>
                             </div>
-                            <label class="label col-md-9 control-label">Description:</label>
-                            <div class="col-md-12">
-                                <input type="text" class="form-control" name="description" placeholder="description" value="{{ old('description', $produit->description ?? null) }}" >
-                            </div>
-                            <label class="label col-md-9 control-label">Nom categorie :</label>
-                            <div class="col-md-12">
-                                @include('managements.selection.select')
-                            </div>
-                            {{-- <div class="col-md-12">
-                                <input type="text" class="form-control" name="nom_categorie" placeholder="description" value="{{ old('nom_categorie', $produit->nom_categorie ?? null) }}" readonly>
-                            </div> --}}
-
-                            
-                        @if ($errors->any())  
-
-                        <ul>
-                            @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        @endif
-                        
-                        <div class="col-md-12">
-                         <button class="btn btn-info" type="submit">Modifier</button>
-                        <a href="{{action('ProduitController@index')}}" class="btn btn-info"  >retour</a>
                         </div>
                     </form>
-
-                    </div>
-                    
                 </div>
-             </div>
-            
-        </main>
+            </div>
+        </div>
     </div>
-</body>
-</html>
-
-
+    {{-- ---------------- --}}
+</div>
+<!-- /.content --> 
+{{-- ################## --}}
+<script type="text/javascript">
+    $(document).on('keyup','#code_produit',function(){
+        myFunction();
+    })
+    $(document).on('keyup','#nom_produit',function(){
+        myFunction();
+    })
+    $(document).on('click','#tva',function(){
+        myFunction();
+        calculTTC();
+    })
+    $(document).on('keyup','#prix_produit_TTC',function(){
+        myFunction();
+        calculHT();
+    })
+    $(document).on('click','#prix_produit_TTC',function(){
+        myFunction();
+        calculHT();
+    })
+    $(document).on('keyup','#prix_produit_HT',function(){
+        myFunction();
+        calculTTC();
+    })
+    $(document).on('click','#prix_produit_HT',function(){
+        myFunction();
+        calculTTC();
+    })
+    $(document).on('click','#nom_categorie',function(){
+        myFunction();
+    })
+    function calculHT() {
+        var tva = $('#tva').val();
+        var prix_produit_HT = $('#prix_produit_HT');
+        var prix_produit_TTC = $('#prix_produit_TTC');
+        var ttc = parseFloat(prix_produit_TTC.val());
+        prix_produit_HT.val((ttc / (1 + tva/100)).toFixed(2));
+    }
+    function calculTTC() {
+        var tva = $('#tva').val();
+        var prix_produit_HT = $('#prix_produit_HT');
+        var prix_produit_TTC = $('#prix_produit_TTC');
+        var ht = parseFloat(prix_produit_HT.val());
+        prix_produit_TTC.val((ht + (ht * tva/100)).toFixed(2));
+    }
+    function myFunction() {
+        var code_produit = $('#code_produit').val();
+        var nom_produit = $('#nom_produit').val();
+        var tva = $('#tva').val();
+        var prix_produit_HT = $('#prix_produit_HT').val();
+        var prix_produit_TTC = $('#prix_produit_TTC').val();
+        var nom_categorie = $('#nom_categorie').val();
+        // -----    -----       ---- //
+        var btn = $('button[name=updateProduit]');
+        if(
+            (!code_produit && code_produit=='') || 
+            (!nom_produit && nom_produit=='') || 
+            (!tva && tva=='') || 
+            (!prix_produit_TTC && prix_produit_TTC===0) || 
+            (!prix_produit_HT && prix_produit_HT===0) || 
+            (!nom_categorie && nom_categorie=='')
+        ) {
+            btn.prop('disabled',true);
+        }
+        else{
+            btn.prop('disabled',false);
+        }
+    }
+</script>
+{{-- ################## --}}
+@endsection
