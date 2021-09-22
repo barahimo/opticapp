@@ -198,7 +198,7 @@
                 <div class="text-center">
                     <!-- <a href="route('pdf.generate',['id'=>$reglement->id])" class="btn btn-primary">Imprimer</a> -->
                     <div class="text-center">
-                        <i class="fas fa-arrow-circle-left fa-3x" onclick="window.location.assign('/index5')"></i>
+                        <i class="fas fa-arrow-circle-left fa-3x" onclick="window.location.assign('{{route('commande.index')}}')"></i>
                     </div>
                     <br>
                     <button onclick="onprint()" class="btn btn-primary">Créer PDF</button>

@@ -22,13 +22,12 @@
                 </div>
                 <br>
                 <div class="col-6 text-center">
-                    {{-- <button onclick="onprint()" class="btn btn-outline-primary"><i class="fa fa-print"></i></button> --}}
-                    <button onclick="onprint()" class="btn btn-primary">Créer PDF</button>
+                    <button onclick="onprint()" class="btn btn-outline-primary"><i class="fa fa-print"></i></button>
                 </div>
             </div>
             <div id="content">
                 <div class="align-center" style="display: flex;align-items: center;justify-content: center;">
-                    <div class="card" style="margin-top:20px;">
+                    <div class="card border border-white" style="margin-top:20px;">
                         <div class="card-body">
                             <div id="contenu" class="text-black">
                                 <div class="row">
@@ -81,7 +80,7 @@
                                                 Montants exprimés en Dirham
                                             </th>
                                         </tr>
-                                        <tr id="headerFacture">
+                                        <tr class="headerFacture">
                                             <th style="width:10%" class="text-center">Réf.</th>
                                             <th style="width:50%" class="text-center">Désignation</th>
                                             <th style="width:10%" class="text-center">Qté</th>
@@ -98,7 +97,7 @@
                                             $prix_unit = $lignecommande->total_produit / $lignecommande->quantite;
                                             $TTC += $lignecommande->total_produit;
                                         @endphp
-                                        <tr id="bodyFacture">
+                                        <tr class="bodyFacture">
                                             <td style="width:10%" class="text-left">{{$lignecommande->produit->code_produit}}</td>
                                             <td style="width:50%" class="text-left">{{$lignecommande->produit->nom_produit}}</td>
                                             <td style="width:10%" class="text-center">{{$lignecommande->quantite}}</td>
@@ -106,16 +105,25 @@
                                             <td style="width:15%" class="text-right">{{number_format($lignecommande->total_produit,2)}}</td>
                                         </tr>
                                         @endforeach
-                                        <tr id="tbody_ligne">
+                                        {{-- --------------------------- --}}
+                                        {{-- <tr class="bodyFacture">
+                                            <td style="width:10%" class="text-left">code_produit</td>
+                                            <td style="width:50%" class="text-left">nom_produit</td>
+                                            <td style="width:10%" class="text-center">3</td>
+                                            <td style="width:15%" class="text-right">100</td>
+                                            <td style="width:15%" class="text-right">300</td>
+                                        </tr> --}}
+                                        {{-- --------------------------- --}}
+                                        <tr class="tbody_ligne">
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
-                                        <tr id="ttcFacture">
+                                        <tr class="ttcFacture">
                                             <td colspan="2" style="border-bottom: none !important"></td>
-                                            <th colspan="2" class="text-right">MONTANT A PAYER : :</th>
+                                            <th colspan="2" class="text-right">MONTANT A PAYER :</th>
                                             <th colspan="1" class="text-right">{{number_format($TTC,2)}}</th>
                                         </tr>
                                         <tr>
@@ -188,23 +196,25 @@
 </div>
 <!-- #########################################################" -->
 <!-- #########################################################" -->
-<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.1/html2canvas.min.js" integrity="sha512-Ki6BxhTDkeY2+bERO2RGKOGh6zvje2DxN3zPsNg4XhJGhkXiVXxIi1rkHUeZgZrf+5voBQJErceuCHtCCMuqTw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-{{-- <script src="{{ asset('js/jspdf.umd.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.min.js') }}"></script> --}}
+{{-- <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.1/html2canvas.min.js" integrity="sha512-Ki6BxhTDkeY2+bERO2RGKOGh6zvje2DxN3zPsNg4XhJGhkXiVXxIi1rkHUeZgZrf+5voBQJErceuCHtCCMuqTw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+<script src="{{ asset('js/jspdf.umd.min.js') }}"></script>
+<script src="{{ asset('js/html2canvas.min.js') }}"></script>
 <script type="application/javascript">
     function dimensionTBODY(){
-        var tbody = $('#display').find('#pdf').find('table').find('tbody');
+        // var tbody = $('#display').find('#pdf').find('table').find('tbody');
+        var tbody = $('#contenu').find('table').find('tbody');
         var height_tbody = tbody.outerHeight();
-        var lignes = tbody.find('tr');
+        // var lignes = tbody.find('tr');
         // tbody_ligne = lignes.eq(lignes.length - 6);
         // tbody_ligne.height(300-height_tbody);
-        // $('#pdf').find('#tbody_ligne').height(300-height_tbody);
-        $('#pdf').find('#tbody_ligne').height(320-height_tbody);
+        // $('#pdf').find('.tbody_ligne').height(300-height_tbody);
+        $('#pdf').find('.tbody_ligne').height(500-height_tbody);
+        // console.log('height_tbody : '+height_tbody);
         // var height_tbody = $('#display').find('table').find('tbody').outerHeight();
-        // $('#display').find('#tbody_ligne').height(480-height_tbody);
+        // $('#display').find('.tbody_ligne').height(480-height_tbody);
         // var height_tbody = $('table').find('tbody').outerHeight();
-        // $('#tbody_ligne').height(500-height_tbody);
+        // $('.tbody_ligne').height(500-height_tbody);
         // console.log(document.getElementById('tr1').offsetHeight);
         // console.log(document.getElementById('tr2').offsetHeight);
     }

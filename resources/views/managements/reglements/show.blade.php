@@ -1,149 +1,213 @@
 @extends('layout.dashboard')
-
 @section('contenu')
-
-<div class="row justify-content-left m-l-10">
-    <div class="col-md-8">
-        <div class="card" style="background-color: rgba(241, 241, 241, 0.842)">
-            <div class="card-body" >
-
-                {{-- <table calss="table">
-
-                    <tr>
-                        <th>Nom Client :</th>
-                            <td style="width: 500px; height: 30px" > 
-                            <input type="text" class="form-control" placeholder="Nom Client">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Adresse :</th>
-                        <td><input type="text" class="form-control" ></td>
-                    </tr>
-                    <tr>
-                        <th>telephone :</th>
-                        <td><input type="text" class="form-control" ></td>
-                    </tr>
-
-                </table> --}}
-                <table class="table">
-                    <tr style="text-align: center;background:white; font-size:20px;">
-                        <th > Infos Client</th>
-                    </tr>
-
-                </table>
-
-                 
-                <div class="form-group">
-                    <label for="AA"><strong>Nom Complet:</strong></label> 
-                    <input type="text" class="form-control" placeholder="Nom Client" value="{{$commande->client->nom_client}}">
+<!-- #########################################################" -->
+{{ Html::style(asset('css/facturestyle.css')) }}
+{{-- ################## --}}
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+    <h1>Reglement</h1>
+    <ol class="breadcrumb">
+        <li><a href="{{route('app.home')}}">Home</a></li>
+        <li><i class="fa fa-angle-right"></i> Reglement</li>
+    </ol>
+</div>
+{{-- ################## --}}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row" style="text-align : right">
+                <div class="col-6 text-center">
+                    <i class="fas fa-arrow-circle-left fa-3x" onclick="window.location.assign('{{route('commande.index')}}')"></i>
                 </div>
-                <div class="form-group">
-                    <label for="AA"><strong>Adresse:</strong></label> 
-                     <input type="text" class="form-control" placeholder="Adresse" value="{{$commande->client->adresse}}">
-                </div>
-                <div class="form-group">
-                    <label for="AA"><strong>Telephone:</strong></label> 
-
-                     <input class="form-control" placeholder="telephone" value="{{$commande->client->telephone}}"> 
-                </div>
-                   
-                {{-- &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="text" class="form-control" placeholder="avance">&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="text" class="form-control" placeholder="reste">&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="date" class="form-control" placeholder="date">&nbsp;&nbsp; --}}
-
-
-            </div>
-        </div>
-    </div>
-
-</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-<div class="row m-l-10" >
-    <div  class="col-3">
-        <div class="card" style="background-color: rgba(241, 241, 241, 0.842)">
-            <div class="card-body" >
-                <table class="table">
-                    <tr style="text-align: center;background:white; font-size:20px;">
-                        <th >info mode</th>
-                    </tr>
-
-                </table>
-
-                <div class="form-group">
-                 <label for="AA"><strong>mode reglement:</strong></label> 
-                 <input type="text" class="form-control" placeholder="Nom Client" value="{{$reglement->mode_reglement}}">
-                </div>
-                <div class="form-group">
-                  <label for="AA"><strong> Avance:</strong></label> 
-                 <input type="text" class="form-control" placeholder="Adresse" value="{{$reglement->avance}}">
-                </div>
-                <div class="form-group">
-                 <label for="AA"><strong>Reste:</strong></label>
-                <input type="text" class="form-control" placeholder="Adresse" value="{{$reglement->reste}}">
+                <br>
+                <div class="col-6 text-center">
+                    <button onclick="onprint()" class="btn btn-outline-primary"><i class="fa fa-print"></i></button>
                 </div>
             </div>
-        </div>
-    </div>
-
-
-    <div  class="col-3">
-        <div class="card" style="background-color: rgba(241, 241, 241, 0.842)">
-            <div class="card-body" >
-                <table class="table">
-                    <tr style="text-align: center;background:white; font-size:20px;">
-                        <th > Infos commande  </th>
-                    </tr>
-
-                </table>
-
-                <div class="form-group">
-                 <label for="AA"><strong>commande_id :</strong></label>   
-                <input type="text" id="AA" class="form-control" placeholder="Nom Client" value="{{$commande->id}}">
-                </div>
-                <div class="form-group">
-                <label for="BB"> <strong>date:</strong> </label>
-                <input type="text" class="form-control" id="BB" placeholder="Adresse" value="{{$commande->date}}">
-                </div>
-                <div class="form-group">
-                <label for="BB"> <strong>Etat de règlement</strong> </label>
-                <input type="text" class="form-control" id="BB" placeholder="Adresse" value="{{$reglement->status}}">
+            <div id="content">
+                <div class="align-center" style="display: flex;align-items: center;justify-content: center;">
+                    <div class="card border border-white" style="margin-top:20px;">
+                        <div class="card-body">
+                            <div id="contenu" class="text-black">
+                                <div class="row">
+                                    {{-- <div class="col-12">
+                                        RECEPISSE DE REGLEMENT
+                                    </div> --}}
+                                    <div class="col-6">
+                                        @if($company && ($company->logo || $company->logo != null))
+                                            <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:80px;height:80px" class="img-fluid">
+                                        @else
+                                            <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
+                                        @endif
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        @php
+                                        $time = strtotime($reglement->date);
+                                        $date = date('d/m/Y',$time);
+                                        @endphp
+                                        Le, {{$date}}
+                                    </div>
+                                </div>
+                                <table cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr style="height:10px"></tr>
+                                        <tr>
+                                            <th colspan="5" style="text-align:center; background-color:rgb(235, 233, 233);">
+                                                @php
+                                                $list = explode("-",$reglement->code);
+                                                $list1 = $list[1];
+                                                $list2 = $list[2];
+                                                $code = $list1.'-'.$list2;
+                                                @endphp
+                                                Reçu n° : {{$code}}
+                                            </th>
+                                        </tr>
+                                        <tr style="height:10px"></tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Client -->
+                                        <tr>
+                                            <td rowspan="7" >
+                                                <!-- <img src="{{asset('images/logo.jpg')}}" alt="logo" style="width:100px"> -->
+                                                @if($company && ($company->logo || $company->logo != null))
+                                                    <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:80px;height:80px" class="img-fluid">
+                                                @else
+                                                    <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
+                                                @endif
+                                            </td>
+                                            <th  class="text-left border">Client:</th>
+                                            <td  class="text-left border">{{$reglement->commande->client->code}} | {{$reglement->commande->client->nom_client}}</td>
+                                        </tr>
+                                        <!-- Adresse Client -->
+                                        <tr>
+                                            <!-- <td  class="text-right border"></td> -->
+                                            <th  class="text-left border">Adresse :</th>
+                                            <td  class="text-left border">{{$reglement->commande->client->adresse}}</td>
+                                        </tr>
+                                        <!-- Code Comande -->
+                                        <tr>
+                                            <!-- <td  class="text-right border"></td> -->
+                                            <th  class="text-left border">Commande :</th>
+                                            <td  class="text-left border">{{$reglement->commande->code}}</td>
+                                        </tr>
+                                        <!-- Total à payer -->
+                                        <tr>
+                                            <!-- <td  class="text-right border"></td> -->
+                                            <th  class="text-left border">Total à payer :</th>
+                                            <td  class="text-left border">{{$reglement->commande->total}} dh</td>
+                                        </tr>
+                                        <!-- Montant réglé -->
+                                        <tr>
+                                            <!-- <td  class="text-right border"></td> -->
+                                            <th  class="text-left border">Montant réglé :</th>
+                                            <td  class="text-left border">{{$reglement->avance}} dh</td>
+                                        </tr>
+                                        <!-- Total des règlements -->
+                                        <tr>
+                                            <!-- <td  class="text-right border"></td> -->
+                                            <th  class="text-left border">Total des règlements :</th>
+                                            @php
+                                            $total_reg = $reglement->commande->total - $reglement->reste;
+                                            @endphp
+                                            <td  class="text-left border">{{number_format($total_reg, 2, '.', '')}} dh</td>
+                                        </tr>
+                                        <!-- Reste à payer -->
+                                        <tr>
+                                            <!-- <td  class="text-right border"></td> -->
+                                            <th  class="text-left border">Reste à payer :</th>
+                                            <td  class="text-left border">{{$reglement->reste}} dh</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr ><td colspan="3"></td></tr>
+                                        <tr>
+                                            <td colspan="3" class="text-center" style="background-color:rgb(235, 233, 233);">
+                                                {!!$adresse!!}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div  class="col-3 m-r-10">
-        <div class="card" style="background-color: rgba(241, 241, 241, 0.842)">
-            <div class="card-body" >
-                <table class="table">
-                    <tr style="text-align: center;background:white; font-size:20px;">
-                        <th > Dates règelement  </th>
-                    </tr>
-
-                </table>
-                <div class="form-group">
-                    <label for="XX"><strong>créé le :</strong></label>
-                    <input type="text" class="form-control" id="XX" placeholder="Nom Client" value="{{$reglement->created_at}}">
-                </div>
-                <div class="form-group">   
-                    <label for="YY"><strong>modifier le :</strong></label>
-                    <input type="text" class="form-control" id="YY" placeholder="Adresse" value="{{$reglement->updated_at}}">
-                </div>
-              
-    
-                    <a href="{{action('ReglementController@index')}}" class="btn btn-info btn-lg" style=" width:110px; margin-left: 100px ; margin-top: 20px ; margin-left:1030px;">retour</a>
-               
-            </div>
-        
-        </div>
-        
     </div>
 </div>
-
-<a href="{{action('ReglementController@index')}}" class="btn btn-info btn-lg" style=" width:110px; margin-left: 100px ; margin-top: 20px ; margin-left:1030px;">retour</a>
-
-
-
-
+<!-- #########################################################" -->
+<div id="display" style="display : none">
+    <div id="pdf" style="width: 700px"></div>
+</div>
+<!-- #########################################################" -->
+<!-- #########################################################" -->
+{{-- <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.1/html2canvas.min.js" integrity="sha512-Ki6BxhTDkeY2+bERO2RGKOGh6zvje2DxN3zPsNg4XhJGhkXiVXxIi1rkHUeZgZrf+5voBQJErceuCHtCCMuqTw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+<script src="{{ asset('js/jspdf.umd.min.js') }}"></script>
+<script src="{{ asset('js/html2canvas.min.js') }}"></script>
+<script type="application/javascript">
+    function dimensionTBODY(){
+        // var tbody = $('#display').find('#pdf').find('table').find('tbody');
+        var tbody = $('#contenu').find('table').find('tbody');
+        var height_tbody = tbody.outerHeight();
+        // var lignes = tbody.find('tr');
+        // tbody_ligne = lignes.eq(lignes.length - 6);
+        // tbody_ligne.height(300-height_tbody);
+        // $('#pdf').find('.tbody_ligne').height(300-height_tbody);
+        $('#pdf').find('.tbody_ligne').height(500-height_tbody);
+        console.log('height_tbody : '+height_tbody);
+        // var height_tbody = $('#display').find('table').find('tbody').outerHeight();
+        // $('#display').find('.tbody_ligne').height(480-height_tbody);
+        // var height_tbody = $('table').find('tbody').outerHeight();
+        // $('.tbody_ligne').height(500-height_tbody);
+        // console.log(document.getElementById('tr1').offsetHeight);
+        // console.log(document.getElementById('tr2').offsetHeight);
+    }
+    function onprint(){
+        // -------- declarartion des jsPDF and html2canvas ------------//
+        window.html2canvas = html2canvas;
+        window.jsPDF = window.jspdf.jsPDF;
+        // -------- Change Style ------------//
+        $('#pdf').html($('#content').html());
+        dimensionTBODY();
+        // $('#pdf').prop('style','height: 700px;width: 500px;margin-left: auto;margin-right: auto;');
+            // height: 800px;
+            // width: 550px;
+            // height: 780px;
+            // width: 580px;
+        var style = `
+            margin-left: auto;
+            margin-right: auto;
+            font-size:10px;
+            font-family: Arial, Helvetica, sans-serif;
+        `;
+        $('#pdf').prop('style',style);
+        // -------- Initialization de doc ------------//
+        var doc = new jsPDF("p", "pt", "a4",true);
+        // -------- html to pdf ------------//
+        // -------- Footer ------------//
+        // -------------- //
+        // var foot1 = `Siège social : --------------`;
+        // var foot2 = `Téléphone : --------`;
+        // var foot3 = `I.F. :--------`;
+        // doc.setFontSize(10);//optional
+        // var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+        // var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+        // -------------- //
+        // doc.text(foot1, pageWidth / 2, pageHeight  - 50, {align: 'center'});
+        // doc.text(foot2, pageWidth / 2, pageHeight  - 35, {align: 'center'});
+        // doc.text(foot3, pageWidth / 2, pageHeight  - 20, {align: 'center'});
+        // -------- Footer ------------//
+        doc.html(document.querySelector("#pdf"), {
+            callback: function (doc) {
+                var code = "<?php echo $reglement->code;?>";
+                // doc.save("REG-"+code+".pdf");
+                doc.save(code+".pdf");
+            },
+            x: 10,
+            y: 10,
+        });
+    }
+</script>
 @endsection

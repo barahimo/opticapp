@@ -112,7 +112,7 @@ Route::post('/storeReglements3','ReglementController@store3')->name('reglement.s
 // Route::get('/facture2/{facture}','FactureController@show2')->name('facture.show2');
 
 // Route::get('/showCommande/{id}','CommandeController@show2')->name('commande.show2');//commande.show
-Route::get('/showReglement/{id}','ReglementController@show2')->name('reglement.show2');
+// Route::get('/showReglement/{id}','ReglementController@show2')->name('reglement.show2');//reglement.show
 
 
 Route::resource('company', 'CompanyController');

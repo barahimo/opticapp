@@ -58,7 +58,7 @@
                 <!-- Logo --> 
                 <a href="{{route('app.home')}}" class="navbar-brand logo blue-bg"> 
                     <span class="logo-lg">
-                        <img src="{{ asset('dist/img/logo-blue.png')}}" href="{{ url('/')}}">
+                        <img src="{{ asset('dist/img/logo-blue.png')}}" alt="logo">
                     </span> 
                 </a>
 
@@ -76,14 +76,17 @@
                     <ul class="navbar-nav ml-auto text-right">
                         <!-- Authentication Links -->
                         @guest
+                            @if (Route::has('login'))
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('login') }}"><i class="icon-lock"></i> {{ __('Se connecter') }}</a>
                             </li>
+                            @endif
                             @if (Route::has('register'))
-                                <li class="nav-item links">
-                                    <a class="nav-link" href="{{ route('register') }}"><i class="icon-note"></i> {{ __('Créer compte') }}</a>
-                                </li>
-                            @else
+                            <li class="nav-item links">
+                                <a class="nav-link" href="{{ route('register') }}"><i class="icon-note"></i> {{ __('Créer compte') }}</a>
+                            </li>
+                            @endif
+                            {{-- @else
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         {{ Auth::user()->name }}
@@ -100,17 +103,15 @@
                                             @csrf
                                         </form>
                                     </div>
-                                </li>
-                            @endif
+                                </li> --}}
                         @else
                             <li class="nav-item links">
-                                <a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
+                                <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
                             </li>
                             <li class="nav-item links">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fa fa-power-off"></i> Se déconnecter
-                                </a>
+                                <a class="nav-link" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fa fa-power-off"></i> Se déconnecter
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>

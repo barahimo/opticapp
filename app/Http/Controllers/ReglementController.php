@@ -53,7 +53,7 @@ class ReglementController extends Controller
         //
     }
 
-    public function show(Reglement $reglement)
+    public function show_remove(Reglement $reglement)
     {
         // $commande= Commande::with('client')->where('id',$reglement->commande_id )->first();
         $commande= Commande::with('client')->find($reglement->commande_id);
@@ -402,18 +402,19 @@ class ReglementController extends Controller
         return ['status'=>"success",'message'=>"Le règlement a été bien enregistré !!"];
     }
 
-    public function show2($reg_id){
+    public function show(Reglement $reglement){
         $companies = Company::get();
         $count = count($companies);
         ($count>0)  ? $company = Company::first(): $company = null;
         $adresse = $this->getAdresse($company);
 
-        $reglement = Reglement::with(['commande' => function($query){$query->with('client');}])->find($reg_id);
+        $reglement = Reglement::with(['commande' => function($query){$query->with('client');}])->find($reglement->id);
         // return $reglement;
         // return view('managements.reglements.show2', [
         //     'reglement' => $reglement
         // ]);
-        return view('managements.reglements.view1', [
+        // return view('managements.reglements.view1', [
+        return view('managements.reglements.show', [
             'reglement' => $reglement,
             'company' => $company,
             'adresse' => $adresse,

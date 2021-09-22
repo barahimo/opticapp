@@ -90,7 +90,7 @@
                       })"
                       class="btn btn-outline-success btn-sm">Avoir</button>`;
                 }
-                var url_show2 = "{{route('reglement.show2',['id'=>":id"])}}".replace(':id', reglement.id);
+                var url_show2 = "{{route('reglement.show',['reglement'=>":id"])}}".replace(':id', reglement.id);
                 var url_delete2 = "{{route('reglement.delete',['reglement'=>":reglement"])}}".replace(':reglement', reglement.id);
                 var btnPrint = `<a class="btn btn-outline-info  btn-sm" href=${url_show2}><i class="fas fa-print"></i></a>`;
                 // var btnDelete2 = `<a class="btn btn-outline-danger  btn-sm" href=${url_delete2}><i class="fas fa-trash"></i></a>`;
