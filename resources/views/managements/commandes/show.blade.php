@@ -126,12 +126,7 @@
                                             <th colspan="2" class="text-right">MONTANT A PAYER :</th>
                                             <th colspan="1" class="text-right">{{number_format($TTC,2)}}</th>
                                         </tr>
-                                        <tr>
-                                            <th></th>
-                                            <th colspan="6">
-                                                Arrêté la présente facture à la somme : 
-                                            </th>
-                                        </tr>
+                                        <tr style="height:10px;"></tr>
                                         <tr>
                                             <th></th>
                                             <th colspan="6">

@@ -33,43 +33,45 @@
             <!-- search form --> 
             <br>
             {{-- ---------------- --}}
-            <table class="table" id="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Commande</th>
-                        <th>Date</th>
-                        <th>Client</th>
-                        <th>Total HT</th>
-                        <th>Total TVA</th>
-                        <th>Total TTC</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($factures as $facture)
+            <div class="table-responsive">
+                <table class="table" id="table">
+                    <thead>
                         <tr>
-                            <td>{{$facture->code}}</td>
-                            <td>{{$facture->commande->code}}</td>
-                            <td>{{$facture->date}}</td>
-                            <td>{{$facture->commande->client->nom_client}}</td>
-                            <td>{{$facture->total_HT}}</td>
-                            <td>{{$facture->total_TVA}}</td>
-                            <td>{{$facture->total_TTC}}</td>
-                            <td>
-                                <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                                @if( Auth::user()->is_admin )
-                                <button class="btn btn-outline-danger btn-sm remove-facture" 
-                                    data-id="{{ $facture->id }}" 
-                                    data-action="{{ route('facture.destroy',$facture->id) }}"> 
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                                @endif
-                            </td>
+                            <th>#</th>
+                            <th>Commande</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Total HT</th>
+                            <th>Total TVA</th>
+                            <th>Total TTC</th>
+                            <th>Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($factures as $facture)
+                            <tr>
+                                <td>{{$facture->code}}</td>
+                                <td>{{$facture->commande->code}}</td>
+                                <td>{{$facture->date}}</td>
+                                <td>{{$facture->commande->client->nom_client}}</td>
+                                <td>{{$facture->total_HT}}</td>
+                                <td>{{$facture->total_TVA}}</td>
+                                <td>{{$facture->total_TTC}}</td>
+                                <td>
+                                    <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                    @if( Auth::user()->is_admin )
+                                    <button class="btn btn-outline-danger btn-sm remove-facture" 
+                                        data-id="{{ $facture->id }}" 
+                                        data-action="{{ route('facture.destroy',$facture->id) }}"> 
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

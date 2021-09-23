@@ -1,7 +1,7 @@
 @extends('layout.dashboard')
 @section('contenu')
 <!-- #########################################################" -->
-{{ Html::style(asset('css/facturestyle.css')) }}
+{{ Html::style(asset('css/reglementstyle.css')) }}
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
@@ -31,14 +31,11 @@
                         <div class="card-body">
                             <div id="contenu" class="text-black">
                                 <div class="row">
-                                    {{-- <div class="col-12">
-                                        RECEPISSE DE REGLEMENT
-                                    </div> --}}
                                     <div class="col-6">
                                         @if($company && ($company->logo || $company->logo != null))
-                                            <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:80px;height:80px" class="img-fluid">
+                                        <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:80px;height:80px" class="img-fluid">
                                         @else
-                                            <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
+                                        <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
                                         @endif
                                     </div>
                                     <div class="col-6 text-right">
@@ -53,7 +50,12 @@
                                     <thead>
                                         <tr style="height:10px"></tr>
                                         <tr>
-                                            <th colspan="5" style="text-align:center; background-color:rgb(235, 233, 233);">
+                                            <th colspan="2" style="text-align:center">
+                                                RECEPISSE DE REGLEMENT
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2" style="text-align:center; background-color:rgb(235, 233, 233);">
                                                 @php
                                                 $list = explode("-",$reglement->code);
                                                 $list1 = $list[1];
@@ -68,61 +70,53 @@
                                     <tbody>
                                         <!-- Client -->
                                         <tr>
-                                            <td rowspan="7" >
-                                                <!-- <img src="{{asset('images/logo.jpg')}}" alt="logo" style="width:100px"> -->
-                                                @if($company && ($company->logo || $company->logo != null))
-                                                    <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:80px;height:80px" class="img-fluid">
-                                                @else
-                                                    <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
-                                                @endif
-                                            </td>
-                                            <th  class="text-left border">Client:</th>
-                                            <td  class="text-left border">{{$reglement->commande->client->code}} | {{$reglement->commande->client->nom_client}}</td>
+                                            <th  class="text-left">Client:</th>
+                                            <td  class="text-left">{{$reglement->commande->client->code}} | {{$reglement->commande->client->nom_client}}</td>
                                         </tr>
+                                        <tr style="height:5px"></tr>
                                         <!-- Adresse Client -->
                                         <tr>
-                                            <!-- <td  class="text-right border"></td> -->
-                                            <th  class="text-left border">Adresse :</th>
-                                            <td  class="text-left border">{{$reglement->commande->client->adresse}}</td>
+                                            <th  class="text-left">Adresse :</th>
+                                            <td  class="text-left">{{$reglement->commande->client->adresse}}</td>
                                         </tr>
+                                        <tr style="height:5px"></tr>
                                         <!-- Code Comande -->
                                         <tr>
-                                            <!-- <td  class="text-right border"></td> -->
-                                            <th  class="text-left border">Commande :</th>
-                                            <td  class="text-left border">{{$reglement->commande->code}}</td>
+                                            <th  class="text-left">Commande :</th>
+                                            <td  class="text-left">{{$reglement->commande->code}}</td>
                                         </tr>
+                                        <tr style="height:5px"></tr>
                                         <!-- Total à payer -->
                                         <tr>
-                                            <!-- <td  class="text-right border"></td> -->
-                                            <th  class="text-left border">Total à payer :</th>
-                                            <td  class="text-left border">{{$reglement->commande->total}} dh</td>
+                                            <th  class="text-left">Total à payer :</th>
+                                            <td  class="text-left">{{number_format($reglement->commande->total, 2)}} dh</td>
                                         </tr>
+                                        <tr style="height:5px"></tr>
                                         <!-- Montant réglé -->
                                         <tr>
-                                            <!-- <td  class="text-right border"></td> -->
-                                            <th  class="text-left border">Montant réglé :</th>
-                                            <td  class="text-left border">{{$reglement->avance}} dh</td>
+                                            <th  class="text-left">Montant réglé :</th>
+                                            <td  class="text-left">{{number_format($reglement->avance, 2)}} dh</td>
                                         </tr>
+                                        <tr style="height:5px"></tr>
                                         <!-- Total des règlements -->
                                         <tr>
-                                            <!-- <td  class="text-right border"></td> -->
-                                            <th  class="text-left border">Total des règlements :</th>
+                                            <th  class="text-left">Total des règlements :</th>
                                             @php
                                             $total_reg = $reglement->commande->total - $reglement->reste;
                                             @endphp
-                                            <td  class="text-left border">{{number_format($total_reg, 2, '.', '')}} dh</td>
+                                            <td  class="text-left">{{number_format($total_reg, 2)}} dh</td>
                                         </tr>
+                                        <tr style="height:5px"></tr>
                                         <!-- Reste à payer -->
                                         <tr>
-                                            <!-- <td  class="text-right border"></td> -->
-                                            <th  class="text-left border">Reste à payer :</th>
-                                            <td  class="text-left border">{{$reglement->reste}} dh</td>
+                                            <th  class="text-left">Reste à payer :</th>
+                                            <td  class="text-left">{{number_format($reglement->reste, 2)}} dh</td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
-                                        <tr ><td colspan="3"></td></tr>
+                                        <tr class="tbody_ligne" style="height:10px"></tr>
                                         <tr>
-                                            <td colspan="3" class="text-center" style="background-color:rgb(235, 233, 233);">
+                                            <td colspan="2" class="text-center" style="background-color:rgb(235, 233, 233);">
                                                 {!!$adresse!!}
                                             </td>
                                         </tr>
@@ -155,7 +149,7 @@
         // tbody_ligne = lignes.eq(lignes.length - 6);
         // tbody_ligne.height(300-height_tbody);
         // $('#pdf').find('.tbody_ligne').height(300-height_tbody);
-        $('#pdf').find('.tbody_ligne').height(500-height_tbody);
+        $('#pdf').find('.tbody_ligne').height(550-height_tbody);
         console.log('height_tbody : '+height_tbody);
         // var height_tbody = $('#display').find('table').find('tbody').outerHeight();
         // $('#display').find('.tbody_ligne').height(480-height_tbody);

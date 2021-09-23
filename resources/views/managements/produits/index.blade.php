@@ -35,44 +35,46 @@
             <!-- search form --> 
             <br>
             {{-- ---------------- --}}
-            <table class="table" id="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Code</th>
-                        <th>Produit</th>
-                        <th>TVA</th>
-                        <th>prix HT</th>
-                        <th>prix TTC</th>
-                        <th>Catégorie</th>                            
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($produits as $key=>$produit)
+            <div class="table-responsive">
+                <table class="table" id="table">
+                    <thead>
                         <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$produit->code_produit}}</td>
-                            <td>{{$produit->nom_produit}}</td>
-                            <td>{{$produit->TVA}}%</td>
-                            <td>{{number_format($produit->prix_produit_HT,2)}}</td>
-                            <td>{{number_format($produit->prix_produit_TTC,2)}}</td>
-                            <td>{{$produit->categorie->nom_categorie}}</td>
-                            <td>
-                                <a href="{{ action('ProduitController@show',['produit'=> $produit])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                                @if( Auth::user()->is_admin )
-                                <a href="{{route('produit.edit',['produit'=> $produit])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
-                                <button class="btn btn-outline-danger btn-sm remove-produit" 
-                                data-id="{{ $produit->id }}" 
-                                data-action="{{ route('produit.destroy',$produit->id) }}"> 
-                                <i class="fas fa-trash"></i>
-                                </button>
-                                @endif
-                            </td>
+                            <th>#</th>
+                            <th>Code</th>
+                            <th>Produit</th>
+                            <th>TVA</th>
+                            <th>prix HT</th>
+                            <th>prix TTC</th>
+                            <th>Catégorie</th>                            
+                            <th>Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($produits as $key=>$produit)
+                            <tr>
+                                <td>{{$key+1}}</td>
+                                <td>{{$produit->code_produit}}</td>
+                                <td>{{$produit->nom_produit}}</td>
+                                <td>{{$produit->TVA}}%</td>
+                                <td>{{number_format($produit->prix_produit_HT,2)}}</td>
+                                <td>{{number_format($produit->prix_produit_TTC,2)}}</td>
+                                <td>{{$produit->categorie->nom_categorie}}</td>
+                                <td>
+                                    <a href="{{ action('ProduitController@show',['produit'=> $produit])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                    @if( Auth::user()->is_admin )
+                                    <a href="{{route('produit.edit',['produit'=> $produit])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                    <button class="btn btn-outline-danger btn-sm remove-produit" 
+                                    data-id="{{ $produit->id }}" 
+                                    data-action="{{ route('produit.destroy',$produit->id) }}"> 
+                                    <i class="fas fa-trash"></i>
+                                    </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

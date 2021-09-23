@@ -35,40 +35,42 @@
             <!-- search form --> 
             <br>
             {{-- ---------------- --}}
-            <table class="table" id="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Libelle</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($categories as $key=>$categorie)
+            <div class="table-responsive">
+                <table class="table" id="table">
+                    <thead>
                         <tr>
-                            <td>{{$key+1 }}</td>
-                            <td>{{$categorie->nom_categorie}}</td>
-                            <td>
-                                @if($categorie->description)
-                                {{substr($categorie->description,0,25)}}...
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ action('CategorieController@show',['categorie'=> $categorie])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                                @if( Auth::user()->is_admin )
-                                <a href="{{route('categorie.edit',['categorie'=> $categorie])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
-                                <button class="btn btn-outline-danger btn-sm remove-categorie" 
-                                data-id="{{ $categorie->id }}" 
-                                data-action="{{ route('categorie.destroy',$categorie->id) }}"> 
-                                <i class="fas fa-trash"></i>
-                                </button>
-                                @endif
-                            </td>
+                            <th>#</th>
+                            <th>Libelle</th>
+                            <th>Description</th>
+                            <th>Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($categories as $key=>$categorie)
+                            <tr>
+                                <td>{{$key+1 }}</td>
+                                <td>{{$categorie->nom_categorie}}</td>
+                                <td>
+                                    @if($categorie->description)
+                                    {{substr($categorie->description,0,25)}}...
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ action('CategorieController@show',['categorie'=> $categorie])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                    @if( Auth::user()->is_admin )
+                                    <a href="{{route('categorie.edit',['categorie'=> $categorie])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                    <button class="btn btn-outline-danger btn-sm remove-categorie" 
+                                    data-id="{{ $categorie->id }}" 
+                                    data-action="{{ route('categorie.destroy',$categorie->id) }}"> 
+                                    <i class="fas fa-trash"></i>
+                                    </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

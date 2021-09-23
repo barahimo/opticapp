@@ -75,23 +75,25 @@
   <!-- Main card -->
   <div class="card">
       <div class="card-body">
-        <table class="table" id="table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Date</th>
-              <th>Client</th>
-              <th>Montant total</th>
-              <th>Montant payer</th>
-              <th>Reste à payer</th>
-              <th style="display : none">Status</th>
-              <th style="display : none">Facture</th>
-              <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table" id="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Montant total</th>
+                <th>Montant payer</th>
+                <th>Reste à payer</th>
+                <th style="display : none">Status</th>
+                <th style="display : none">Facture</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
       </div>
   </div>
 </div>

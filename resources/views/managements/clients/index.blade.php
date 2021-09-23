@@ -35,43 +35,49 @@
             <!-- search form --> 
             <br>
             {{-- ---------------- --}}
-            <table class="table" id="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Code</th>
-                        <th>Client</th>
-                        <th>Adresse</th>
-                        <th>Téléphone</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php 
-                    $i = 0 ;
-                    @endphp
-                    @foreach($clients as $client)
-                    <tr>
-                        <td>{{++$i}}</td>
-                        <td>{{$client->code}}</td>
-                        <td>{{$client->nom_client}}</td>
-                        <td>{{$client->adresse}}</td>
-                        <td>{{$client->telephone}}</td>
-                        <td>
-                            <a href="{{ action('ClientController@show',['client'=> $client])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                            @if( Auth::user()->is_admin )
-                            <a href="{{route('client.edit',['client'=> $client])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-outline-danger btn-sm remove-client" 
-                                data-id="{{ $client->id }}" 
-                                data-action="{{ route('client.destroy',$client->id) }}"> 
-                                <i class="fas fa-trash"></i>
-                            </button>
-                            @endif                                  
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table" id="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Code</th>
+                            <th>Client</th>
+                            <th>Adresse</th>
+                            <th>Téléphone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php 
+                        $i = 0 ;
+                        @endphp
+                        @foreach($clients as $client)
+                        <tr>
+                            <td>{{++$i}}</td>
+                            <td>{{$client->code}}</td>
+                            <td>{{$client->nom_client}}</td>
+                            <td>
+                                @if($client->adresse)
+                                    {{substr($client->adresse,0,25)}}...
+                                @endif
+                            </td>
+                            <td>{{$client->telephone}}</td>
+                            <td>
+                                <a href="{{ action('ClientController@show',['client'=> $client])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                @if( Auth::user()->is_admin )
+                                <a href="{{route('client.edit',['client'=> $client])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                <button class="btn btn-outline-danger btn-sm remove-client" 
+                                    data-id="{{ $client->id }}" 
+                                    data-action="{{ route('client.destroy',$client->id) }}"> 
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                @endif                                  
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -111,11 +117,14 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                             @endif `;
+                    var adresse = '';
+                    if(client.adresse != null)
+                        adresse = client.adresse.substring(0,25)+'...';
                     lignes += `<tr>
                         <td>${i+1}</td>
                         <td>${client.code}</td>
                         <td>${client.nom_client}</td>
-                        <td>${client.adresse}</td>
+                        <td>${adresse}</td>
                         <td>${client.telephone}</td>
                         <td>${action}</td>
                     </tr>`;

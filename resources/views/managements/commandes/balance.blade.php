@@ -41,26 +41,28 @@
           <!-- Begin Mouvements  -->
           <div id="content">
             <h5 class="card-title text-center" id="title">Les mouvements :</h5>
-            <table class="table table-striped" id="table" >
-              <thead>
-                <tr class="text-center">
-                    <th>Date</th>
-                    <th>Client</th>
-                    <th>Nature</th>
-                    <th>N° de pièce</th>
-                    <th>Débit</th>
-                    <th>Crédit</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-              <tfoot>
-                <tr class="text-right">
-                  <th colspan="4">Totaux :</th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tfoot>
-            </table>
+            <div class="table-responsive">
+              <table class="table table-striped" id="table" >
+                <thead>
+                  <tr class="text-center">
+                      <th>Date</th>
+                      <th>Client</th>
+                      <th>Nature</th>
+                      <th>N° de pièce</th>
+                      <th>Débit</th>
+                      <th>Crédit</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <th colspan="4">Totaux :</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
           <!-- End Mouvements  -->
       </div>

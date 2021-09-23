@@ -109,128 +109,130 @@
     <div class="card">
         <div class="card-body">
             <h4 class="text-black">Activités récentes</h4>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Clients</th>
-                        <th>Catégories</th>
-                        <th>Produits</th>
-                        <th>Commandes</th>
-                        <th>Règlements</th>
-                        <th>Factures</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            @if(count($clients)>0) 
-                                {{$clients[0]->code}}<br>
-                                <span class="badge badge-light">{{$clients[0]->nom_client}}</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($categories)>0) 
-                                {{$categories[0]->nom_categorie}}
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($produits)>0) 
-                                {{$produits[0]->code_produit}}
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($commandes)>0) 
-                                {{$commandes[0]->code}}<br>
-                                <span class="badge badge-light">{{$commandes[0]->client->nom_client}}</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($reglements)>0) 
-                                {{$reglements[0]->code}}<br>
-                                <span class="badge badge-light">{{$reglements[0]->commande->client->nom_client}}</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($factures)>0) 
-                                {{$factures[0]->code}}<br>
-                                <span class="badge badge-light">{{$factures[2]->commande->client->nom_client}}</span>
-                            @endif
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @if(count($clients)>1) 
-                                {{$clients[1]->code}} <br> 
-                                <span class="badge badge-light">{{$clients[1]->nom_client}}</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($categories)>1) 
-                                {{$categories[1]->nom_categorie}}
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($produits)>1) 
-                                {{$produits[1]->code_produit}}
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($commandes)>1) 
-                                {{$commandes[1]->code}}<br>
-                                <span class="badge badge-light">{{$commandes[1]->client->nom_client}}</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($reglements)>1) 
-                                {{$reglements[1]->code}}<br>
-                                <span class="badge badge-light">{{$reglements[1]->commande->client->nom_client}}</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($factures)>1) 
-                                {{$factures[1]->code}}<br>
-                                <span class="badge badge-light">{{$factures[1]->commande->client->nom_client}}</span>
-                            @endif
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @if(count($clients)>2) 
-                                {{$clients[2]->code}} <br> 
-                                <span class="badge badge-light">{{$clients[2]->nom_client}}</span> 
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($categories)>2) 
-                                {{$categories[2]->nom_categorie}}
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($produits)>2) 
-                                {{$produits[2]->code_produit}}
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($commandes)>2) 
-                                {{$commandes[2]->code}} <br> 
-                                <span class="badge badge-light">{{$commandes[2]->client->nom_client}}</span> 
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($reglements)>2) 
-                                {{$reglements[2]->code}}<br>
-                                <span class="badge badge-light">{{$reglements[2]->commande->client->nom_client}}</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if(count($factures)>2) 
-                                {{$factures[2]->code}}<br>
-                                <span class="badge badge-light">{{$factures[2]->commande->client->nom_client}}</span>
-                            @endif
-                        </td>
-                    </tr>  
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Clients</th>
+                            <th>Catégories</th>
+                            <th>Produits</th>
+                            <th>Commandes</th>
+                            <th>Règlements</th>
+                            <th>Factures</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @if(count($clients)>0) 
+                                    {{$clients[0]->code}}<br>
+                                    <span class="badge badge-light">{{$clients[0]->nom_client}}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($categories)>0) 
+                                    {{$categories[0]->nom_categorie}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($produits)>0) 
+                                    {{$produits[0]->code_produit}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($commandes)>0) 
+                                    {{$commandes[0]->code}}<br>
+                                    <span class="badge badge-light">{{$commandes[0]->client->nom_client}}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($reglements)>0) 
+                                    {{$reglements[0]->code}}<br>
+                                    <span class="badge badge-light">{{$reglements[0]->commande->client->nom_client}}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($factures)>0) 
+                                    {{$factures[0]->code}}<br>
+                                    <span class="badge badge-light">{{$factures[2]->commande->client->nom_client}}</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @if(count($clients)>1) 
+                                    {{$clients[1]->code}} <br> 
+                                    <span class="badge badge-light">{{$clients[1]->nom_client}}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($categories)>1) 
+                                    {{$categories[1]->nom_categorie}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($produits)>1) 
+                                    {{$produits[1]->code_produit}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($commandes)>1) 
+                                    {{$commandes[1]->code}}<br>
+                                    <span class="badge badge-light">{{$commandes[1]->client->nom_client}}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($reglements)>1) 
+                                    {{$reglements[1]->code}}<br>
+                                    <span class="badge badge-light">{{$reglements[1]->commande->client->nom_client}}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($factures)>1) 
+                                    {{$factures[1]->code}}<br>
+                                    <span class="badge badge-light">{{$factures[1]->commande->client->nom_client}}</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @if(count($clients)>2) 
+                                    {{$clients[2]->code}} <br> 
+                                    <span class="badge badge-light">{{$clients[2]->nom_client}}</span> 
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($categories)>2) 
+                                    {{$categories[2]->nom_categorie}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($produits)>2) 
+                                    {{$produits[2]->code_produit}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($commandes)>2) 
+                                    {{$commandes[2]->code}} <br> 
+                                    <span class="badge badge-light">{{$commandes[2]->client->nom_client}}</span> 
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($reglements)>2) 
+                                    {{$reglements[2]->code}}<br>
+                                    <span class="badge badge-light">{{$reglements[2]->commande->client->nom_client}}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(count($factures)>2) 
+                                    {{$factures[2]->code}}<br>
+                                    <span class="badge badge-light">{{$factures[2]->commande->client->nom_client}}</span>
+                                @endif
+                            </td>
+                        </tr>  
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
