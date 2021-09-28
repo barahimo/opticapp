@@ -24,26 +24,26 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group has-feedback">
-                                <label class="control-label">Nom complet</label>
-                                <input class="form-control" placeholder="Nom complet" type="text" name="nom_client">
+                                <label class="control-label" for="nom_client">Nom complet</label>
+                                <input class="form-control" placeholder="Nom complet" type="text" name="nom_client" id="nom_client">
                                 <span class="fa fa-user form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-feedback">
-                                <label class="control-label">Adresse</label>
-                                <input class="form-control" placeholder="Adresse" type="text" name="adresse">
+                                <label class="control-label" for="adresse">Adresse</label>
+                                <input class="form-control" placeholder="Adresse" type="text" name="adresse" id="adresse">
                                 <span class="fa fa-map-marker form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-feedback">
-                                <label class="control-label">Téléphone</label>
-                                <input class="form-control" placeholder="Téléphone" type="text" name="telephone">
+                                <label class="control-label" for="telephone">Téléphone</label>
+                                <input class="form-control" placeholder="Téléphone" type="text" name="telephone" id="telephone">
                                 <span class="fa fa-phone form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-feedback">
-                                <label class="control-label">Solde</label>
-                                <input class="form-control" placeholder="Solde" type="number" step="0.01" min="0" value="0" name="solde">
+                                <label class="control-label" for="solde">Solde</label>
+                                <input class="form-control" placeholder="Solde" type="number" step="0.01" min="0" value="0" name="solde" id="solde">
                                 <span class="fa fa-money form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
                             <div class="col-md-12">

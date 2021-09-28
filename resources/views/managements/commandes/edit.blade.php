@@ -125,29 +125,31 @@
     <div class="card-body">
       <h5 class="card-title">Les Lignes des commandes :</h5>
       <div class="card-text">
-        <table class="table" id="lignes">
-          <thead>
-            <tr>
-              <th style="display : none;">#</th>
-              <th>Libelle</th>
-              <th>Prix</th>
-              <th>Qté</th>
-              <th>Total</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th style="display: none;"></th>
-              <th></th>
-              <th></th>
-              <th>Total à payer</th>
-              <th id="somme">0.00</th>
-            </tr>
-          </tfoot>
-        </table>
+        <div class="table-responsive">
+          <table class="table" id="lignes">
+            <thead class="bg-primary text-white">
+              <tr>
+                <th style="display : none;">#</th>
+                <th>Libelle</th>
+                <th>Prix</th>
+                <th>Qté</th>
+                <th>Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th style="display: none;"></th>
+                <th></th>
+                <th></th>
+                <th>Total à payer</th>
+                <th id="somme">0.00</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -304,9 +306,9 @@
                     <td>${qte.val()}</td>
                     <td>${parseFloat(total.val()).toFixed(2)}</td>
                     <td>
-                      <button class="btn btn-outline-success" onclick="edit(${prod_id.val()})"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-outline-success btn-sm" onclick="edit(${prod_id.val()})"><i class="fas fa-edit"></i></button>
                       &nbsp;&nbsp;&nbsp;
-                      <button class="btn btn-outline-danger" onclick="remove(${prod_id.val()})"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-outline-danger btn-sm" onclick="remove(${prod_id.val()})"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>`;
         table.find('tbody').append(ligne);
@@ -619,9 +621,9 @@
                     <td>${ligne.quantite}</td>
                     <td>${parseFloat(ligne.total_produit).toFixed(2)}</td>
                     <td>
-                      <button class="btn btn-outline-success" onclick="edit(${ligne.produit_id})"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-outline-success btn-sm" onclick="edit(${ligne.produit_id})"><i class="fas fa-edit"></i></button>
                       &nbsp;&nbsp;&nbsp;
-                      <button class="btn btn-outline-danger" onclick="remove(${ligne.produit_id})"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-outline-danger btn-sm" onclick="remove(${ligne.produit_id})"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>`;
           });

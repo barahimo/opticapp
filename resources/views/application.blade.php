@@ -111,7 +111,7 @@
             <h4 class="text-black">Activités récentes</h4>
             <div class="table-responsive">
                 <table class="table">
-                    <thead>
+                    <thead class="bg-primary text-white">
                         <tr>
                             <th>Clients</th>
                             <th>Catégories</th>

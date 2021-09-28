@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Throwable;
 use App\Client;
 use App\Commande;
+use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
@@ -21,16 +23,26 @@ class ClientController extends Controller
         // $clients = Client::onlyTrashed()->get();
         // return $clients;
 
-        try{ 
-            // $clients = Client::orderBy('id','desc')->paginate(3);
+        // try{ 
+            // -------------------------------------- //
+            // if( Auth::user()->id == 1)
+            // $clients = DB::connection('mysql')->table('clients')->orderBy('id','desc')->get();
+            // elseif( Auth::user()->id == 2)
+            // $clients = DB::connection('mysql2')->table('clients')->orderBy('id','desc')->get();
+            // dd($clients);
+            // $clients = DB::SELECT('select * from clients');
+            // $clients = DB::table('clients')->get();
+            // $clients = Client::get();
+            // dd($clients);
+            // -------------------------------------- //
             $clients = Client::orderBy('id','desc')->get();
             return view('managements.clients.index', compact('clients'));
-        }
-        catch(Throwable $e)
-        {
-            $request->session()->flash('status', $e->getMessage());
-            return view('error');
-        }
+        // }
+        // catch(Throwable $e)
+        // {
+        //     $request->session()->flash('status', $e->getMessage());
+        //     return view('error');
+        // }
     }
 
     public function create()
@@ -166,6 +178,22 @@ class ClientController extends Controller
             ->orWhere('telephone','like',"%$search%")
             ->orderBy('id','desc')
             ->get();
+        // if( Auth::user()->id == 1)
+        // $clients = DB::connection('mysql')->table('clients')->where('nom_client','like',"%$search%")
+        //     ->orWhere('code','like',"%$search%")
+        //     ->orWhere('adresse','like',"%$search%")
+        //     ->orWhere('solde','like',"%$search%")
+        //     ->orWhere('telephone','like',"%$search%")
+        //     ->orderBy('id','desc')
+        //     ->get();
+        // elseif( Auth::user()->id == 2)
+        // $clients = DB::connection('mysql2')->table('clients')->where('nom_client','like',"%$search%")
+        //     ->orWhere('code','like',"%$search%")
+        //     ->orWhere('adresse','like',"%$search%")
+        //     ->orWhere('solde','like',"%$search%")
+        //     ->orWhere('telephone','like',"%$search%")
+        //     ->orderBy('id','desc')
+        //     ->get();
         return $clients;
     }
     // ---------------------

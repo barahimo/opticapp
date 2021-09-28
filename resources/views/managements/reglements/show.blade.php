@@ -30,98 +30,112 @@
                     <div class="card border border-white" style="margin-top:20px;">
                         <div class="card-body">
                             <div id="contenu" class="text-black">
+                                {{-- --------Begin header----------- --}}
+                                
                                 <div class="row">
+                                    <div class="col"></div>
                                     <div class="col-6">
-                                        @if($company && ($company->logo || $company->logo != null))
-                                        <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:80px;height:80px" class="img-fluid">
-                                        @else
-                                        <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
-                                        @endif
-                                    </div>
-                                    <div class="col-6 text-right">
-                                        @php
-                                        $time = strtotime($reglement->date);
-                                        $date = date('d/m/Y',$time);
-                                        @endphp
-                                        Le, {{$date}}
-                                    </div>
-                                </div>
-                                <table cellspacing="0" cellpadding="0">
-                                    <thead>
-                                        <tr style="height:10px"></tr>
-                                        <tr>
-                                            <th colspan="2" style="text-align:center">
-                                                RECEPISSE DE REGLEMENT
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="2" style="text-align:center; background-color:rgb(235, 233, 233);">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                @if($company && ($company->logo || $company->logo != null))
+                                                <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:80px;height:80px" class="img-fluid">
+                                                @else
+                                                <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
+                                                @endif
+                                            </div>
+                                            <div class="col-6 text-right">
                                                 @php
-                                                $list = explode("-",$reglement->code);
-                                                $list1 = $list[1];
-                                                $list2 = $list[2];
-                                                $code = $list1.'-'.$list2;
+                                                $time = strtotime($reglement->date);
+                                                $date = date('d/m/Y',$time);
                                                 @endphp
-                                                Reçu n° : {{$code}}
-                                            </th>
-                                        </tr>
-                                        <tr style="height:10px"></tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Client -->
-                                        <tr>
-                                            <th  class="text-left">Client:</th>
-                                            <td  class="text-left">{{$reglement->commande->client->code}} | {{$reglement->commande->client->nom_client}}</td>
-                                        </tr>
-                                        <tr style="height:5px"></tr>
-                                        <!-- Adresse Client -->
-                                        <tr>
-                                            <th  class="text-left">Adresse :</th>
-                                            <td  class="text-left">{{$reglement->commande->client->adresse}}</td>
-                                        </tr>
-                                        <tr style="height:5px"></tr>
-                                        <!-- Code Comande -->
-                                        <tr>
-                                            <th  class="text-left">Commande :</th>
-                                            <td  class="text-left">{{$reglement->commande->code}}</td>
-                                        </tr>
-                                        <tr style="height:5px"></tr>
-                                        <!-- Total à payer -->
-                                        <tr>
-                                            <th  class="text-left">Total à payer :</th>
-                                            <td  class="text-left">{{number_format($reglement->commande->total, 2)}} dh</td>
-                                        </tr>
-                                        <tr style="height:5px"></tr>
-                                        <!-- Montant réglé -->
-                                        <tr>
-                                            <th  class="text-left">Montant réglé :</th>
-                                            <td  class="text-left">{{number_format($reglement->avance, 2)}} dh</td>
-                                        </tr>
-                                        <tr style="height:5px"></tr>
-                                        <!-- Total des règlements -->
-                                        <tr>
-                                            <th  class="text-left">Total des règlements :</th>
-                                            @php
-                                            $total_reg = $reglement->commande->total - $reglement->reste;
-                                            @endphp
-                                            <td  class="text-left">{{number_format($total_reg, 2)}} dh</td>
-                                        </tr>
-                                        <tr style="height:5px"></tr>
-                                        <!-- Reste à payer -->
-                                        <tr>
-                                            <th  class="text-left">Reste à payer :</th>
-                                            <td  class="text-left">{{number_format($reglement->reste, 2)}} dh</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="tbody_ligne" style="height:10px"></tr>
-                                        <tr>
-                                            <td colspan="2" class="text-center" style="background-color:rgb(235, 233, 233);">
-                                                {!!$adresse!!}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                                Le, {{$date}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                                {{-- --------End header----------- --}}
+                                {{-- --------Begin table----------- --}}
+                                <div class="row">
+                                    <div class="col"></div>
+                                    <div class="col-6">
+                                        <table cellspacing="0" cellpadding="0">
+                                            <thead>
+                                                <tr style="height:10px"></tr>
+                                                <tr>
+                                                    <th colspan="2" style="text-align:center">
+                                                        RECEPISSE DE REGLEMENT
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="2" style="text-align:center; background-color:rgb(235, 233, 233);">
+                                                        @php
+                                                        $list = explode("-",$reglement->code);
+                                                        $list1 = $list[1];
+                                                        $list2 = $list[2];
+                                                        $code = $list1.'-'.$list2;
+                                                        @endphp
+                                                        Reçu n° : {{$code}}
+                                                    </th>
+                                                </tr>
+                                                <tr style="height:10px"></tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Client -->
+                                                <tr>
+                                                    <td class="text-left" colspan="2">
+                                                        <span class="font-weight-bold">Client : </span>
+                                                        {{$reglement->commande->client->code}} | {{$reglement->commande->client->nom_client}}
+                                                    </td>
+                                                </tr>
+                                                <!-- Code Comande -->
+                                                <tr>
+                                                    <td class="text-left"colspan="2">
+                                                        <span class="font-weight-bold">Commande : </span>
+                                                        {{$reglement->commande->code}}
+                                                    </td>
+                                                </tr>
+                                                <tr style="height:15px"></tr>
+                                                <!-- Total à payer -->
+                                                <tr>
+                                                    <th  class="text-left">Total à payer :</th>
+                                                    <td  class="text-right">{{number_format($reglement->commande->total, 2)}} dh</td>
+                                                </tr>
+                                                <tr style="height:5px"></tr>
+                                                <!-- Montant réglé -->
+                                                <tr>
+                                                    <th  class="text-left">Montant réglé :</th>
+                                                    <td  class="text-right">{{number_format($reglement->avance, 2)}} dh</td>
+                                                </tr>
+                                                <tr style="height:5px"></tr>
+                                                <!-- Total des règlements -->
+                                                <tr>
+                                                    <th  class="text-left">Total des règlements :</th>
+                                                    @php
+                                                    $total_reg = $reglement->commande->total - $reglement->reste;
+                                                    @endphp
+                                                    <td  class="text-right">{{number_format($total_reg, 2)}} dh</td>
+                                                </tr>
+                                                <tr style="height:5px"></tr>
+                                                <!-- Reste à payer -->
+                                                <tr>
+                                                    <th  class="text-left">Reste à payer :</th>
+                                                    <td  class="text-right">{{number_format($reglement->reste, 2)}} dh</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="tbody_ligne" style="height:10px"></tr>
+                                                <tr>
+                                                    <td colspan="2" class="text-center" style="background-color:rgb(235, 233, 233);">
+                                                        {!!$adresse!!}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                                {{-- --------End table----------- --}}
                             </div>
                         </div>
                     </div>
@@ -164,7 +178,7 @@
         window.jsPDF = window.jspdf.jsPDF;
         // -------- Change Style ------------//
         $('#pdf').html($('#content').html());
-        dimensionTBODY();
+        // dimensionTBODY();
         // $('#pdf').prop('style','height: 700px;width: 500px;margin-left: auto;margin-right: auto;');
             // height: 800px;
             // width: 550px;

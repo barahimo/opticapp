@@ -20,7 +20,7 @@
                     <h5 class="text-white m-b-0">Formulaire de client</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{route('client.update',['client'=> $client])}}" method="POST">
+                    <form action="{{route('client.update',['client'=> $client->id])}}" method="POST">
                         @csrf 
                         @method('PUT')
                         <div class="row">

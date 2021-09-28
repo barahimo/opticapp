@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\CommandeController;
+use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,14 +24,16 @@ Route::get('/', function () {
 });
 // routes authentification user admin
 Auth::routes();
-Route::get('/admin/login', 'Auth\Admin\LoginController@showLoginForm');
-Route::post('/admin/login', 'Auth\Admin\LoginController@login')->name('adminlogin');
+// Route::get('/admin/login', 'Auth\Admin\LoginController@showLoginForm');
+// Route::post('/admin/login', 'Auth\Admin\LoginController@login')->name('adminlogin');
 
-Route::get('/admin/register', 'Auth\Admin\RegisterController@showRegisterForm');
-Route::post('/admin/register', 'Auth\Admin\RegisterController@register')->name('adminregister');
- 
+// Route::get('/admin/register', 'Auth\Admin\RegisterController@showRegisterForm');
+// Route::post('/admin/register', 'Auth\Admin\RegisterController@register')->name('adminregister');
+
+// routes user
+Route::get('findEmail','UserController@findEmail')->name('user.findEmail');
+Route::resource('user', 'UserController');
 // route clients
-
 Route::resource('client', 'ClientController');
 Route::resource('commande', 'CommandeController')->except('update');
 Route::post('/commande/{commande}', 'CommandeController@update')->name('commande.update');
@@ -147,9 +152,23 @@ Route::get('/foo', function () {
     return "done => storage:link";
 });
 
+Route::get('/reset/{email}', function (Request $request) {
+    try
+    {
+        $user = User::where('email',$request->email)->first(); 
+        $user->password = Hash::make('password');
+        $user->save();
+        return 'Done';
+    }
+    catch(Throwable $e)
+    {
+        return $e->getMessage();
+    }
+});
+
 Route::get('/link', function () {        
     $targetFolder = $_SERVER['DOCUMENT_ROOT'].'/app-optic-2/storage/app/public';
     $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/storage';
     symlink($targetFolder,$linkFolder);
     echo 'Symlink process successfully completed';
- });
+});

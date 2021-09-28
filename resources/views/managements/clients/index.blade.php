@@ -37,7 +37,7 @@
             {{-- ---------------- --}}
             <div class="table-responsive">
                 <table class="table" id="table">
-                    <thead>
+                    <thead class="bg-primary text-white">
                         <tr>
                             <th>#</th>
                             <th>Code</th>
@@ -63,15 +63,15 @@
                             </td>
                             <td>{{$client->telephone}}</td>
                             <td>
-                                <a href="{{ action('ClientController@show',['client'=> $client])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                <a href="{{ action('ClientController@show',['client'=> $client->id])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                 @if( Auth::user()->is_admin )
-                                <a href="{{route('client.edit',['client'=> $client])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                <a href="{{route('client.edit',['client'=> $client->id])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
                                 <button class="btn btn-outline-danger btn-sm remove-client" 
                                     data-id="{{ $client->id }}" 
                                     data-action="{{ route('client.destroy',$client->id) }}"> 
                                     <i class="fas fa-trash"></i>
                                 </button>
-                                @endif                                  
+                                @endif                         
                             </td>
                         </tr>
                         @endforeach
@@ -167,9 +167,9 @@
                 // 'success'
                 // )
             }
-            })
-        // end swal2
-        });
+        })
+    // end swal2
+    });
 </script>
 @endsection
 

@@ -18,63 +18,63 @@
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Identifiant :</h5>
                     <div>
-                        <span class="badge badge-info">{{$client->code}}</span>
+                        <span class="badge badge-primary">{{$client->code}}</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Nom Complet : </h5>
                     <div>
-                        <span class="badge badge-info">{{$client->nom_client}}</span>
+                        <span class="badge badge-primary">{{$client->nom_client}}</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Nb des commandes : </h5>
                     <div>
-                        <span class="badge badge-info">{{$count}}</span>
+                        <span class="badge badge-primary">{{$count}}</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Télèphone : </h5>
                     <div>
-                        <span class="badge badge-info">{{$client->telephone}}</span>
+                        <span class="badge badge-primary">{{$client->telephone}}</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Solde : </h5>
                     <div>
-                        <span class="badge badge-info">{{number_format($client->solde,2)}} DH</span>
+                        <span class="badge badge-primary">{{number_format($client->solde,2)}} DH</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Reste à payer : </h5>
                     <div>
-                        <span class="badge badge-info">{{number_format($reste,2)}} DH</span>
+                        <span class="badge badge-primary">{{number_format($reste,2)}} DH</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Adresse : </h5>
                     <div>
-                        <span class="badge badge-info">{{$client->adresse}}</span>
+                        <span class="badge badge-primary">{{$client->adresse}}</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Crée le : </h5>
                     <div>
-                        <span class="badge badge-info">{{$client->created_at}}</span>
+                        <span class="badge badge-primary">{{$client->created_at}}</span>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
                     <h5>Modifié le : </h5>
                     <div>
-                        <span class="badge badge-info">{{$client->updated_at}}</span>
+                        <span class="badge badge-primary">{{$client->updated_at}}</span>
                     </div>
                     <hr>
                 </div>
@@ -89,28 +89,30 @@
             <h3 class="card-title text-center" id="title">Les commandes de client :
                 <span class="badge badge-dark">{{count($commandes)}}</span>
             </h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>Total</th>
-                        <th>Avance</th>
-                        <th>Reste</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($commandes as $commande)
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="bg-primary text-white">
                         <tr>
-                            <td>{{$commande->code }}</td>
-                            <td>{{$commande->date}}</td>
-                            <td>{{number_format($commande->total,2)}}</td>
-                            <td>{{number_format($commande->avance,2)}}</td>
-                            <td>{{number_format($commande->reste,2)}}</td>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Avance</th>
+                            <th>Reste</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($commandes as $commande)
+                            <tr>
+                                <td>{{$commande->code }}</td>
+                                <td>{{$commande->date}}</td>
+                                <td>{{number_format($commande->total,2)}}</td>
+                                <td>{{number_format($commande->avance,2)}}</td>
+                                <td>{{number_format($commande->reste,2)}}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

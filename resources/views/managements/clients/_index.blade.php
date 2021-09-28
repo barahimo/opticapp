@@ -3,13 +3,26 @@
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
-    <h1>Panneau des catégories</h1>
+    <h1>Panneau des clients</h1>
     <ol class="breadcrumb">
         <li><a href="{{route('app.home')}}">Home</a></li>
-        <li><i class="fa fa-angle-right"></i> Catégories</li>
+        <li><i class="fa fa-angle-right"></i> Clients</li>
     </ol>
 </div>
 {{-- ################## --}}
+<ul>
+    @foreach($clients as $client)
+    <li>
+        {{$client->code}} | 
+        {{$client->nom_client}} | 
+        {{$client->adresse}} | 
+        {{$client->telephone}} | 
+        {{$client->ICE}} | 
+        {{$client->solde}} | 
+    </li>
+    @endforeach
+</ul>
+{{dd('')}}
 <!-- Main content -->
 <div class="content">
     <!-- Main card -->
@@ -18,10 +31,10 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
-                    <a href="{{route('categorie.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-plus"></i> Catégorie</a>
+                    <a href="{{route('client.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-user-plus"></i>  Client</a>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8">
-                    <form action="{{route('categorie.search')}}" method="get" class="search-form">
+                    <form action="{{route('client.search')}}" method="get" class="search-form">
                         <div class="input-group">
                             <input name="q" class="form-control" placeholder="search..." type="text">
                             <span class="input-group-btn">
@@ -37,36 +50,43 @@
             {{-- ---------------- --}}
             <div class="table-responsive">
                 <table class="table" id="table">
-                    <thead class="bg-primary text-white">
+                    <thead>
                         <tr>
                             <th>#</th>
-                            <th>Libelle</th>
-                            <th>Description</th>
+                            <th>Code</th>
+                            <th>Client</th>
+                            <th>Adresse</th>
+                            <th>Téléphone</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($categories as $key=>$categorie)
-                            <tr>
-                                <td>{{$key+1 }}</td>
-                                <td>{{$categorie->nom_categorie}}</td>
-                                <td>
-                                    @if($categorie->description)
-                                    {{substr($categorie->description,0,25)}}...
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ action('CategorieController@show',['categorie'=> $categorie])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                                    @if( Auth::user()->is_admin )
-                                    <a href="{{route('categorie.edit',['categorie'=> $categorie])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-outline-danger btn-sm remove-categorie" 
-                                    data-id="{{ $categorie->id }}" 
-                                    data-action="{{ route('categorie.destroy',$categorie->id) }}"> 
+                        @php 
+                        $i = 0 ;
+                        @endphp
+                        @foreach($clients as $client)
+                        <tr>
+                            <td>{{++$i}}</td>
+                            <td>{{$client->code}}</td>
+                            <td>{{$client->nom_client}}</td>
+                            <td>
+                                @if($client->adresse)
+                                    {{substr($client->adresse,0,25)}}...
+                                @endif
+                            </td>
+                            <td>{{$client->telephone}}</td>
+                            <td>
+                                <a href="{{ action('ClientController@show',['client'=> $client])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                @if( Auth::user()->is_admin )
+                                <a href="{{route('client.edit',['client'=> $client])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                <button class="btn btn-outline-danger btn-sm remove-client" 
+                                    data-id="{{ $client->id }}" 
+                                    data-action="{{ route('client.destroy',$client->id) }}"> 
                                     <i class="fas fa-trash"></i>
-                                    </button>
-                                    @endif
-                                </td>
-                            </tr>
+                                </button>
+                                @endif                                  
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -77,61 +97,64 @@
 <!-- /.content --> 
 {{-- ################## --}}
 <script type="text/javascript">
-    // $('#action').html(`ok`);
     $(document).ready(function(){
-        searchCategorie();
+        searchClient();
         $(document).on('keyup','input[name=q]',function(e){
             e.preventDefault();
-            searchCategorie();
+            searchClient();
         });
         $(document).on('click','button[type=submit]',function(e){
             e.preventDefault();
-            searchCategorie();
+            searchClient();
         });
     });
-    function searchCategorie() {
+    function searchClient() {
         $.ajax({
             type:'get',
-            url:'{!!Route('categorie.searchCategorie')!!}',
+            url:'{!!Route('client.searchClient')!!}',
             data:{'search':$('input[name=q]').val()},
             success:function(res){
                 var lignes = '';
                 var table = $('#table');
                 table.find('tbody').html("");
-                res.forEach((categorie,i) => {
-                    var url_edit = "{{route('categorie.edit',['categorie'=> ":id"])}}".replace(':id', categorie.id);
-                    var url_destroy = "{{ route('categorie.destroy',":id") }}".replace(':id', categorie.id);
-                    var url_show = "{{action('CategorieController@show',['categorie'=> ":id"])}}".replace(':id', categorie.id);
+                res.forEach((client,i) => {
+                    var url_show = "{{action('ClientController@show',['client'=> ":id"])}}".replace(':id', client.id);
+                    var url_edit = "{{route('client.edit',['client'=> ":id"])}}".replace(':id', client.id);
+                    var url_destroy = "{{ route('client.destroy',":id") }}".replace(':id', client.id);
                     var action = `<a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                             @if(Auth::user()->is_admin)
                             <a href=${url_edit} class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-outline-danger btn-sm remove-categorie" 
-                                data-id="${categorie.id}" 
+                            <button class="btn btn-outline-danger btn-sm remove-client" 
+                                data-id="${client.id}" 
                                 data-action=${url_destroy}> 
                                 <i class="fas fa-trash"></i>
                             </button>
                             @endif `;
-                    var description = '';
-                    if(categorie.description != null)
-                        description = categorie.description.substring(0,25)+'...';
+                    var adresse = '';
+                    if(client.adresse != null)
+                        adresse = client.adresse.substring(0,25)+'...';
                     lignes += `<tr>
                         <td>${i+1}</td>
-                        <td>${categorie.nom_categorie}</td>
-                        <td>${description}</td>
+                        <td>${client.code}</td>
+                        <td>${client.nom_client}</td>
+                        <td>${adresse}</td>
+                        <td>${client.telephone}</td>
                         <td>${action}</td>
                     </tr>`;
                 });
                 table.find('tbody').append(lignes);
+
             },
             error:function(){
                 console.log([]);    
             }
         });
     }
-    $("body").on("click",".remove-categorie",function(){
+    $("body").on("click",".remove-client",function(){
         var current_object = $(this);
+        // begin swal2
         Swal.fire({
-            title: "Une catégorie est sur le point d'être détruite ",
+            title: "Un client est sur le point d'être détruite",
             text: "Est-ce que vous êtes d'accord ?",
             icon: 'warning',
             showCancelButton: true,
@@ -139,7 +162,7 @@
             cancelButtonColor: '#d33',
             cancelButtonText: 'Annuler',
             confirmButtonText: 'Oui, supprimez-le!'
-        }).then((result) => {
+            }).then((result) => {
             if (result.isConfirmed) {
                 // begin destroy
                     var action = current_object.attr('data-action');
@@ -157,10 +180,10 @@
                 // 'success'
                 // )
             }
-        })
-    });
+            })
+        // end swal2
+        });
 </script>
-{{-- ################## --}}
 @endsection
 
 

@@ -95,6 +95,9 @@
                 {{-- <div class="pull-left user-img"><img src="{{$logo}}" class="img-responsive img-circle" alt="User"></div> --}}
                 <p class="text-left">{{ Auth::user()->email }} <small>{{ Auth::user()->name }}</small> </p>
               </li>
+              @if(Auth::user()->is_admin == 2)
+              <li><a href="{{ route('user.index') }}"><i class="icon-user"></i> Gestion des comptes</a></li>
+              @endif
               <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
               <li role="separator" class="divider"></li>
               <li>

@@ -72,64 +72,66 @@
   <br>
   <div class="card">
     <div class="card-body">
-      <table class="table" id="table">
-        <thead>
-          <tr>
-            <th style="display: none">cmd_id</th>
-            <th>#</th>
-            <th>Date</th>
-            <th>Client</th>
-            <th>Montant total</th>
-            <th>Montant payer</th>
-            <th>Reste à payer</th>
-            <th>[Avance]</th>
-            <th>[Reste]</th>
-            <th>[Status]</th>
-        </tr>
-        </thead>
-        <tbody>
-          @foreach($commandes as $key => $commande)
-          <tr>
-              <td id="cmd_id{{$key}}" style="display: none">{{$commande->id}}</td>
-              <td>{{$commande->code}}</td>
-              <td>{{$commande->date}}</td>
-              <td>{{$commande->client->nom_client}}</td>
-              <td id="total{{$key}}">{{$commande->total}}</td>
-              <td id="avance1{{$key}}">{{$commande->avance}}</td>
-              <td id="reste1{{$key}}">{{$commande->reste}}</td>
-              <td id="avance2{{$key}}">
-                <!-- 0.00 -->
-                <input type="number" min="0" step="0.01" style="width: 50%" value="0.00" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
-              </td>
-              <td id="reste2{{$key}}">{{$commande->reste}}</td>
-              <td id="status{{$key}}">NR</td>
+      <div class="table-responsive">
+        <table class="table" id="table">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th style="display: none">cmd_id</th>
+              <th>#</th>
+              <th>Date</th>
+              <th>Client</th>
+              <th>Montant total</th>
+              <th>Montant payer</th>
+              <th>Reste à payer</th>
+              <th>[Avance]</th>
+              <th>[Reste]</th>
+              <th>[Status]</th>
           </tr>
-          @endforeach
-        </tbody>
-        <tfoot>
-          @php
-            $total = 0;
-            $avance = 0;
-            $reste = 0;
-            foreach($commandes as $commande){
-              $total += $commande->total;
-              $avance += $commande->avance;
-              $reste += $commande->reste;
-            }
-          @endphp
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th id="ftotal">{{number_format($total, 2, '.', '')}}</th>
-            <th id="favance1">{{number_format($avance, 2, '.', '')}}</th>
-            <th id="freste1">{{number_format($reste, 2, '.', '')}}</th>
-            <th id="favance2"></th>
-            <th id="freste2"></th>
-            <th></th>
-          </tr>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            @foreach($commandes as $key => $commande)
+            <tr>
+                <td id="cmd_id{{$key}}" style="display: none">{{$commande->id}}</td>
+                <td>{{$commande->code}}</td>
+                <td>{{$commande->date}}</td>
+                <td>{{$commande->client->nom_client}}</td>
+                <td id="total{{$key}}">{{$commande->total}}</td>
+                <td id="avance1{{$key}}">{{$commande->avance}}</td>
+                <td id="reste1{{$key}}">{{$commande->reste}}</td>
+                <td id="avance2{{$key}}">
+                  <!-- 0.00 -->
+                  <input type="number" min="0" step="0.01" style="width: 50%" value="0.00" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
+                </td>
+                <td id="reste2{{$key}}">{{$commande->reste}}</td>
+                <td id="status{{$key}}">NR</td>
+            </tr>
+            @endforeach
+          </tbody>
+          <tfoot>
+            @php
+              $total = 0;
+              $avance = 0;
+              $reste = 0;
+              foreach($commandes as $commande){
+                $total += $commande->total;
+                $avance += $commande->avance;
+                $reste += $commande->reste;
+              }
+            @endphp
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th id="ftotal">{{number_format($total, 2, '.', '')}}</th>
+              <th id="favance1">{{number_format($avance, 2, '.', '')}}</th>
+              <th id="freste1">{{number_format($reste, 2, '.', '')}}</th>
+              <th id="favance2"></th>
+              <th id="freste2"></th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
   <!-- End TABLE -->

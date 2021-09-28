@@ -43,7 +43,7 @@
             <h5 class="card-title text-center" id="title">Les mouvements :</h5>
             <div class="table-responsive">
               <table class="table table-striped" id="table" >
-                <thead>
+                <thead class="bg-primary text-white">
                   <tr class="text-center">
                       <th>Date</th>
                       <th>Client</th>

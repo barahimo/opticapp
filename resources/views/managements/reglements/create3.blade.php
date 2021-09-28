@@ -67,40 +67,42 @@
   <br>
   <div class="card">
     <div class="card-body">
-      <table class="table" id="table">
-        <thead>
-          <tr>
-            <th style="display: none">cmd_id</th>
-            <th>#</th>
-            <th>Date</th>
-            {{-- <th>Client</th> --}}
-            <th>Montant total</th>
-            <th>Montant payer</th>
-            <th>Reste à payer</th>
-            <th>[Avance]</th>
-            <th>[Reste]</th>
-            <th>[Status]</th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td id="cmd_id" style="display: none">{{$commande->id}}</td>
-              <td>{{$commande->code}}</td>
-              <td>{{$commande->date}}</td>
-              {{-- <td id="client">{{$commande->client->nom_client}}</td> --}}
-              <td id="total">{{number_format($commande->total, 2, '.', '')}}</td>
-              <td id="avance1">{{number_format($commande->avance, 2, '.', '')}}</td>
-              <td id="reste1">{{number_format($commande->reste, 2, '.', '')}}</td>
-              <td id="avance2">
-                <input type="number" min="0" style="width: 50%" value="0.00" step="0.01" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
-              </td>
-              <td id="reste2">{{number_format($commande->reste, 2, '.', '')}}</td>
-              <td id="status2">NR</td>
+      <div class="table-responsive">
+        <table class="table" id="table">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th style="display: none">cmd_id</th>
+              <th>#</th>
+              <th>Date</th>
+              {{-- <th>Client</th> --}}
+              <th>Montant total</th>
+              <th>Montant payer</th>
+              <th>Reste à payer</th>
+              <th>[Avance]</th>
+              <th>[Reste]</th>
+              <th>[Status]</th>
           </tr>
-        </tbody>
-        <tfoot>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            <tr>
+                <td id="cmd_id" style="display: none">{{$commande->id}}</td>
+                <td>{{$commande->code}}</td>
+                <td>{{$commande->date}}</td>
+                {{-- <td id="client">{{$commande->client->nom_client}}</td> --}}
+                <td id="total">{{number_format($commande->total, 2, '.', '')}}</td>
+                <td id="avance1">{{number_format($commande->avance, 2, '.', '')}}</td>
+                <td id="reste1">{{number_format($commande->reste, 2, '.', '')}}</td>
+                <td id="avance2">
+                  <input type="number" min="0" style="width: 50%" value="0.00" step="0.01" onclick="setAvances({{$commande->id}})" onkeyup="setAvances({{$commande->id}})">
+                </td>
+                <td id="reste2">{{number_format($commande->reste, 2, '.', '')}}</td>
+                <td id="status2">NR</td>
+            </tr>
+          </tbody>
+          <tfoot>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
   <!-- End TABLE -->
