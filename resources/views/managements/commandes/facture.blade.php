@@ -126,7 +126,7 @@
         <input type="hidden" name="code" id="newCode" value="{{$code}}">
         <input type="hidden" name="total_HT" value="{{$HT}}">
         <input type="hidden" name="total_TVA" value="{{$TVA}}">
-        <input type="hidden" name="total_TTC"  value="{{$TTC}}" >
+        <input type="hidden" name="total_TTC" value="{{$TTC}}" >
         <input type="hidden" name="reglement" value="à réception">
         <input type="submit" class="btn btn-info bnt-lg" value="Valider La facture">
     </form>
@@ -225,7 +225,7 @@
             montant_HT = ligne.total_produit / (1 + ligne.produit.TVA/100);
             prix_unit_HT = montant_HT / ligne.quantite;
             HT += montant_HT;
-            TTC += ligne.total_produit;
+            TTC += parseFloat(ligne.total_produit);
             lignes+=`<tr>
                     <td>${ligne.produit.code_produit}</td>
                     <td>${ligne.produit.nom_produit}</td>

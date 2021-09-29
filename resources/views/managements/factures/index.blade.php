@@ -54,9 +54,9 @@
                                 <td>{{$facture->commande->code}}</td>
                                 <td>{{$facture->date}}</td>
                                 <td>{{$facture->commande->client->nom_client}}</td>
-                                <td>{{$facture->total_HT}}</td>
-                                <td>{{$facture->total_TVA}}</td>
-                                <td>{{$facture->total_TTC}}</td>
+                                <td>{{number_format($facture->total_HT,2)}}</td>
+                                <td>{{number_format($facture->total_TVA,2)}}</td>
+                                <td>{{number_format($facture->total_TTC,2)}}</td>
                                 <td>
                                     <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                     @if( Auth::user()->is_admin )
@@ -133,13 +133,14 @@
         var current_object = $(this);
        // begin swal2
         Swal.fire({
-            title: "Une facture sur le point d'être DÉTRUITE",
-            text: "You won't be able to revert this!",
+            title: "Une facture est sur le point d'être détruite",
+            text: "Est-ce que vous êtes d'accord ?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            cancelButtonText: 'Annuler',
+            confirmButtonText: 'Oui, supprimez-le!'
         }).then((result) => {
             if (result.isConfirmed) {
             // begin destroy
@@ -152,11 +153,11 @@
                 $('body').find('.remove-form').append('<input name="id" type="hidden" value="'+id+'">');
                 $('body').find('.remove-form').submit();
             //end destroy
-                Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-                )
+                // Swal.fire(
+                // 'Deleted!',
+                // 'Your file has been deleted.',
+                // 'success'
+                // )
             }
         })
         // end swal2

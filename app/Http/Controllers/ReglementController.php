@@ -576,8 +576,8 @@ class ReglementController extends Controller
             $reglement->save();
         }
 
-        return redirect()->route('commande.index5')->with([
-            "success" => "le règlement a été supprimée avec succès !"
+        return redirect()->route('commande.index')->with([
+            "success" => "Le règlement a été supprimé avec succès !"
         ]); 
     }
 // ----------------------------

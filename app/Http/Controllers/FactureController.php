@@ -94,7 +94,7 @@ class FactureController extends Controller
         $facture->commande->facture = 'nf';
         $facture->commande->save();
         $facture->delete();
-        return redirect()->route('facture.index'); 
+        return redirect()->route('facture.index')->with(["status" => "La facture a été supprimée avec succès !"]) ; 
     }
 
     public function search(Request $request){
