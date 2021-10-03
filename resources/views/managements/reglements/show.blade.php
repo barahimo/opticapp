@@ -31,7 +31,6 @@
                         <div class="card-body">
                             <div id="contenu" class="text-black">
                                 {{-- --------Begin header----------- --}}
-                                
                                 <div class="row">
                                     <div class="col"></div>
                                     <div class="col-6">
