@@ -28,11 +28,22 @@
             <div id="content">
                 <div class="align-center" style="display: flex;align-items: center;justify-content: center;">
                     <div class="card border border-white" style="margin-top:20px;">
-                        <div class="card-body p-1">
+                        <div class="card-body">
                             <div id="contenu" class="text-black">
                                 {{-- --------Begin header----------- --}}
-                                {{-- <div class="row p-0"> --}}
-                                    {{-- <div class="col-4" style="font-size:10px"> --}}
+                                <div class="row p-0">
+                                    <div class="col-8">
+                                        {{-- <div class="text-right photo-gris"> --}}
+                                        <div class="text-right">
+                                            @if($company && ($company->logo || $company->logo != null))
+                                            <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:200px;height:200px" class="img-fluid">
+                                            @else
+                                            <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
+                                            @endif
+                                        </div>
+                                        {{-- </div> --}}
+                                    </div>
+                                    <div class="col-4" style="font-size: 22px">
                                         <div class="text-right">
                                             @php
                                             $time = strtotime($reglement->date);
@@ -40,22 +51,8 @@
                                             @endphp
                                             Le, {{$date}}
                                         </div>
-                                        {{-- </div> --}}
-                                        {{-- <div class="col-8"> --}}
-                                            {{-- <div class="text-right photo-gris"> --}}
-                                            <div class="text-center">
-                                                @if($company && ($company->logo || $company->logo != null))
-                                                <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:100px;height:100px" class="img-fluid">
-                                                    @if($company && ($company->nom || $company->nom != null))
-                                                        <h5>{{$company->nom ?? null}}</h5>
-                                                    @endif
-                                                @else
-                                                <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
-                                                @endif
-                                            </div>
-                                            {{-- </div> --}}
-                                        {{-- </div> --}}
-                                {{-- </div> --}}
+                                    </div>
+                                </div>
                                 {{-- --------End header----------- --}}
                                 {{-- --------Begin table----------- --}}
                                 <table cellspacing="0" cellpadding="0">
@@ -123,9 +120,9 @@
                                         </tr>
                                     </tbody>
                                     <tfoot>
-                                        <tr class="tbody_ligne" style="height:20px"></tr>
+                                        <tr class="tbody_ligne" style="height:10px"></tr>
                                         <tr>
-                                            <td colspan="2" class="text-center" style="background-color:rgb(235, 233, 233); font-size:10px">
+                                            <td colspan="2" class="text-center" style="background-color:rgb(235, 233, 233); font-size:20px">
                                                 {!!$adresse!!}
                                             </td>
                                         </tr>
@@ -187,14 +184,12 @@
         var style = `
             margin-left: auto;
             margin-right: auto;
-            font-size:10px;
+            font-size:23px;
             font-family: Arial, Helvetica, sans-serif;
         `;
         $('#pdf').prop('style',style);
         // -------- Initialization de doc ------------//
-        // var doc = new jsPDF("p", "pt", "a4",true);
-        var height_card_body = $('.card-body').outerHeight()+25;
-        var doc = new jsPDF("p", "pt", [210, height_card_body],true);
+        var doc = new jsPDF("p", "pt", "a4",true);
         // -------- html to pdf ------------//
         // -------- Footer ------------//
         // -------------- //
@@ -215,7 +210,7 @@
                 // doc.save("REG-"+code+".pdf");
                 doc.save(code+".pdf");
             },
-            x: 0,
+            x: 10,
             y: 0,
         });
     }

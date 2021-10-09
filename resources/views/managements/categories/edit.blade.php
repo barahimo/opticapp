@@ -20,8 +20,9 @@
                     <h5 class="text-white m-b-0">Catégorie</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{route('categorie.store')}}" method="POST">
+                    <form action="{{route('categorie.update',['categorie'=> $categorie])}}" method="POST">
                         @csrf 
+                        @method('PUT')
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group has-feedback">

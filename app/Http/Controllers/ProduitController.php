@@ -6,6 +6,7 @@ use App\Produit;
 use App\Categorie;
 use App\Lignecommande;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProduitController extends Controller
 {
@@ -38,6 +39,7 @@ class ProduitController extends Controller
         //     'prix_produit_HT' => 'required',
         //     // 'nom_categorie' => 'required' 
         // ]);
+        $user_id = Auth::user()->id;
         $tva = $request->input('tva');
         // $ht = $request->input('prix_produit_HT');
         $ttc = $request->input('prix_produit_TTC');
@@ -52,6 +54,8 @@ class ProduitController extends Controller
         $produit->description = $request->input('description');
         // $produit->nom_categorie =  $request->input('nom_categorie');
         $produit->categorie_id =  $request->input('nom_categorie');
+        $produit->user_id = $user_id;
+
         // $categorieligne = Categorie::where('id','=', $produit->categorie_id)->get();
         // foreach($categorieligne as $var)
         // {   
@@ -101,6 +105,7 @@ class ProduitController extends Controller
         //         // 'nom_categorie' => 'required|min:4|max:100' 
                         
         // ]);
+        $user_id = Auth::user()->id;
         $tva = $request->input('tva');
         $ttc = $request->input('prix_produit_TTC');
 
@@ -116,6 +121,7 @@ class ProduitController extends Controller
         $produit->description = $request->input('description');
         // $produit->nom_categorie =  $request->input('nom_categorie');
         $produit->categorie_id =  $request->input('nom_categorie');
+        $produit->user_id = $user_id;
         // --------------------------------------------------------
         // $categorieligne = Categorie::where('id','=', $produit->categorie_id)->get();
         // foreach($categorieligne as $var)

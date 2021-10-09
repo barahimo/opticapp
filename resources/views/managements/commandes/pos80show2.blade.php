@@ -2,8 +2,6 @@
 @section('contenu')
 <!-- #########################################################" -->
 {{ Html::style(asset('css/commandestyle.css')) }}
-{{-- {{ Html::style(asset('css/pos80commandestyle2.css')) }} --}}
-
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
@@ -30,19 +28,15 @@
             <div id="content">
                 <div class="align-center" style="display: flex;align-items: center;justify-content: center;">
                     <div class="card border border-white" style="margin-top:20px;">
-                        <div class="card-body p-1">
+                        <div class="card-body">
                             <div id="contenu" class="text-black">
                                 {{-- --------Begin Header----------- --}}
                                 {{-- <div class="row"> --}}
                                     {{-- <div class="col"></div> --}}
                                     {{-- <div class="col-6 text-center"> --}}
-                                        {{-- <div class="photo-gris text-center"> --}}
                                         <div class="text-center">
                                             @if($company && ($company->logo || $company->logo != null))
-                                                <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:100px;height:100px;" class="img-fluid">
-                                                @if($company && ($company->nom || $company->nom != null))
-                                                    <h5>{{$company->nom ?? null}}</h5>
-                                                @endif
+                                                <img src="{{Storage::url($company->logo ?? null)}}"  alt="logo" style="width:200px;height:200px" class="img-fluid">
                                             @else
                                                 <img src="{{asset('images/image.png')}}" alt="Logo" style="width:120px">
                                             @endif
@@ -88,7 +82,7 @@
                                                 </tr>
                                                 <tr style="height:10px"></tr>
                                                 {{-- <tr style="height:10px; font-size : 7px"> --}}
-                                                <tr style="height:10px; font-size:6px">
+                                                <tr style="height:10px; font-size : 23px">
                                                     <th colspan="5">
                                                         @if($commande->oeil_gauche)
                                                         Oeil gauche : {{$commande->oeil_gauche}} &nbsp;&nbsp;&nbsp; 
@@ -99,7 +93,7 @@
                                                     </th>
                                                 </tr>
                                                 {{-- <tr style="height:10px; font-size : 8px;"> --}}
-                                                <tr style="height:10px; font-size:6px">
+                                                <tr style="height:10px; font-size : 23px;">
                                                     <th colspan="5" class="text-right">
                                                         Montants exprimés en Dirham
                                                     </th>
@@ -114,7 +108,7 @@
                                                 </tr>
                                             </thead>
                                             {{-- <tbody style="font-size : 8px"> --}}
-                                            <tbody style="font-size:6px">
+                                            <tbody style="font-size : 23px">
                                                 @php 
                                                     $TTC = 0;
                                                 @endphp
@@ -140,14 +134,15 @@
                                                     <td style="width:15%" class="text-right">100</td>
                                                     <td style="width:15%" class="text-right">300</td>
                                                 </tr> --}}
-                                                {{-- <tr class="bodyFacture">
-                                                    <td style="width:60%" class="text-left">nom_produit1</td>
+                                                <tr class="bodyFacture">
+                                                    {{-- <td style="width:10%" class="text-left">code_produit</td> --}}
+                                                    <td style="width:60%" class="text-left">nom_produit12345 nom_produit2 nom_produit3 nom_produit4 </td>
                                                     <td style="width:10%" class="text-center">543</td>
                                                     <td style="width:15%" class="text-right">10098760</td>
                                                     <td style="width:15%" class="text-right">3000764</td>
-                                                </tr> --}}
+                                                </tr>
                                                 {{-- --------------------------- --}}
-                                                <tr class="tbody_ligne" style="height:2px">
+                                                <tr class="tbody_ligne">
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -158,8 +153,8 @@
                                                     {{-- <td colspan="2" style="border-bottom: none !important"></td> --}}
                                                     <td colspan="1" style="border-bottom: none !important"></td>
                                                     <th colspan="2" class="text-right">NET A PAYER</th>
-                                                    <th colspan="1" class="text-right">{{number_format($TTC,2)}}</th>
-                                                    {{-- <th colspan="1" class="text-right">156789</th> --}}
+                                                    {{-- <th colspan="1" class="text-right">{{number_format($TTC,2)}}</th> --}}
+                                                    <th colspan="1" class="text-right">156789</th>
                                                 </tr>
                                                 <tr style="height:10px;"></tr>
                                                 <tr>
@@ -167,7 +162,7 @@
                                                     {{-- <th colspan="6"> --}}
                                                     <th colspan="4">
                                                         @php
-                                                        // $TTC = 156789;
+                                                        $TTC = 156789;
                                                         $numberToWords = new NumberToWords\NumberToWords();
                                                         $numberTransformer = $numberToWords->getNumberTransformer('fr');
                                                         // $numberWord1 = $numberTransformer->toWords(number_format($TTC,2)); // outputs "five thousand one hundred twenty"
@@ -206,7 +201,7 @@
                                                 </tr>
                                             </tbody>
                                             <tfoot>
-                                                <tr style="height:10px"></tr>
+                                                <tr style="height:30px"></tr>
                                                 <tr style="height: 10px">
                                                     <td colspan="7" class="text-center" style="text-align:center; background-color:rgb(235, 233, 233)">
                                                         {!!$adresse!!}
@@ -232,8 +227,8 @@
 </div>
 <!-- #########################################################" -->
 <!-- #########################################################" -->
-{{-- <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>  --}}
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.1/html2canvas.min.js" integrity="sha512-Ki6BxhTDkeY2+bERO2RGKOGh6zvje2DxN3zPsNg4XhJGhkXiVXxIi1rkHUeZgZrf+5voBQJErceuCHtCCMuqTw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+{{-- <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.1/html2canvas.min.js" integrity="sha512-Ki6BxhTDkeY2+bERO2RGKOGh6zvje2DxN3zPsNg4XhJGhkXiVXxIi1rkHUeZgZrf+5voBQJErceuCHtCCMuqTw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 <script src="{{ asset('js/jspdf.umd.min.js') }}"></script>
 <script src="{{ asset('js/html2canvas.min.js') }}"></script>
 <script type="application/javascript">
@@ -269,20 +264,15 @@
             //
             // font-size:23px;
             //
-            // filter: grayscale(1);
-            // -webkit-filter: grayscale(1);
         var style = `
             margin-left: auto;
             margin-right: auto;
-            font-size:6px;
+            font-size:23px;
             font-family: Arial, Helvetica, sans-serif;
         `;
         $('#pdf').prop('style',style);
         // -------- Initialization de doc ------------//
-        // var doc = new jsPDF("p", "pt", "a4",true);
-        // var doc = new jsPDF("p", "pt", [80, contentHeight],true);
-        var height_card_body = $('.card-body').outerHeight()+25;
-        var doc = new jsPDF("p", "pt", [210, height_card_body],true);
+        var doc = new jsPDF("p", "pt", "a4",true);
         // -------- html to pdf ------------//
         // -------- Footer ------------//
         // -------------- //
@@ -303,8 +293,8 @@
                     // doc.save("BON"+code+".pdf");
                     doc.save(code+".pdf");
             },
-            x: 0,
-            y: 0,
+            x: 10,
+            y: 10,
         });
     }
 </script>

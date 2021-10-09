@@ -3,7 +3,7 @@ table{
 }
 .headerFacture { 
     font-size:8px ;
-    /* background-color: yellow; */
+    background-color: ye;
 }
 .headerFacture th { 
     border-top:1pt solid black;
@@ -14,6 +14,7 @@ table{
     border-right:1pt solid black;
 }
 .bodyFacture td { 
+    vertical-align: top;
     padding-right: 2px;
     padding-left: 2px;
     border-left:1pt solid black;

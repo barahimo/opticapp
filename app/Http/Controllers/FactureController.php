@@ -7,6 +7,7 @@ use App\Commande;
 use App\Company;
 use App\Lignecommande;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FactureController extends Controller
@@ -73,13 +74,14 @@ class FactureController extends Controller
     
     public function update(Request $request, Facture $facture)
     {
+        $user_id = Auth::user()->id;
         $facture->total_HT = $request->input('total_HT');
         $facture->total_TVA = $request->input('total_TVA');
         $facture->total_TTC = $request->input('total_TTC');
         $facture->commande_id = $request->input('commande_id');
         // $facture->clients_id = $request->input('client_id');
         $facture->reglement = $request->input('reglement');
-        
+        $facture->user_id = $user_id;
         // dd($facture);
         $facture->save();
 

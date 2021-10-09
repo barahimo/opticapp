@@ -6,6 +6,7 @@ use App\Produit;
 use App\Categorie;
 use App\Lignecommande;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategorieController extends Controller
 {
@@ -35,11 +36,11 @@ class CategorieController extends Controller
             //     'code_client' => 'required|min:4|max:100' 
                         
             // ]);
-
+        $user_id = Auth::user()->id;
         $categorie = new Categorie();
         $categorie ->nom_categorie = $request->input('nom_categorie');
         $categorie ->description = $request->input('description');
-        
+        $categorie->user_id = $user_id;
 
         $categorie->save();
 
@@ -78,10 +79,10 @@ class CategorieController extends Controller
         //     'solde' => 'required',
 
         // ]);
-
+        $user_id = Auth::user()->id;
         $categorie ->nom_categorie = $request->input('nom_categorie');
         $categorie ->description = $request->input('description');
-        
+        $categorie->user_id = $user_id;
 
         $categorie->save();
 

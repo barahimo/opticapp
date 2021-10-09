@@ -35,7 +35,8 @@ class ClientController extends Controller
             // $clients = Client::get();
             // dd($clients);
             // -------------------------------------- //
-            $clients = Client::orderBy('id','desc')->get();
+            // $clients = Client::orderBy('id','desc')->get();
+            $clients = Client::orderBy('id','desc')->where('user_id',Auth::user()->id)->get();
             return view('managements.clients.index', compact('clients'));
         // }
         // catch(Throwable $e)
@@ -61,6 +62,7 @@ class ClientController extends Controller
         //     'solde' => 'required',
         //     'code' => 'required|min:4|max:100' 
         // ]);
+        $user_id = Auth::user()->id;
         // --------------------------------------------------
         $clients = Client::withTrashed()->get();
         (count($clients)>0) ? $lastcode = $clients->last()->code : $lastcode = null;
@@ -76,6 +78,7 @@ class ClientController extends Controller
         $client->solde = $request->input('solde');
         $client->code = $code;
         $client->ICE = Str::slug($client->nom_client, '-');
+        $client->user_id = $user_id;
         $client->save();
         $request->session()->flash('status','le client a été bien enregistré !');
         return redirect()->route('client.index');
@@ -130,14 +133,14 @@ class ClientController extends Controller
         //     'solde' => 'required',
 
         // ]);
-
+        $user_id = Auth::user()->id;
         $client->nom_client = $request->input('nom_client');
         $client->adresse = $request->input('adresse');
         $client->telephone = $request->input('telephone');
         $client->solde = $request->input('solde');
-    
         $client->ICE = Str::slug($client->nom_client, '-');
-    
+        $client->user_id = $user_id;
+
         $client->save();
 
         $request->session()->flash('status','Le client a été bien modifié !');
@@ -171,29 +174,26 @@ class ClientController extends Controller
     public function searchClient(Request $request)
     {
         $search = $request->search;
-        $clients = Client::where('nom_client','like',"%$search%")
-            ->orWhere('code','like',"%$search%")
-            ->orWhere('adresse','like',"%$search%")
-            ->orWhere('solde','like',"%$search%")
-            ->orWhere('telephone','like',"%$search%")
-            ->orderBy('id','desc')
-            ->get();
-        // if( Auth::user()->id == 1)
-        // $clients = DB::connection('mysql')->table('clients')->where('nom_client','like',"%$search%")
+        // $clients = Client::where('nom_client','like',"%$search%")
+        //     ->orWhere('user_id',Auth::user()->id)
         //     ->orWhere('code','like',"%$search%")
         //     ->orWhere('adresse','like',"%$search%")
         //     ->orWhere('solde','like',"%$search%")
         //     ->orWhere('telephone','like',"%$search%")
         //     ->orderBy('id','desc')
         //     ->get();
-        // elseif( Auth::user()->id == 2)
-        // $clients = DB::connection('mysql2')->table('clients')->where('nom_client','like',"%$search%")
-        //     ->orWhere('code','like',"%$search%")
-        //     ->orWhere('adresse','like',"%$search%")
-        //     ->orWhere('solde','like',"%$search%")
-        //     ->orWhere('telephone','like',"%$search%")
-        //     ->orderBy('id','desc')
-        //     ->get();
+        $clients = Client::where([
+            [function ($query) use ($search) {
+                    $query->where('nom_client','like',"%$search%")
+                    ->orWhere('code','like',"%$search%")
+                    ->orWhere('adresse','like',"%$search%")
+                    ->orWhere('solde','like',"%$search%")
+                    ->orWhere('telephone','like',"%$search%");
+            }],
+            ['user_id',Auth::user()->id]
+        ])
+        ->orderBy('id','desc')
+        ->get();
         return $clients;
     }
     // ---------------------

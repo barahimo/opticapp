@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use NumberToWords\NumberToWords;
 
 
@@ -53,6 +54,8 @@ class CommandeController extends Controller
     // ------------ END CREATE COMMANDE ------------------------------
     // ------------ BEGIN STORE COMMANDE ---------------------------
     public function store(Request $request){ 
+        $user_id = Auth::user()->id;
+        // return ['status'=>"error",'message'=>"user_id : ".$user_id];
         $lignes = $request->input('lignes');
         $date = $request->input('date');
         $client = $request->input('client');
@@ -99,6 +102,7 @@ class CommandeController extends Controller
                 $commande->reste = $reste;
                 $commande->total = $total;
                 $commande->code = $code;
+                $commande->user_id = $user_id;
                 $commande->save();
                 // ------------ End Commande -------- //
                 if($commande->id){
@@ -110,6 +114,7 @@ class CommandeController extends Controller
                         // $lignecommande->nom_produit = $ligne['libelle'];
                         $lignecommande->quantite = $ligne['qte'];
                         $lignecommande->total_produit = $ligne['total'];
+                        $lignecommande->user_id = $user_id;
                         $lignecommande->save();
                     }
                     // ------------ End LigneCommande -------- //
@@ -142,6 +147,7 @@ class CommandeController extends Controller
                         $reglement->reste = $reste;
                         $reglement->status = $status;
                         $reglement->code = $code;
+                        $reglement->user_id = $user_id;
                         $reglement->save();
                     }
                     // ------------ End Reglement -------- //
@@ -167,6 +173,7 @@ class CommandeController extends Controller
         $count = count($companies);
         ($count>0)  ? $company = Company::first(): $company = null;
         $adresse = $this->getAdresse($company);
+        // $adresse = $this->get_siege_tel($company);
 
         $commande = Commande::with('client')->find($cmd_id);
         $lignecommandes = Lignecommande::with('produit')->where('commande_id', '=', $cmd_id)->get();
@@ -209,7 +216,7 @@ class CommandeController extends Controller
     public function update(Request $request){ 
         // $id = $request->input('id');
         // return ['status'=>"error",'message'=>$id];
-
+        $user_id = Auth::user()->id;
         $lignes = $request->input('lignes');
         if(!empty($lignes)){
             $id = $request->input('id');
@@ -238,6 +245,7 @@ class CommandeController extends Controller
                 $commande->avance = $cmd_avance;
                 $commande->reste = $cmd_reste;
                 $commande->total = $cmd_total;
+                $commande->user_id = $user_id;
                 $commande->save();
                 // ------------ End Commande -------- //
                 if($commande->id){
@@ -253,6 +261,7 @@ class CommandeController extends Controller
                         // $lignecommande->nom_produit = $ligne['libelle'];
                         $lignecommande->quantite = $ligne['qte'];
                         $lignecommande->total_produit = $ligne['total'];
+                        $lignecommande->user_id = $user_id;
                         $lignecommande->save();
                     }
                     // ------------ End LigneCommande -------- //
@@ -261,7 +270,8 @@ class CommandeController extends Controller
                         foreach ($reglements as $reg) {
                             $reglement = reglement::find($reg['reg_id']);
                             $reglement->reste = $reg['reste'];
-                            $reglement->status = $reg['status'];;
+                            $reglement->status = $reg['status'];
+                            $reglement->user_id = $user_id;
                             $reglement->save();
                         }
                     }
@@ -481,18 +491,15 @@ class CommandeController extends Controller
 
     public function storefacture( Request $request)
     {
-
         // $validateData = $request->validate([
-     
         //     'total_HT' => 'required',
         //     'total_TVA ' => 'required',
         //     'total_TTC' => 'required' ,
         //     'commande_id ' => 'required|unique:factures,commande_id',
         //     'clients_id' => 'required|min:4|max:100' 
-                   
         // ]);
 
-
+        $user_id = Auth::user()->id;
         $facture = new Facture();
             $factures = Facture::where('commande_id','=',$request->input('commande_id'))->get();
             if($factures->count()>0)
@@ -505,7 +512,7 @@ class CommandeController extends Controller
                 $facture->commande_id = $request->input('commande_id');
                 // $facture->clients_id = $request->input('client_id');
                 $facture->reglement = $request->input('reglement');
-                
+                $facture->user_id = $user_id;
                 $facture->save();
                 $msg= "la facture a été bien enregistré vous devez ajouter le règlement de la commande N° .$facture->command_id ";
             }
@@ -911,6 +918,7 @@ class CommandeController extends Controller
     }
 
     public function storefacture2( Request $request){
+        $user_id = Auth::user()->id;
         $cmd_id = $request->input('commande_id');
         $factures = Facture::where('commande_id','=',$cmd_id)->get();
         if($factures->count()>0){
@@ -951,11 +959,13 @@ class CommandeController extends Controller
                 $facture->reglement = $request->input('reglement');
                 $facture->date = $request->input('date');
                 $facture->code = $code;
+                $facture->user_id = $user_id;
                 $facture->save();
                 $msg= "La facture a été bien enregistrée";
                 if($facture->id){
                     $commande = Commande::find($facture->commande_id);
                     $commande->facture = "f";
+                    $commande->user_id = $user_id;
                     $commande->save();
                 }
             }
@@ -1030,7 +1040,32 @@ class CommandeController extends Controller
         return $adresse;
     }
 
-    
+    public function get_siege_tel($company){
+        // ############################################################### //
+        // Siège social : ITIC SOLUTION - 3 ,immeuble Karoum, Av Alkhansaa, Cité Azmani , 83350 , OULED TEIMA , MAROC<br>
+        $siege = '';
+        // ############################################################### //
+        ($company && ($company->nom || $company->nom != null)) ? $siege .= 'Siège social : '.$company->nom.' - ' : $siege .= 'Siège social : nom_societé';
+        // -------------------------------------//
+        ($company && ($company->adresse || $company->adresse != null)) ? $siege .= $company->adresse.' , ' : $siege .= '';
+        // -------------------------------------//
+        ($company && ($company->code_postal || $company->code_postal != null)) ? $siege .= $company->code_postal.' , ' : $siege .= '';
+        // -------------------------------------//
+        ($company && ($company->ville || $company->ville != null)) ?  $siege .= $company->ville.' , ' : $siege .= '';
+        // -------------------------------------//
+        ($company && ($company->pays || $company->pays != null)) ? $siege .= $company->pays : $siege .= '';
+        // ############################################################### //
+        $tel = '';
+        ($company && ($company->tel || $company->tel != null)) ? $tel .= 'Tél : '.$company->tel : $tel .= '';
+        // -------------------------------------//
+        // ############################################################### //
+        $adresse = '';
+        if($siege != '')
+            $adresse .= $siege.'<br>';
+        if($tel != '')
+            $adresse .= $tel.'<br>';
+        return $adresse;
+    }
 
     public function codeFacture(Request $request){
         // $datetime = Carbon::now();

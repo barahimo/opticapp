@@ -8,6 +8,7 @@ use App\Reglement;
 use App\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 
 class ReglementController extends Controller
@@ -290,6 +291,7 @@ class ReglementController extends Controller
 
     // Enregistrer plusieurs reglements
     public function store2(Request $request){ 
+        $user_id = Auth::user()->id;
         $lignes = $request->input('lignes');
         if(!empty($lignes)){
             $date = $request->input('date');
@@ -326,11 +328,13 @@ class ReglementController extends Controller
                     // -----------------------------------------------------
                     $reglement->code = $code;
                     $reglement->commande_id = $ligne['cmd_id'];
+                    $reglement->user_id = $user_id;
                     $reglement->save();
                     
                     $commande = Commande::find($ligne['cmd_id']);
                     $commande->avance = $commande->avance+$ligne['avance'];
                     $commande->reste = $ligne['reste'];
+                    $commande->user_id = $user_id;
                     $commande->save();
                 }
                 // ------------ End Reglement -------- //
@@ -348,6 +352,7 @@ class ReglementController extends Controller
 
     // enregistrer une seule reglement
     public function store3(Request $request){ 
+        $user_id = Auth::user()->id;
         $lignes = $request->input('lignes');
         if(!empty($lignes)){
             $date = $request->input('date');
@@ -382,11 +387,13 @@ class ReglementController extends Controller
                     $reglement->status = $ligne['status'];
                     $reglement->code = $code;
                     $reglement->commande_id = $ligne['cmd_id'];
+                    $reglement->user_id = $user_id;
                     $reglement->save();
                     
                     $commande = Commande::find($ligne['cmd_id']);
                     $commande->avance = $commande->avance+$ligne['avance'];
                     $commande->reste = $ligne['reste'];
+                    $commande->user_id = $user_id;
                     $commande->save();
                 }
                 // ------------ End Reglement -------- //
