@@ -17,15 +17,19 @@ class ProduitController extends Controller
     public function index()
     {
         // $produits = Produit::with('categorie')->orderBy('id')->paginate(10);
-        $produits = Produit::with('categorie')->orderBy('id','desc')->get();
-        $categories = Categorie::all();
-        return view('managements.produits.index', compact('produits', 'categories'));
+        // $produits = Produit::with('categorie')->orderBy('id','desc')->get();
+        $produits = Produit::with('categorie')->orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
+        // $categories = Categorie::all();
+        // return view('managements.produits.index', compact('produits', 'categories'));
+        return view('managements.produits.index', compact('produits'));
     }
 
     public function create()
     {
+        $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
         return view('managements.produits.create',[
-            'categories' => Categorie::all()
+            // 'categories' => Categorie::all()
+            'categories' => $categories
         ]);
     }
 
@@ -87,9 +91,11 @@ class ProduitController extends Controller
     
     public function edit(Produit $produit)
     {
+        $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
         return view('managements.produits.edit')->with([
             "produit" => $produit,
-            'categories' => Categorie::all()
+            // 'categories' => Categorie::all(),
+            'categories' => $categories
         ]);
     }
 
@@ -194,13 +200,29 @@ class ProduitController extends Controller
     public function searchProduit(Request $request)
     {
         $search = $request->search;
-        $produits = Produit::with('categorie')->where('nom_produit','like',"%$search%")
-            ->orWhere('code_produit','like',"%$search%")
-            ->orWhere('TVA','like',"%$search%")
-            ->orWhere('prix_produit_HT','like',"%$search%")
-            ->orWhere('prix_produit_TTC','like',"%$search%")
+        // $produits = Produit::with('categorie')->where('nom_produit','like',"%$search%")
+        //     ->orWhere('code_produit','like',"%$search%")
+        //     ->orWhere('TVA','like',"%$search%")
+        //     ->orWhere('prix_produit_HT','like',"%$search%")
+        //     ->orWhere('prix_produit_TTC','like',"%$search%")
+        //     ->orWhereHas('categorie',function($query) use($search){
+        //         $query->where('nom_categorie','like',"%$search%");
+        //     })
+        //     ->orderBy('id','desc')
+        //     ->get();
+        $produits = Produit::with('categorie')
+            ->where([
+                [function ($query) use ($search) {
+                    $query->where('nom_produit','like',"%$search%")
+                    ->orWhere('code_produit','like',"%$search%")
+                    ->orWhere('TVA','like',"%$search%")
+                    ->orWhere('prix_produit_HT','like',"%$search%")
+                    ->orWhere('prix_produit_TTC','like',"%$search%");
+                }],
+                ['user_id',Auth::user()->id]
+            ])
             ->orWhereHas('categorie',function($query) use($search){
-                $query->where('nom_categorie','like',"%$search%");
+                $query->where([['nom_categorie','like',"%$search%"],['user_id',Auth::user()->id]]);
             })
             ->orderBy('id','desc')
             ->get();

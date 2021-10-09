@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Company;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
@@ -16,7 +17,8 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::get();
+        // $companies = Company::get();
+        $companies = Company::where('user_id',Auth::user()->id)->get();
         $count = count($companies);
         ($count > 0) ? $view = 'edit': $view = 'create';
         if($view == 'create'){
@@ -24,7 +26,8 @@ class CompanyController extends Controller
             $route = route('company.store');
         }
         if($view == 'edit'){
-            $company = Company::first();
+            // $company = Company::first();
+            $company = Company::where('user_id',Auth::user()->id)->first();
             $route = route('company.update',['company'=>$company->id]);
         }
         return view('parametres.form',compact('company','route','view'));
@@ -70,6 +73,7 @@ class CompanyController extends Controller
         $company->cnss = $request->cnss;
         $company->banque = $request->banque;
         $company->rib = $request->rib;
+        $company->user_id = Auth::user()->id;
     }
 
     /**
@@ -122,7 +126,8 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $company = Company::first();
+        // $company = Company::first();
+        $company = Company::where('user_id',Auth::user()->id)->first();
         $path = $this->imageUpdate($request, $company);
         $this->form($request,$company,$path);
         $company->save();

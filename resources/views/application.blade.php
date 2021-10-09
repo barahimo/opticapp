@@ -2,22 +2,28 @@
 @section('contenu')
 {{-- BEGIN PHP --}}
 <?php
-    $nbclients = App\Client::get()->count();
-    $nbcategories = App\Categorie::get()->count();
-    $nbproduits = App\Produit::get()->count();
-    $nbcommandes = App\Commande::get()->count();
-    $nbreglements = App\Reglement::get()->count();
-    $nbfactures = App\Facture::get()->count();
-    $clients = App\Client::orderBy('id','desc')->limit(3)->get();
-    $categories = App\Categorie::orderBy('id','desc')->limit(3)->get();
-    $produits = App\Produit::orderBy('id','desc')->limit(3)->get();
-    $commandes = App\Commande::with('client')->orderBy('id','desc')->limit(3)->get();
+    use Illuminate\Support\Facades\Auth;
+    $user_id = Auth::user()->id;
+    // echo 'user_id '.$user_id;
+    // return;
+    $nbclients = App\Client::where('user_id',$user_id)->get()->count();
+    $nbcategories = App\Categorie::where('user_id',$user_id)->get()->count();
+    $nbproduits = App\Produit::where('user_id',$user_id)->get()->count();
+    $nbcommandes = App\Commande::where('user_id',$user_id)->get()->count();
+    $nbreglements = App\Reglement::where('user_id',$user_id)->get()->count();
+    $nbfactures = App\Facture::where('user_id',$user_id)->get()->count();
+    $clients = App\Client::where('user_id',$user_id)->orderBy('id','desc')->limit(3)->get();
+    $categories = App\Categorie::where('user_id',$user_id)->orderBy('id','desc')->limit(3)->get();
+    $produits = App\Produit::where('user_id',$user_id)->orderBy('id','desc')->limit(3)->get();
+    $commandes = App\Commande::with('client')->where('user_id',$user_id)->orderBy('id','desc')->limit(3)->get();
     $reglements = App\Reglement::with(['commande'=>function($query){
         $query->with('client');
-    }])->orderBy('id','desc')->limit(3)->get();
+    }])->where('user_id',$user_id)->orderBy('id','desc')->limit(3)->get();
     $factures = App\Facture::with(['commande'=>function($query){
         $query->with('client');
-    }])->orderBy('id','desc')->limit(3)->get();
+    }])->where('user_id',$user_id)->orderBy('id','desc')->limit(3)->get();
+    // echo count($factures);
+    // return;
     ?>
 {{-- END PHP --}}
 
@@ -154,7 +160,7 @@
                             <td>
                                 @if(count($factures)>0) 
                                     {{$factures[0]->code}}<br>
-                                    <span class="badge badge-light">{{$factures[2]->commande->client->nom_client}}</span>
+                                    <span class="badge badge-light">{{$factures[0]->commande->client->nom_client}}</span>
                                 @endif
                             </td>
                         </tr>

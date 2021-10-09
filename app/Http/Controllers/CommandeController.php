@@ -28,10 +28,14 @@ class CommandeController extends Controller
     }
     // ------------ BEGIN INDEX COMMANDE ------------------------------
     public function index(Request $request){
-        $commandes = Commande::with(['client','reglements'])->get();
-        $lignecommandes = Lignecommande::get();
-        $reglements = reglement::get();
-        $clients = Client::get();
+        // $commandes = Commande::with(['client','reglements'])->get();
+        // $lignecommandes = Lignecommande::get();
+        // $reglements = reglement::get();
+        // $clients = Client::get();
+        $commandes = Commande::with(['client','reglements'])->where('user_id',Auth::user()->id)->get();
+        $lignecommandes = Lignecommande::where('user_id',Auth::user()->id)->get();
+        $reglements = reglement::where('user_id',Auth::user()->id)->get();
+        $clients = Client::where('user_id',Auth::user()->id)->get();
         return view('managements.commandes.index', [
             'commandes'=>$commandes,
             'lignecommandes'=>$lignecommandes,
@@ -43,8 +47,10 @@ class CommandeController extends Controller
     // ------------ BEGIN CREATE COMMANDE ---------------------------
     public function create(Request $request){
         $date = Carbon::now();
-        $categories=Categorie::all();//get data from table
-        $clients = Client::all();
+        // $categories=Categorie::all();//get data from table
+        // $clients = Client::all();
+        $categories=Categorie::where('user_id',Auth::user()->id)->get();//get data from table
+        $clients = Client::where('user_id',Auth::user()->id)->get();
         return view('managements.commandes.create', [
             'clients' =>$clients,
             'categories' => $categories,
@@ -73,7 +79,8 @@ class CommandeController extends Controller
             $year = date('y',$time);
             $month = date('m',$time);
             // -----------------------------------------------------
-            $commandes = Commande::get();
+            // $commandes = Commande::get();
+            $commandes = Commande::where('user_id',Auth::user()->id)->get();
             (count($commandes)>0) ? $lastcode = $commandes->last()->code : $lastcode = null;
             $str = 1;
             if(isset($lastcode)){
@@ -123,7 +130,7 @@ class CommandeController extends Controller
                     $year = date('y',$time);
                     $month = date('m',$time);
                     // -----------------------------------------------------
-                    $getReg = Reglement::get();
+                    $getReg = Reglement::where('user_id',Auth::user()->id)->get();
                     (count($getReg)>0) ? $lastcode = $getReg->last()->code : $lastcode = null;
                     $str = 1;
                     if(isset($lastcode)){
@@ -169,9 +176,11 @@ class CommandeController extends Controller
     // ------------ END STORE COMMANDE ------------------------------
     // ------------ BEGIN SHOW COMMANDE ---------------------------
     public function show($cmd_id){
-        $companies = Company::get();
+        // $companies = Company::get();
+        $companies = Company::where('user_id',Auth::user()->id)->get();
         $count = count($companies);
-        ($count>0)  ? $company = Company::first(): $company = null;
+        // ($count>0)  ? $company = Company::first(): $company = null;
+        ($count>0)  ? $company = Company::where('user_id',Auth::user()->id)->first(): $company = null;
         $adresse = $this->getAdresse($company);
         // $adresse = $this->get_siege_tel($company);
 
@@ -200,10 +209,13 @@ class CommandeController extends Controller
     // ------------ END SHOW COMMANDE ------------------------------
     // ------------ BEGIN EDIT COMMANDE ---------------------------
     public function edit($id){
-        $commande = Commande::with(['client','reglements'])->find($id);
+        // $commande = Commande::with(['client','reglements'])->where('user_id',Auth::user()->id)->find($id);
+        $commande = Commande::with(['client','reglements'])->where('user_id',Auth::user()->id)->findOrFail($id);
         $date = Carbon::now();
-        $clients = Client::get();
-        $categories=Categorie::all();
+        // $clients = Client::get();
+        // $categories=Categorie::all();
+        $clients = Client::where('user_id',Auth::user()->id)->get();
+        $categories=Categorie::where('user_id',Auth::user()->id)->get();
         return view('managements.commandes.edit', [
             'commande' =>$commande,
             'clients' =>$clients,
@@ -580,7 +592,7 @@ class CommandeController extends Controller
         ]);
     }
 
-    
+    ##################################################################################################
 
     //get commandes pour la page commande
     public function getCommandes(Request $request){
@@ -678,6 +690,7 @@ class CommandeController extends Controller
 
     //get commandes v2 pour la page commande
     public function getCommandes5(Request $request){
+
         // ------------------------------------
         $facture = $request->facture;//f - nf - all - null
         $status = $request->status;//r - nr - all - null
@@ -685,28 +698,52 @@ class CommandeController extends Controller
         $search = $request->search;//f - nf - all - null
         // ------------------------------------
         // ------------------------------------
-        $r = Commande::with(['client','reglements'])->where('reste','<=',0)->orderBy('id','desc');
-        $nr = Commande::with(['client','reglements'])->where('reste','>',0)->orderBy('id','desc');
-        $f = Commande::with(['client','reglements'])->where('facture','f')->orderBy('id','desc');
-        $nf = Commande::with(['client','reglements'])->where('facture','nf')->orderBy('id','desc');
-        $fr = Commande::with(['client','reglements'])->where('facture','f')->where('reste','<=',0)->orderBy('id','desc');
-        $fnr = Commande::with(['client','reglements'])->where('facture','f')->where('reste','>',0)->orderBy('id','desc');
-        $nfr = Commande::with(['client','reglements'])->where('facture','nf')->where('reste','<=',0)->orderBy('id','desc');
-        $nfnr = Commande::with(['client','reglements'])->where('facture','nf')->where('reste','>',0)->orderBy('id','desc');
+        // $r = Commande::with(['client','reglements'])->where('reste','<=',0)->orderBy('id','desc');
+        // $nr = Commande::with(['client','reglements'])->where('reste','>',0)->orderBy('id','desc');
+        // $f = Commande::with(['client','reglements'])->where('facture','f')->orderBy('id','desc');
+        // $nf = Commande::with(['client','reglements'])->where('facture','nf')->orderBy('id','desc');
+        // $fr = Commande::with(['client','reglements'])->where('facture','f')->where('reste','<=',0)->orderBy('id','desc');
+        // $fnr = Commande::with(['client','reglements'])->where('facture','f')->where('reste','>',0)->orderBy('id','desc');
+        // $nfr = Commande::with(['client','reglements'])->where('facture','nf')->where('reste','<=',0)->orderBy('id','desc');
+        // $nfnr = Commande::with(['client','reglements'])->where('facture','nf')->where('reste','>',0)->orderBy('id','desc');
+        $r = Commande::with(['client','reglements'])->where('reste','<=',0)->orderBy('id','desc')->where('user_id',Auth::user()->id);
+        $nr = Commande::with(['client','reglements'])->where('reste','>',0)->orderBy('id','desc')->where('user_id',Auth::user()->id);
+        $f = Commande::with(['client','reglements'])->where('facture','f')->orderBy('id','desc')->where('user_id',Auth::user()->id);
+        $nf = Commande::with(['client','reglements'])->where('facture','nf')->orderBy('id','desc')->where('user_id',Auth::user()->id);
+        $fr = Commande::with(['client','reglements'])->where('facture','f')->where('reste','<=',0)->orderBy('id','desc')->where('user_id',Auth::user()->id);
+        $fnr = Commande::with(['client','reglements'])->where('facture','f')->where('reste','>',0)->orderBy('id','desc')->where('user_id',Auth::user()->id);
+        $nfr = Commande::with(['client','reglements'])->where('facture','nf')->where('reste','<=',0)->orderBy('id','desc')->where('user_id',Auth::user()->id);
+        $nfnr = Commande::with(['client','reglements'])->where('facture','nf')->where('reste','>',0)->orderBy('id','desc')->where('user_id',Auth::user()->id);
         if($search){
+            // $commandes = Commande::with(['client','reglements'])
+            //     ->where('code','like','%'.$search.'%')
+            //     // ->orWhere('nom_client','like','%'.$search.'%')
+            //     ->orWhereHas('client', function($query) use ($search)  {
+            //         $query->where('nom_client','like','%'.$search.'%');
+            //     })
+            //     ->orWhere('date','like','%'.$search.'%')
+            //     ->orWhere('date','like','%'.$search.'%')
+            //     ->orWhere('total','like','%'.$search.'%')
+            //     ->orWhere('avance','like','%'.$search.'%')
+            //     ->orWhere('reste','like','%'.$search.'%')
+            //     ->orderBy('id','desc')
+            //     ->get(); 
             $commandes = Commande::with(['client','reglements'])
-                ->where('code','like','%'.$search.'%')
-                // ->orWhere('nom_client','like','%'.$search.'%')
-                ->orWhereHas('client', function($query) use ($search)  {
-                    $query->where('nom_client','like','%'.$search.'%');
-                })
-                ->orWhere('date','like','%'.$search.'%')
-                ->orWhere('date','like','%'.$search.'%')
-                ->orWhere('total','like','%'.$search.'%')
-                ->orWhere('avance','like','%'.$search.'%')
-                ->orWhere('reste','like','%'.$search.'%')
-                ->orderBy('id','desc')
-                ->get(); 
+                ->where([
+                    [function ($query) use ($search) {
+                        $query->where('code','like','%'.$search.'%')
+                        ->orWhere('date','like','%'.$search.'%')
+                        ->orWhere('total','like','%'.$search.'%')
+                        ->orWhere('avance','like','%'.$search.'%')
+                        ->orWhere('reste','like','%'.$search.'%');
+                    }],
+                    ['user_id',Auth::user()->id]
+                ])
+            ->orWhereHas('client', function($query) use ($search)  {
+                $query->where([['nom_client','like','%'.$search.'%'],['user_id',Auth::user()->id]]);
+            })
+            ->orderBy('id','desc')
+            ->get();
         }
         else{
             if($client){
@@ -717,7 +754,7 @@ class CommandeController extends Controller
                 else if((!$facture && $status=='nr') || ($facture=='all' && $status=='nr'))  //echo 'nr';
                     $commandes = $nr->where('client_id',$client)->get();
                 else if((!$facture && $status=='all') || ($facture=='all' && !$status) || ($facture=='all' && $status=='all')) //echo 'all';
-                    $commandes = Commande::with(['client','reglements'])->where('client_id',$client)->orderBy('id','desc')->get();
+                    $commandes = Commande::with(['client','reglements'])->where('client_id',$client)->orderBy('id','desc')->where('user_id',Auth::user()->id)->get();
                 else if(($facture=='f' && !$status) || ($facture=='f' && $status=='all')) //echo 'f';
                     $commandes = $f->where('client_id',$client)->get();
                 else if($facture=='f' && $status=='r') //echo 'fr';
@@ -741,7 +778,7 @@ class CommandeController extends Controller
                 else if((!$facture && $status=='nr') || ($facture=='all' && $status=='nr'))  //echo 'nr';
                     $commandes = $nr->get();
                 else if((!$facture && $status=='all') || ($facture=='all' && !$status) || ($facture=='all' && $status=='all')) //echo 'all';
-                    $commandes = Commande::with(['client','reglements'])->orderBy('id','desc')->get();
+                    $commandes = Commande::with(['client','reglements'])->orderBy('id','desc')->where('user_id',Auth::user()->id)->get();
                 else if(($facture=='f' && !$status) || ($facture=='f' && $status=='all')) //echo 'f';
                     $commandes = $f->get();
                 else if($facture=='f' && $status=='r') //echo 'fr';
@@ -845,7 +882,8 @@ class CommandeController extends Controller
         // $year = date('y',$time);
         // $month = date('m',$time);
         // ---------------------        
-        $factures = Facture::where('code', 'like', "FA-$year%")->get();
+        // $factures = Facture::where('code', 'like', "FA-$year%")->get();
+        $factures = Facture::where('code', 'like', "FA-$year%")->where('user_id',Auth::user()->id)->get();
         // (count($factures)>0) ? $fcode = Facture::get()->last()->code : $fcode = null;
         // ---------------------------------------
         if(count($factures)>0) {
@@ -926,7 +964,8 @@ class CommandeController extends Controller
         }
         else{
             $code = $request->input('code');
-            $getFactures = Facture::get();
+            // $getFactures = Facture::get();
+            $getFactures = Facture::where('user_id',Auth::user()->id)->get();
             // --------------------------------------
             $list = explode("-",$code);
             $y1 = substr($list[1],0,2);
@@ -1136,8 +1175,16 @@ class CommandeController extends Controller
         $from = $request->from;
         $to = $request->to;
 
-        $commandes = Commande::with('client')->whereBetween('date', [$from, $to])->get();
-        $reglements = Reglement::with(['commande' => function($query){$query->with('client');}])->whereBetween('date', [$from, $to])->get();
+        // $commandes = Commande::with('client')->whereBetween('date', [$from, $to])->get();
+        // $reglements = Reglement::with(['commande' => function($query){$query->with('client');}])->whereBetween('date', [$from, $to])->get();
+        $commandes = Commande::with('client')
+            ->whereBetween('date', [$from, $to])
+            ->where('user_id',Auth::user()->id)
+            ->get();
+        $reglements = Reglement::with(['commande' => function($query){$query->with('client');}])
+            ->whereBetween('date', [$from, $to])
+            ->where('user_id',Auth::user()->id)
+            ->get();
         return compact('commandes','reglements');
     }
 

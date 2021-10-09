@@ -58,7 +58,8 @@
   @php
   $companies = App\Company::get();
   $count = count($companies);
-  ($count>0)  ? $company = App\Company::first(): $company = null;
+  // ($count>0)  ? $company = App\Company::first(): $company = null;
+  ($count>0)  ? $company = App\Company::where('user_id',Auth::user()->id)->first(): $company = null;
   if($company && ($company->logo || $company->logo != null)){
     $logo = Storage::url($company->logo ?? null);
     $nom = $company->nom;

@@ -16,7 +16,8 @@ class CategorieController extends Controller
 
     public function index()
     {
-        $categories = Categorie::orderBy('id', 'desc')->get();
+        // $categories = Categorie::orderBy('id', 'desc')->get();
+        $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
         return view('managements.categories.index', compact('categories'));
     }
 
@@ -97,10 +98,19 @@ class CategorieController extends Controller
     public function searchCategorie(Request $request)
     {
         $search = $request->search;
-        $categories = Categorie::where('nom_categorie','like',"%$search%")
-            ->orWhere('description','like',"%$search%")
-            ->orderBy('id','desc')
-            ->get();
+        // $categories = Categorie::where('nom_categorie','like',"%$search%")
+        //     ->orWhere('description','like',"%$search%")
+        //     ->orderBy('id','desc')
+        //     ->get();
+        $categories = Categorie::where([
+            [function ($query) use ($search) {
+                    $query->where('nom_categorie','like',"%$search%")
+                    ->orWhere('description','like',"%$search%");
+            }],
+            ['user_id',Auth::user()->id]
+        ])
+        ->orderBy('id','desc')
+        ->get();
         return $categories;
     }
 

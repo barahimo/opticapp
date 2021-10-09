@@ -129,7 +129,7 @@
                 <button id="btnFacture${index}" class="btn btn-link" onclick="window.location.assign('${url_fac}')"><i class="fa fa-plus-square"></i>&nbsp;Facture&nbsp;<i class="fas fa-receipt"></i></button>
                 <button id="btnStatus${index}" class="btn btn-link" onclick="window.location.assign('${url_reg}')"><i class="fa fa-plus-square"></i>&nbsp;Règlement&nbsp;<i class="fas fa-hand-holding-usd"></i></button>
                 <a class="btn btn-outline-info btn-sm" href=${url_show1}><i class="fas fa-print"></i></a>
-                <a class="btn btn-outline-success btn-sm" id="btnEdit${index}" href=${url_edit}><i class="fas fa-edit"></i></a>
+                <a class="btn btn-outline-success btn-sm" id="btnEdit${index+1}" href=${url_edit}><i class="fas fa-edit"></i></a>
                 <a 
                   class="btn btn-outline-danger btn-sm" 
                   id="btnDelete1${index+1}" 
@@ -262,13 +262,13 @@
       // var btnStatus = action.eq(1);
       var btnFacture = $('#btnFacture'+index);
       var btnStatus = $('#btnStatus'+index);
-      var btnEdit = $('#btnEdit'+index);
-      var btnDelete1 = $('#btnDelete1'+index);
+      var btnEdit = $('#btnEdit'+(index+1));
+      var btnDelete1 = $('#btnDelete1'+(index+1));
       if(facture.html() == 'F'){
         btnFacture.attr('disabled',true);
         btnEdit.attr('style',"color : grey;cursor: default !important;pointer-events: none;");
         btnEdit.attr('onclick',"return false;");
-        
+
         btnDelete1.attr('style',"color : grey;cursor: default !important;pointer-events: none;");
         btnDelete1.attr('onclick',"return false;");
       }

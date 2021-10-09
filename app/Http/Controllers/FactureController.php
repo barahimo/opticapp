@@ -22,7 +22,9 @@ class FactureController extends Controller
         // $factures = Facture::orderBy('id','desc')->paginate(3);
         $factures = Facture::with(['commande' => function ($query) {
             $query->with('client')->get();
-        }])->orderBy('id','desc')->get();
+        }])
+        ->where('user_id',Auth::user()->id)
+        ->orderBy('id','desc')->get();
         return view('managements.factures.index', compact('factures'));
     }
 
@@ -109,25 +111,46 @@ class FactureController extends Controller
 
     public function searchFacture(Request $request){
         $search = $request->search;
+        // $factures = Facture::with(['commande' => function ($query) {
+        //     $query->with('client')->get();
+        // }])->where('code','like',"%$search%")
+        //     ->orWhere('date','like',"%$search%")
+        //     ->orWhere('total_HT','like',"%$search%")
+        //     ->orWhere('total_TVA','like',"%$search%")
+        //     ->orWhere('total_TTC','like',"%$search%")
+        //     // ->orWhereHas('commande',function($query) use($search){
+        //     //     $query->where('code','like',"%$search%");
+        //     // })
+        //     // ->orWhereHas('commande',function($query) use($search){
+        //     //     $query->WhereHas('client',function($query) use($search){
+        //     //         $query->where('nom_client','like',"%$search%");
+        //     //     });
+        //     // })
+        //     ->orWhereHas('commande',function($query) use($search){
+        //         $query->where('code','like',"%$search%")
+        //             ->orWhereHas('client',function($query) use($search){
+        //             $query->where('nom_client','like',"%$search%");
+        //         });
+        //     })
+        //     ->orderBy('id','desc')
+        //     ->get();
         $factures = Facture::with(['commande' => function ($query) {
-            $query->with('client')->get();
-        }])->where('code','like',"%$search%")
-            ->orWhere('date','like',"%$search%")
-            ->orWhere('total_HT','like',"%$search%")
-            ->orWhere('total_TVA','like',"%$search%")
-            ->orWhere('total_TTC','like',"%$search%")
-            // ->orWhereHas('commande',function($query) use($search){
-            //     $query->where('code','like',"%$search%");
-            // })
-            // ->orWhereHas('commande',function($query) use($search){
-            //     $query->WhereHas('client',function($query) use($search){
-            //         $query->where('nom_client','like',"%$search%");
-            //     });
-            // })
+                $query->with('client')->get();
+            }])
+            ->where([
+                [function ($query) use ($search) {
+                    $query->where('code','like',"%$search%")
+                    ->orWhere('date','like',"%$search%")
+                        ->orWhere('total_HT','like',"%$search%")
+                        ->orWhere('total_TVA','like',"%$search%")
+                        ->orWhere('total_TTC','like',"%$search%");
+                }],
+                ['user_id',Auth::user()->id]
+            ])
             ->orWhereHas('commande',function($query) use($search){
-                $query->where('code','like',"%$search%")
+                $query->where([['code','like',"%$search%"],['user_id',Auth::user()->id]])
                     ->orWhereHas('client',function($query) use($search){
-                    $query->where('nom_client','like',"%$search%");
+                    $query->where([['nom_client','like',"%$search%"],['user_id',Auth::user()->id]]);
                 });
             })
             ->orderBy('id','desc')
@@ -172,9 +195,11 @@ class FactureController extends Controller
     }
 
     public function show(Request $request, Facture $facture){
-        $companies = Company::get();
+        // $companies = Company::get();
+        $companies = Company::where('user_id',Auth::user()->id)->get();
         $count = count($companies);
-        ($count>0)  ? $company = Company::first(): $company = null;
+        // ($count>0)  ? $company = Company::first(): $company = null;
+        ($count>0)  ? $company = Company::where('user_id',Auth::user()->id)->first(): $company = null;
         $adresse = $this->getAdresse($company);
         $facture = $facture;
         $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
