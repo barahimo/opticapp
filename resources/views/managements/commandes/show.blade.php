@@ -53,7 +53,7 @@
                                 {{-- <div class="row"> --}}
                                     {{-- <div class="col"></div> --}}
                                     {{-- <div class="col-6"> --}}
-                                    <div class="">
+                                    <div style="font-size:8px">
                                         Code client: {{$commande->client->code}} <br>  
                                         Nom client : {{$commande->client->nom_client}} <br>
                                         Télèphone : {{$commande->client->telephone}} <br>  
@@ -76,7 +76,7 @@
                                             <thead>
                                                 <tr style="height:10px"></tr>
                                                 <tr>
-                                                    <th colspan="5" style="text-align:center; background-color:rgb(235, 233, 233);">
+                                                    <th colspan="5" style="font-size:10px;text-align:center; background-color:rgb(235, 233, 233);">
                                                         @php
                                                         $list = explode("-",$commande->code);
                                                         $list1 = $list[1];
@@ -88,7 +88,7 @@
                                                 </tr>
                                                 <tr style="height:10px"></tr>
                                                 {{-- <tr style="height:10px; font-size : 7px"> --}}
-                                                <tr style="height:10px; font-size:6px">
+                                                <tr style="height:10px; font-size:8px">
                                                     <th colspan="5">
                                                         @if($commande->oeil_gauche)
                                                         Oeil gauche : {{$commande->oeil_gauche}} &nbsp;&nbsp;&nbsp; 
@@ -99,7 +99,7 @@
                                                     </th>
                                                 </tr>
                                                 {{-- <tr style="height:10px; font-size : 8px;"> --}}
-                                                <tr style="height:10px; font-size:6px">
+                                                <tr style="height:10px; font-size:8px">
                                                     <th colspan="5" class="text-right">
                                                         Montants exprimés en Dirham
                                                     </th>
@@ -114,7 +114,7 @@
                                                 </tr>
                                             </thead>
                                             {{-- <tbody style="font-size : 8px"> --}}
-                                            <tbody style="font-size:6px">
+                                            <tbody style="font-size:8px">
                                                 @php 
                                                     $TTC = 0;
                                                 @endphp
@@ -159,15 +159,15 @@
                                                     <td colspan="1" style="border-bottom: none !important"></td>
                                                     <th colspan="2" class="text-right">NET A PAYER</th>
                                                     <th colspan="1" class="text-right">{{number_format($TTC,2)}}</th>
-                                                    {{-- <th colspan="1" class="text-right">156789</th> --}}
+                                                    {{-- <th colspan="1" class="text-right">156789.69</th> --}}
                                                 </tr>
-                                                <tr style="height:10px;"></tr>
+                                                <tr style="height:60px;"></tr>
                                                 <tr>
                                                     {{-- <th></th> --}}
                                                     {{-- <th colspan="6"> --}}
                                                     <th colspan="4">
                                                         @php
-                                                        // $TTC = 156789;
+                                                        // $TTC = 156789.69;
                                                         $numberToWords = new NumberToWords\NumberToWords();
                                                         $numberTransformer = $numberToWords->getNumberTransformer('fr');
                                                         // $numberWord1 = $numberTransformer->toWords(number_format($TTC,2)); // outputs "five thousand one hundred twenty"
@@ -206,7 +206,7 @@
                                                 </tr>
                                             </tbody>
                                             <tfoot>
-                                                <tr style="height:10px"></tr>
+                                                <tr style="height:60px"></tr>
                                                 <tr style="height: 10px">
                                                     <td colspan="7" class="text-center" style="text-align:center; background-color:rgb(235, 233, 233)">
                                                         {!!$adresse!!}
@@ -274,7 +274,7 @@
         var style = `
             margin-left: auto;
             margin-right: auto;
-            font-size:6px;
+            font-size:8px;
             font-family: Arial, Helvetica, sans-serif;
         `;
         $('#pdf').prop('style',style);

@@ -123,7 +123,7 @@
                                         </tr>
                                     </tbody>
                                     <tfoot>
-                                        <tr class="tbody_ligne" style="height:20px"></tr>
+                                        <tr class="tbody_ligne" style="height:60px"></tr>
                                         <tr>
                                             <td colspan="2" class="text-center" style="background-color:rgb(235, 233, 233); font-size:10px">
                                                 {!!$adresse!!}
