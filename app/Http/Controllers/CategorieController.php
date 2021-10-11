@@ -12,12 +12,16 @@ class CategorieController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
+        $this->middleware('statususer');
     }
 
     public function index()
     {
         // $categories = Categorie::orderBy('id', 'desc')->get();
-        $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
         return view('managements.categories.index', compact('categories'));
     }
 
@@ -38,6 +42,8 @@ class CategorieController extends Controller
                         
             // ]);
         $user_id = Auth::user()->id;
+            if(Auth::user()->is_admin == 0)
+                $user_id = Auth::user()->user_id;
         $categorie = new Categorie();
         $categorie ->nom_categorie = $request->input('nom_categorie');
         $categorie ->description = $request->input('description');
@@ -81,6 +87,8 @@ class CategorieController extends Controller
 
         // ]);
         $user_id = Auth::user()->id;
+            if(Auth::user()->is_admin == 0)
+                $user_id = Auth::user()->user_id;
         $categorie ->nom_categorie = $request->input('nom_categorie');
         $categorie ->description = $request->input('description');
         $categorie->user_id = $user_id;
@@ -102,12 +110,15 @@ class CategorieController extends Controller
         //     ->orWhere('description','like',"%$search%")
         //     ->orderBy('id','desc')
         //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $categories = Categorie::where([
             [function ($query) use ($search) {
                     $query->where('nom_categorie','like',"%$search%")
                     ->orWhere('description','like',"%$search%");
             }],
-            ['user_id',Auth::user()->id]
+            ['user_id',$user_id]
         ])
         ->orderBy('id','desc')
         ->get();

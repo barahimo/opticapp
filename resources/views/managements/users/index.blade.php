@@ -35,6 +35,7 @@
                             <th>#</th>
                             <th>Nom</th>
                             <th>Email</th>
+                            {{-- <th>Type</th> --}}
                             <th>Type</th>
                             <th>Actions</th>
                         </tr>
@@ -48,12 +49,20 @@
                             <td>{{++$i}}</td>
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
-                            <td>
+                            {{-- <td>
                                 @if($user->is_admin == 0)
                                 User
                                 @endif
                                 @if($user->is_admin == 1)
                                 Admin
+                                @endif
+                            </td> --}}
+                            <td>
+                                @if($user->status == 0)
+                                InActive
+                                @endif
+                                @if($user->status == 1)
+                                Active
                                 @endif
                             </td>
                             <td>

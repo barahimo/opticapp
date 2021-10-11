@@ -50,13 +50,23 @@
                                 <input class="form-control" placeholder="Confirmer le mot de passe" type="password" name="password_confirmation" id="password_confirmation">
                                 <span class="fa fa-lock form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group has-feedback">
                                     <label class="control-label" for="is_admin">Type d'utilisateur</label>
                                     <select class="form-control" id="is_admin" name="is_admin">
                                         <option value="">-- Type d'utilisateur --</option>
                                         <option value="0"  @if ($user->is_admin == old('is_admin',0 ?? null)) selected="selected" @endif> User</option>
                                         <option value="1"  @if ($user->is_admin == old('is_admin',1 ?? null)) selected="selected" @endif> Admin</option>
+                                    </select>
+                                </div>
+                            </div> --}}
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="status">Status d'utilisateur</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="">-- Status d'utilisateur --</option>
+                                        <option value="1"  @if ($user->status == old('status',1 ?? null)) selected="selected" @endif> Active</option>
+                                        <option value="0"  @if ($user->status == old('status',0 ?? null)) selected="selected" @endif> InActive</option>
                                     </select>
                                 </div>
                             </div>
@@ -85,20 +95,25 @@
     $(document).on('keyup','#password_confirmation',function(){
         myFunction();
     })
-    $(document).on('click','#is_admin',function(){
+    // $(document).on('click','#is_admin',function(){
+    //     myFunction();
+    // })
+    $(document).on('click','#status',function(){
         myFunction();
     })
     function myFunction() {
         var name = $('#name').val();
         var password = $('#password').val();
         var password_confirmation = $('#password_confirmation').val();
-        var is_admin = $('#is_admin').val();
+        // var is_admin = $('#is_admin').val();
+        var status = $('#status').val();
         var btn = $('button[name=updateUser]');
         if(
             (!name && name=='') || 
             (!password && password=='') || 
             (password_confirmation!==password) || 
-            (!is_admin && is_admin=='')
+            (!status && status=='')
+            // (!is_admin && is_admin=='')
         ) {
             btn.prop('disabled',true);
         }

@@ -16,6 +16,7 @@ class ReglementController extends Controller
     
     public function __construct(){
         $this->middleware('auth');
+        $this->middleware('statususer');
     }
 
     public function index()
@@ -255,7 +256,10 @@ class ReglementController extends Controller
     //regler plusieurs commandes 
     public function create2(Request $request){
         // $clients = Client::get();
-        $clients = Client::where('user_id',Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $clients = Client::where('user_id',$user_id)->get();
         $client = $request->client;
         $date = Carbon::now();
         if($client){
@@ -288,13 +292,18 @@ class ReglementController extends Controller
         $date = Carbon::now();
         // $commande = Commande::with('client')->find($commande_id);
         // $commande = Commande::with('client')->where('user_id',Auth::user()->id)->find($commande_id);
-        $commande = Commande::with('client')->where('user_id',Auth::user()->id)->findOrFail($commande_id);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $commande = Commande::with('client')->where('user_id',$user_id)->findOrFail($commande_id);
         return view('managements.reglements.create3',compact('commande','date'));
     }
 
     // Enregistrer plusieurs reglements
     public function store2(Request $request){ 
         $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $lignes = $request->input('lignes');
         if(!empty($lignes)){
             $date = $request->input('date');
@@ -317,7 +326,7 @@ class ReglementController extends Controller
                     $reglement->status = $ligne['status'];
                     // -----------------------------------------------------
                     // $reglements = Reglement::get();
-                    $reglements = Reglement::where('user_id',Auth::user()->id)->get();
+                    $reglements = Reglement::where('user_id',$user_id)->get();
                     (count($reglements)>0) ? $lastcode = $reglements->last()->code : $lastcode = null;
                     $str = 1;
                     if(isset($lastcode)){
@@ -357,6 +366,8 @@ class ReglementController extends Controller
     // enregistrer une seule reglement
     public function store3(Request $request){ 
         $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $lignes = $request->input('lignes');
         if(!empty($lignes)){
             $date = $request->input('date');
@@ -367,7 +378,7 @@ class ReglementController extends Controller
             $month = date('m',$time);
             // -----------------------------------------------------
             // $reglements = Reglement::get();
-            $reglements = Reglement::where('user_id',Auth::user()->id)->get();
+            $reglements = Reglement::where('user_id',$user_id)->get();
             (count($reglements)>0) ? $lastcode = $reglements->last()->code : $lastcode = null;
             $str = 1;
             if(isset($lastcode)){
@@ -416,10 +427,13 @@ class ReglementController extends Controller
 
     public function show(Reglement $reglement){
         // $companies = Company::get();
-        $companies = Company::where('user_id',Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $companies = Company::where('user_id',$user_id)->get();
         $count = count($companies);
         // ($count>0)  ? $company = Company::first(): $company = null;
-        ($count>0)  ? $company = Company::where('user_id',Auth::user()->id)->first(): $company = null;
+        ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
         $adresse = $this->getAdresse($company);
 
         $reglement = Reglement::with(['commande' => function($query){$query->with('client');}])->find($reglement->id);
@@ -445,12 +459,16 @@ class ReglementController extends Controller
         $cmd_avance = $data['cmd_avance'];
         $cmd_reste = $data['cmd_reste'];
 
-        $reglement = Reglement::where('user_id',Auth::user()->id)->find($reg_id);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+
+        $reglement = Reglement::where('user_id',$user_id)->find($reg_id);
         $reglement->avance = $reg_avance + $reg_reste;
         $reglement->reste = $reg_reste - $reg_reste;
         $reglement->status = 'R';
         $reglement->save();
-        $commande = Commande::where('user_id',Auth::user()->id)->find($cmd_id);
+        $commande = Commande::where('user_id',$user_id)->find($cmd_id);
         $commande->avance = $cmd_avance + $reg_reste;
         $commande->reste = $cmd_reste - $reg_reste;;
         $commande->save();

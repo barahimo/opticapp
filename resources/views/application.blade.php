@@ -4,6 +4,8 @@
 <?php
     use Illuminate\Support\Facades\Auth;
     $user_id = Auth::user()->id;
+    if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
     // echo 'user_id '.$user_id;
     // return;
     $nbclients = App\Client::where('user_id',$user_id)->get()->count();

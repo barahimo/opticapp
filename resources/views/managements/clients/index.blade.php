@@ -85,7 +85,7 @@
 {{-- ################## --}}
 <script type="text/javascript">
     $(document).ready(function(){
-        searchClient();
+        // searchClient();
         $(document).on('keyup','input[name=q]',function(e){
             e.preventDefault();
             searchClient();

@@ -18,7 +18,10 @@ class CompanyController extends Controller
     public function index()
     {
         // $companies = Company::get();
-        $companies = Company::where('user_id',Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $companies = Company::where('user_id',$user_id)->get();
         $count = count($companies);
         ($count > 0) ? $view = 'edit': $view = 'create';
         if($view == 'create'){
@@ -27,7 +30,7 @@ class CompanyController extends Controller
         }
         if($view == 'edit'){
             // $company = Company::first();
-            $company = Company::where('user_id',Auth::user()->id)->first();
+            $company = Company::where('user_id',$user_id)->first();
             $route = route('company.update',['company'=>$company->id]);
         }
         return view('parametres.form',compact('company','route','view'));

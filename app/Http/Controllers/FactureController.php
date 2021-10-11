@@ -14,16 +14,20 @@ class FactureController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
+        $this->middleware('statususer');
     }
     public function index()
     {
         // $factures = Facture::orderBy('id','desc')->where('total_TTC','>=','120')->get();
         // return $factures;
         // $factures = Facture::orderBy('id','desc')->paginate(3);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $factures = Facture::with(['commande' => function ($query) {
             $query->with('client')->get();
         }])
-        ->where('user_id',Auth::user()->id)
+        ->where('user_id',$user_id)
         ->orderBy('id','desc')->get();
         return view('managements.factures.index', compact('factures'));
     }
@@ -134,6 +138,9 @@ class FactureController extends Controller
         //     })
         //     ->orderBy('id','desc')
         //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $factures = Facture::with(['commande' => function ($query) {
                 $query->with('client')->get();
             }])
@@ -145,12 +152,12 @@ class FactureController extends Controller
                         ->orWhere('total_TVA','like',"%$search%")
                         ->orWhere('total_TTC','like',"%$search%");
                 }],
-                ['user_id',Auth::user()->id]
+                ['user_id',$user_id]
             ])
-            ->orWhereHas('commande',function($query) use($search){
-                $query->where([['code','like',"%$search%"],['user_id',Auth::user()->id]])
-                    ->orWhereHas('client',function($query) use($search){
-                    $query->where([['nom_client','like',"%$search%"],['user_id',Auth::user()->id]]);
+            ->orWhereHas('commande',function($query) use($search,$user_id){
+                $query->where([['code','like',"%$search%"],['user_id',$user_id]])
+                    ->orWhereHas('client',function($query) use($search,$user_id){
+                    $query->where([['nom_client','like',"%$search%"],['user_id',$user_id]]);
                 });
             })
             ->orderBy('id','desc')
@@ -196,10 +203,13 @@ class FactureController extends Controller
 
     public function show(Request $request, Facture $facture){
         // $companies = Company::get();
-        $companies = Company::where('user_id',Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $companies = Company::where('user_id',$user_id)->get();
         $count = count($companies);
         // ($count>0)  ? $company = Company::first(): $company = null;
-        ($count>0)  ? $company = Company::where('user_id',Auth::user()->id)->first(): $company = null;
+        ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
         $adresse = $this->getAdresse($company);
         $facture = $facture;
         $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();

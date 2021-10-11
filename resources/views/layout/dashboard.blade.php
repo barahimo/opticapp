@@ -56,10 +56,13 @@
 </head>
 <body class="skin-blue sidebar-mini">
   @php
-  $companies = App\Company::get();
+  $user_id = Auth::user()->id;
+  if(Auth::user()->is_admin == 0)
+      $user_id = Auth::user()->user_id;
+  $companies = App\Company::where('user_id',$user_id)->get();
   $count = count($companies);
   // ($count>0)  ? $company = App\Company::first(): $company = null;
-  ($count>0)  ? $company = App\Company::where('user_id',Auth::user()->id)->first(): $company = null;
+  ($count>0)  ? $company = App\Company::where('user_id',$user_id)->first(): $company = null;
   if($company && ($company->logo || $company->logo != null)){
     $logo = Storage::url($company->logo ?? null);
     $nom = $company->nom;
@@ -96,7 +99,8 @@
                 {{-- <div class="pull-left user-img"><img src="{{$logo}}" class="img-responsive img-circle" alt="User"></div> --}}
                 <p class="text-left">{{ Auth::user()->email }} <small>{{ Auth::user()->name }}</small> </p>
               </li>
-              @if(Auth::user()->is_admin == 2)
+              {{-- @if(Auth::user()->is_admin == 2) --}}
+              @if(Auth::user()->is_admin != 0)
               <li><a href="{{ route('user.index') }}"><i class="icon-user"></i> Gestion des comptes</a></li>
               @endif
               <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>

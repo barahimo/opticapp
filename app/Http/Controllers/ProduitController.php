@@ -12,13 +12,17 @@ class ProduitController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
+        $this->middleware('statususer');
     }
     
     public function index()
     {
         // $produits = Produit::with('categorie')->orderBy('id')->paginate(10);
         // $produits = Produit::with('categorie')->orderBy('id','desc')->get();
-        $produits = Produit::with('categorie')->orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $produits = Produit::with('categorie')->orderBy('id', 'desc')->where('user_id',$user_id)->get();
         // $categories = Categorie::all();
         // return view('managements.produits.index', compact('produits', 'categories'));
         return view('managements.produits.index', compact('produits'));
@@ -26,7 +30,10 @@ class ProduitController extends Controller
 
     public function create()
     {
-        $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
         return view('managements.produits.create',[
             // 'categories' => Categorie::all()
             'categories' => $categories
@@ -44,6 +51,8 @@ class ProduitController extends Controller
         //     // 'nom_categorie' => 'required' 
         // ]);
         $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $tva = $request->input('tva');
         // $ht = $request->input('prix_produit_HT');
         $ttc = $request->input('prix_produit_TTC');
@@ -112,6 +121,8 @@ class ProduitController extends Controller
                         
         // ]);
         $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $tva = $request->input('tva');
         $ttc = $request->input('prix_produit_TTC');
 
@@ -154,7 +165,6 @@ class ProduitController extends Controller
     
     public function destroy(Produit $produit)
     {
-
             $existe = false;
             
                 $lgcommande = Lignecommande::where('produit_id', '=', $produit->id )->first();
@@ -210,6 +220,9 @@ class ProduitController extends Controller
         //     })
         //     ->orderBy('id','desc')
         //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $produits = Produit::with('categorie')
             ->where([
                 [function ($query) use ($search) {
@@ -219,10 +232,10 @@ class ProduitController extends Controller
                     ->orWhere('prix_produit_HT','like',"%$search%")
                     ->orWhere('prix_produit_TTC','like',"%$search%");
                 }],
-                ['user_id',Auth::user()->id]
+                ['user_id',$user_id]
             ])
-            ->orWhereHas('categorie',function($query) use($search){
-                $query->where([['nom_categorie','like',"%$search%"],['user_id',Auth::user()->id]]);
+            ->orWhereHas('categorie',function($query) use($search,$user_id){
+                $query->where([['nom_categorie','like',"%$search%"],['user_id',$user_id]]);
             })
             ->orderBy('id','desc')
             ->get();

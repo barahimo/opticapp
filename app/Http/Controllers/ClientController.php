@@ -15,9 +15,10 @@ class ClientController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
+        $this->middleware('statususer');
     }
 
-    public function index( Request $request)
+    public function index(Request $request)
     {
         // $clients = Client::withTrashed()->get();
         // $clients = Client::onlyTrashed()->get();
@@ -36,7 +37,12 @@ class ClientController extends Controller
             // dd($clients);
             // -------------------------------------- //
             // $clients = Client::orderBy('id','desc')->get();
-            $clients = Client::orderBy('id','desc')->where('user_id',Auth::user()->id)->get();
+            #################################
+            $user_id = Auth::user()->id;
+            if(Auth::user()->is_admin == 0)
+                $user_id = Auth::user()->user_id;
+            $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
+            #################################
             return view('managements.clients.index', compact('clients'));
         // }
         // catch(Throwable $e)
@@ -63,8 +69,10 @@ class ClientController extends Controller
         //     'code' => 'required|min:4|max:100' 
         // ]);
         $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         // --------------------------------------------------
-        $clients = Client::withTrashed()->get();
+        $clients = Client::withTrashed()->where('user_id',$user_id)->get();
         (count($clients)>0) ? $lastcode = $clients->last()->code : $lastcode = null;
         $str = 1;
         if(isset($lastcode))
@@ -134,6 +142,8 @@ class ClientController extends Controller
 
         // ]);
         $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $client->nom_client = $request->input('nom_client');
         $client->adresse = $request->input('adresse');
         $client->telephone = $request->input('telephone');
@@ -182,6 +192,9 @@ class ClientController extends Controller
         //     ->orWhere('telephone','like',"%$search%")
         //     ->orderBy('id','desc')
         //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
         $clients = Client::where([
             [function ($query) use ($search) {
                     $query->where('nom_client','like',"%$search%")
@@ -190,7 +203,7 @@ class ClientController extends Controller
                     ->orWhere('solde','like',"%$search%")
                     ->orWhere('telephone','like',"%$search%");
             }],
-            ['user_id',Auth::user()->id]
+            ['user_id',$user_id]
         ])
         ->orderBy('id','desc')
         ->get();
