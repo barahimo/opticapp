@@ -111,9 +111,22 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $user = User::where('user_id',$user_id)->findOrFail($id);
         return view('managements.users.edit')->with([
-            "user" => $user
+            "user" => $user,
+            "visibility" => true
+        ]);
+    }
+
+    public function editUser($id)
+    {
+        $user = User::where('id',Auth::user()->id)->findOrFail($id);
+        return view('managements.users.edit')->with([
+            "user" => $user,
+            "visibility" => false
         ]);
     }
 
@@ -126,6 +139,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $visibility = $request['visibility'];
         $name = $request['name'];
         $email = $request['email'];
         // $is_admin = $request['is_admin'];
@@ -136,19 +150,30 @@ class UserController extends Controller
         $user_id = Auth::user()->id;
         $password = Hash::make($request['password']);
 
-        $user = User::where('user_id',Auth::user()->id)->find($id);
+        if ($visibility) {
+            $user = User::where('user_id',Auth::user()->id)->find($id);
+            $user->status = $status;
+            $user->is_admin = $is_admin;
+            $user->user_id = $user_id;
+        }
+        else{
+            $user = User::where('id',Auth::user()->id)->find($id);
+            $is_admin = Auth::user()->is_admin;
+        }
         $user->name = $name;
         $user->email = $email;
         $user->password = $password;
-        $user->is_admin = $is_admin;
-        $user->status = $status;
-        $user->user_id = $user_id;
         $user->save();
 
-        $request->session()->flash('status',"Utlisateur a été bien modifié !");
-        return redirect()->route('user.index');
+        if($visibility){
+            $request->session()->flash('status',"Utlisateur a été bien modifié !");
+            return redirect()->route('user.index');
+        }
+        else{
+            $request->session()->flash('status',"les informations sont bien modifiés !");
+            return redirect()->route('app.home');
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      *

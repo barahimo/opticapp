@@ -87,14 +87,17 @@
                             </li>
                             @endif --}}
                         @else
-                            @if(Auth::user()->is_admin == 2)
                             <li class="nav-item links">
-                                <a class="nav-link" href="{{ route('user.index') }}"><i class="icon-user"></i>  Gestion des comptes</a>
+                                <a class="nav-link"  href="{{ route('user.editUser',Auth::user()->id) }}"><i class="icon-user"></i> Gestion de compte</a>
                             </li>
-                            @endif
+                            @if(Auth::user()->is_admin != 0)
+                            <li class="nav-item links">
+                                <a class="nav-link" href="{{ route('user.index') }}"><i class="icon-user"></i> Gestion des utilisateurs</a>
+                            </li>
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
                             </li>
+                            @endif
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

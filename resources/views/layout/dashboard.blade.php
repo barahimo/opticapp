@@ -100,10 +100,11 @@
                 <p class="text-left">{{ Auth::user()->email }} <small>{{ Auth::user()->name }}</small> </p>
               </li>
               {{-- @if(Auth::user()->is_admin == 2) --}}
+              <li><a href="{{ route('user.editUser',Auth::user()->id) }}"><i class="icon-user"></i> Gestion de compte</a></li>
               @if(Auth::user()->is_admin != 0)
-              <li><a href="{{ route('user.index') }}"><i class="icon-user"></i> Gestion des comptes</a></li>
-              @endif
+              <li><a href="{{ route('user.index') }}"><i class="icon-people"></i> Gestion des utilisateurs</a></li>
               <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
+              @endif
               <li role="separator" class="divider"></li>
               <li>
                 <a class="dropdown-item" href="{{ route('logout') }}"

@@ -33,22 +33,34 @@
                             <div class="col-md-6">
                                 <div class="form-group has-feedback">
                                 <label class="control-label" for="email">E-Mail</label>
-                                <input class="form-control" placeholder="E-Mail" type="email" id="email" value="{{ old('email', $user->email ?? null) }}" disabled>
-                                <input class="form-control" placeholder="E-Mail" type="hidden" name="email" id="email" value="{{ old('email', $user->email ?? null) }}">
+                                <input class="form-control" placeholder="E-Mail" type="email" id="email1" value="{{ old('email', $user->email ?? null) }}" disabled>
+                                <input class="form-control" placeholder="E-Mail" type="hidden" name="email" id="email2" value="{{ old('email', $user->email ?? null) }}">
                                 <span class="badge badge-danger" id="erreur"></span>
                                 <span class="fa fa-envelope-o form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group has-feedback">
-                                <label class="control-label" for="password">Mot de passe</label>
-                                <input class="form-control" placeholder="Mot de passe" type="password" name="password" id="password">
-                                <span class="fa fa-lock form-control-feedback" aria-hidden="true"></span> </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-danger btn-sm text-white" name="changePasse">Changer le mot de passe</button>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group has-feedback">
-                                <label class="control-label" for="password_confirmation">Confirmer le mot de passe</label>
-                                <input class="form-control" placeholder="Confirmer le mot de passe" type="password" name="password_confirmation" id="password_confirmation">
-                                <span class="fa fa-lock form-control-feedback" aria-hidden="true"></span> </div>
+                            <div class="col-md-12">
+                                &nbsp;&nbsp;
+                            </div>
+                            <div class="col-12" id="pass" style="display : none">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label class="control-label" for="password">Nouveau mot de passe</label>
+                                            <input class="form-control" placeholder="Mot de passe" type="password" name="password" id="password">
+                                            <span class="fa fa-lock form-control-feedback" aria-hidden="true"></span> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label class="control-label" for="password_confirmation">Confirmer le mot de passe</label>
+                                            <input class="form-control" placeholder="Confirmer le mot de passe" type="password" name="password_confirmation" id="password_confirmation">
+                                            <span class="fa fa-lock form-control-feedback" aria-hidden="true"></span> 
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             {{-- <div class="col-md-6">
                                 <div class="form-group has-feedback">
@@ -60,6 +72,8 @@
                                     </select>
                                 </div>
                             </div> --}}
+                            <input type="hidden" name="visibility" id="visibility" value="{{$visibility}}">
+                            @if($visibility)
                             <div class="col-md-6">
                                 <div class="form-group has-feedback">
                                     <label class="control-label" for="status">Status d'utilisateur</label>
@@ -70,8 +84,9 @@
                                     </select>
                                 </div>
                             </div>
+                            @endif
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-warning text-white" name="updateUser" disabled>Modifier</button>
+                                <button type="submit" class="btn btn-warning text-white" name="updateUser">Modifier</button>
                                 &nbsp;
                                 <a href="{{action('UserController@index')}}" class="btn btn-info">Retour</a>
                             </div>
@@ -86,6 +101,24 @@
 <!-- /.content --> 
 {{-- ################## --}}
 <script type="text/javascript">
+    $(document).on('click','button[name=changePasse]',function(e){
+        e.preventDefault();
+        pass = $('#pass');
+        isDisplay = pass.prop('style').display;
+        if(isDisplay == 'none'){
+            pass.prop('style','display : content');
+            var btn = $('button[name=updateUser]');
+            btn.prop('disabled',true);
+            var password = $('#password');
+            var password_confirmation = $('#password_confirmation');
+            password.val('');
+            password_confirmation.val('');
+        }
+        else{
+            pass.prop('style','display : none');
+        }
+        myFunction();
+    })
     $(document).on('keyup','#name',function(){
         myFunction();
     })
@@ -108,17 +141,60 @@
         // var is_admin = $('#is_admin').val();
         var status = $('#status').val();
         var btn = $('button[name=updateUser]');
-        if(
-            (!name && name=='') || 
-            (!password && password=='') || 
-            (password_confirmation!==password) || 
-            (!status && status=='')
-            // (!is_admin && is_admin=='')
-        ) {
-            btn.prop('disabled',true);
-        }
+        var visibility = "{{$visibility}}";
+        pass = $('#pass');
+        isDisplay = pass.prop('style').display;
+        if(visibility){
+            if(isDisplay == 'none'){
+                if(
+                    (!name && name=='') || 
+                    (!status && status=='')
+                    // (!is_admin && is_admin=='')
+                ) {
+                    btn.prop('disabled',true);
+                }
+                else{
+                    btn.prop('disabled',false);
+                }
+            }
+            else{
+                if(
+                    (!name && name=='') || 
+                    (!password && password=='') || 
+                    (password_confirmation!==password) || 
+                    (!status && status=='')
+                    // (!is_admin && is_admin=='')
+                ) {
+                    btn.prop('disabled',true);
+                }
+                else{
+                    btn.prop('disabled',false);
+                }
+            }
+        }   
         else{
-            btn.prop('disabled',false);
+            if(isDisplay == 'none'){
+                if(
+                    (!name && name=='')
+                ) {
+                    btn.prop('disabled',true);
+                }
+                else{
+                    btn.prop('disabled',false);
+                }
+            }
+            else{
+                if(
+                    (!name && name=='') || 
+                    (!password && password=='') || 
+                    (password_confirmation!==password) 
+                ) {
+                    btn.prop('disabled',true);
+                }
+                else{
+                    btn.prop('disabled',false);
+                }
+            }
         }
     }
 </script>

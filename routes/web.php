@@ -32,6 +32,7 @@ Auth::routes();
 
 // routes user
 Route::get('findEmail','UserController@findEmail')->name('user.findEmail');
+Route::get('user/{id}/editUser','UserController@editUser')->name('user.editUser');
 Route::resource('user', 'UserController');
 // route clients
 Route::resource('client', 'ClientController');
