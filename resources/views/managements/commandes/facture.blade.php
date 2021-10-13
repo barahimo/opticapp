@@ -128,7 +128,7 @@
         <input type="hidden" name="total_TVA" value="{{$TVA}}">
         <input type="hidden" name="total_TTC" value="{{$TTC}}" >
         <input type="hidden" name="reglement" value="à réception">
-        <input type="submit" class="btn btn-info bnt-lg" value="Valider La facture">
+        <input type="submit" class="btn btn-info bnt-lg" value="Valider la facture">
     </form>
 </div>
   <!-- End FORM  -->

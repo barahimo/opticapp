@@ -10,6 +10,13 @@
     </ol>
 </div>
 {{-- ################## --}}
+{{-- <p>{{$permission}}</p> --}}
+{{-- <p>in_array()</p> --}}
+<div>
+    @foreach ($permission as $item)
+        <p>{{$item}}</p>
+    @endforeach
+</div>
 <!-- Main content -->
 <div class="content">
     <!-- Main card -->
@@ -18,7 +25,9 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
+                    @if(in_array('create',$permission))
                     <a href="{{route('client.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-user-plus"></i>  Client</a>
+                    @endif
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8">
                     <form action="{{route('client.search')}}" method="get" class="search-form">
@@ -63,14 +72,20 @@
                             </td>
                             <td>{{$client->telephone}}</td>
                             <td>
+                                @if(in_array('show',$permission))
                                 <a href="{{ action('ClientController@show',['client'=> $client->id])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                @endif
                                 @if( Auth::user()->is_admin )
+                                @if(in_array('edit',$permission))
                                 <a href="{{route('client.edit',['client'=> $client->id])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                @endif
+                                @if(in_array('delete',$permission))
                                 <button class="btn btn-outline-danger btn-sm remove-client" 
-                                    data-id="{{ $client->id }}" 
-                                    data-action="{{ route('client.destroy',$client->id) }}"> 
-                                    <i class="fas fa-trash"></i>
+                                data-id="{{ $client->id }}" 
+                                data-action="{{ route('client.destroy',$client->id) }}"> 
+                                <i class="fas fa-trash"></i>
                                 </button>
+                                @endif
                                 @endif                         
                             </td>
                         </tr>

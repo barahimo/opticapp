@@ -84,6 +84,15 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission">Permissions</label>
+                                    <input type="checkbox" name="permission1" id="permission1" value="create" @if (in_array('create',$permission)) checked="checked" @endif>create
+                                    <input type="checkbox" name="permission2" id="permission2" value="edit"  @if (in_array('edit',$permission)) checked="checked" @endif>edit
+                                    <input type="checkbox" name="permission3" id="permission3" value="delete"  @if (in_array('delete',$permission)) checked="checked" @endif>delete
+                                    <input type="checkbox" name="permission4" id="permission4" value="show"  @if (in_array('show',$permission)) checked="checked" @endif>show
+                                </div>
+                            </div>
                             @endif
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-warning text-white" name="updateUser">Modifier</button>

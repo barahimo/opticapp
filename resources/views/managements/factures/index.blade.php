@@ -10,6 +10,11 @@
     </ol>
 </div>
 {{-- ################## --}}
+<div>
+    @foreach ($list as $item)
+        <p>{{$item}}</p>
+    @endforeach
+</div>
 <!-- Main content -->
 <div class="content">
     <!-- Main card -->

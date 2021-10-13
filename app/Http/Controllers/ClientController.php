@@ -18,8 +18,28 @@ class ClientController extends Controller
         $this->middleware('statususer');
     }
 
+    public function getPermssion($string)
+    {
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        return $list;
+    }
+    
     public function index(Request $request)
     {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        // return in_array('create',$permission);
+        // return $permission;
         // $clients = Client::withTrashed()->get();
         // $clients = Client::onlyTrashed()->get();
         // return $clients;
@@ -43,7 +63,8 @@ class ClientController extends Controller
                 $user_id = Auth::user()->user_id;
             $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
             #################################
-            return view('managements.clients.index', compact('clients'));
+            // return view('managements.clients.index', compact('clients'));
+            return view('managements.clients.index', compact(['clients','permission']));
         // }
         // catch(Throwable $e)
         // {
@@ -72,7 +93,8 @@ class ClientController extends Controller
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
         // --------------------------------------------------
-        $clients = Client::withTrashed()->where('user_id',$user_id)->get();
+        // $clients = Client::withTrashed()->where('user_id',$user_id)->get();
+        $clients = Client::where('user_id',$user_id)->get();
         (count($clients)>0) ? $lastcode = $clients->last()->code : $lastcode = null;
         $str = 1;
         if(isset($lastcode))
@@ -88,7 +110,7 @@ class ClientController extends Controller
         $client->ICE = Str::slug($client->nom_client, '-');
         $client->user_id = $user_id;
         $client->save();
-        $request->session()->flash('status','le client a été bien enregistré !');
+        $request->session()->flash('status','Le client a été bien enregistré !');
         return redirect()->route('client.index');
     }
 

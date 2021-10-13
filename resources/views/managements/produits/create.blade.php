@@ -77,7 +77,7 @@
                                 </fieldset>
                             </div>
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-success" name="sendProduit" disabled>Envoyer</button>
+                                <button type="submit" class="btn btn-success" name="sendProduit" disabled>Valider</button>
                                 &nbsp;
                                 <a href="{{action('ProduitController@index')}}" class="btn btn-info">Retour</a>
                             </div>

@@ -89,8 +89,11 @@
 <script type="text/javascript">
     $("body").on("click",".remove-user",function(){
         var current_object = $(this);
+        var is_admin = "{{Auth::user()->is_admin}}";
+        var msg = "";
+        (is_admin == 2) ? msg = "Un utilisateur et ses composants sont sur le point d'être détruite" : msg = "Un utilisateur est sur le point d'être détruite";
         Swal.fire({
-            title: "Un utilisateur est sur le point d'être détruite",
+            title: msg,
             text: "Est-ce que vous êtes d'accord ?",
             icon: 'warning',
             showCancelButton: true,

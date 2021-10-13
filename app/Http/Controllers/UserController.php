@@ -2,7 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Categorie;
+use App\Client;
+use App\Commande;
+use App\Company;
+use App\Facture;
 use App\Http\Middleware\SuperAdmin;
+use App\Lignecommande;
+use App\Produit;
+use App\Reglement;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +26,48 @@ class UserController extends Controller
         $this->middleware('auth');
         // $this->middleware('superAdmin');
         $this->middleware('statususer');
+    }
+
+    public function getPermssion($string)
+    {
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        return $list;
+    }
+
+    public function storePermssion(Request $request)
+    {
+        $permission1 = $request['permission1'];
+        $permission2 = $request['permission2'];
+        $permission3 = $request['permission3'];
+        $permission4 = $request['permission4'];
+        $array = [];
+        if($permission1)
+            array_push($array,$permission1);
+        if($permission2)
+            array_push($array,$permission2);
+        if($permission3)
+            array_push($array,$permission3);
+        if($permission4)
+            array_push($array,$permission4);
+        $permission = "[";
+        foreach ($array as $key => $value) {
+            $permission.="'".$value."'"; 
+            if($key != count($array)-1)
+                $permission.=","; 
+        }
+        $permission .= "]";
+        return $permission;
     }
 
     /**
@@ -60,6 +110,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $permission = $this->storePermssion($request);
         $name = $request['name'];
         $email = $request['email'];
         $password = Hash::make($request['password']);
@@ -79,6 +130,7 @@ class UserController extends Controller
         $user->status = $status;
         $user->remember_token = $remember_token;
         $user->user_id = $user_id;
+        $user->permission = $permission;
         $user->save();
 
         $request->session()->flash('status','Utilisateur a été bien enregistré !');
@@ -113,20 +165,24 @@ class UserController extends Controller
     {
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
+        $user_id = Auth::user()->user_id;
         $user = User::where('user_id',$user_id)->findOrFail($id);
+        $permission = $this->getPermssion($user->permission);
         return view('managements.users.edit')->with([
             "user" => $user,
-            "visibility" => true
+            "visibility" => true,
+            "permission" => $permission
         ]);
     }
 
     public function editUser($id)
     {
         $user = User::where('id',Auth::user()->id)->findOrFail($id);
+        $permission = $this->getPermssion(Auth::user()->permission);
         return view('managements.users.edit')->with([
             "user" => $user,
-            "visibility" => false
+            "visibility" => false,
+            "permission" => $permission
         ]);
     }
 
@@ -139,6 +195,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $permission = $this->storePermssion($request);
         $visibility = $request['visibility'];
         $name = $request['name'];
         $email = $request['email'];
@@ -155,6 +212,7 @@ class UserController extends Controller
             $user->status = $status;
             $user->is_admin = $is_admin;
             $user->user_id = $user_id;
+            $user->permission = $permission;
         }
         else{
             $user = User::where('id',Auth::user()->id)->find($id);
@@ -170,7 +228,7 @@ class UserController extends Controller
             return redirect()->route('user.index');
         }
         else{
-            $request->session()->flash('status',"les informations sont bien modifiés !");
+            $request->session()->flash('status',"Les informations sont bien modifiés !");
             return redirect()->route('app.home');
         }
     }
@@ -182,9 +240,71 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $msg = "Utilisateur est supprimés avec succès !";
+        $user_id = $id;
         $user = User::find($id);
+        ####################################################
+        if($user->is_admin == 1)
+        {
+            $factures = Facture::where('user_id',$user_id)->get();
+            $reglements = Reglement::where('user_id',$user_id)->get();
+            $lignecommandes = Lignecommande::where('user_id',$user_id)->get();
+            $categories = Categorie::where('user_id',$user_id)->get();
+            $produits = Produit::where('user_id',$user_id)->get();
+            $commandes = Commande::where('user_id',$user_id)->get();
+            $clients = Client::where('user_id',$user_id)->get();
+            $companies = Company::where('user_id',$user_id)->get();
+            $users = User::where('user_id',$user_id)->get();
+            ####################################################
+            if($factures->count() != 0){
+                foreach ($factures as $facture) {
+                    $facture->delete();
+                }
+            }
+            if($reglements->count() != 0){
+                foreach ($reglements as $reglement) {
+                    $reglement->delete();
+                }
+            }
+            if($lignecommandes->count() != 0){
+                foreach ($lignecommandes as $lignecommande) {
+                    $lignecommande->delete();
+                }
+            }
+            if($categories->count() != 0){
+                foreach ($categories as $categorie) {
+                    $categorie->delete();
+                }
+            }
+            if($produits->count() != 0){
+                foreach ($produits as $produit) {
+                    $produit->delete();
+                }
+            }
+            if($commandes->count() != 0){
+                foreach ($commandes as $commande) {
+                    $commande->delete();
+                }
+            }
+            if($clients->count() != 0){
+                foreach ($clients as $client) {
+                    $client->delete();
+                }
+            }
+            if($companies->count() != 0){
+                foreach ($companies as $companie) {
+                    $companie->delete();
+                }
+            }
+            if($users->count() != 0){
+                foreach ($users as $user) {
+                    $user->delete();
+                }
+            }
+            $msg = "Utilisateur et ses composants sont supprimés avec succès !";
+        }
+        ####################################################
         $user->delete();
-        $msg = "Utilisateur a été supprimé avec succès !";
         return redirect()->route('user.index')->with(["status" => $msg]); 
     }
 }

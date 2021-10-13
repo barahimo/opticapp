@@ -67,8 +67,18 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission">Permissions</label>
+                                    <input type="checkbox" name="permission1" id="permission1" value="create">create
+                                    <input type="checkbox" name="permission2" id="permission2" value="edit">edit
+                                    <input type="checkbox" name="permission3" id="permission3" value="delete">delete
+                                    <input type="checkbox" name="permission4" id="permission4" value="delete">show
+                                </div>
+                            </div>
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-success" name="sendUser" disabled>Envoyer</button>
+                                <button type="submit" class="btn btn-success" name="sendUser" disabled>Valider</button>
+                                {{-- <button type="submit" class="btn btn-success" name="sendUser">Valider</button> --}}
                                 &nbsp;
                                 <a href="{{action('UserController@index')}}" class="btn btn-info">Retour</a>
                             </div>

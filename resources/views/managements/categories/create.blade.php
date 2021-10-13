@@ -36,7 +36,7 @@
                                 </fieldset>
                             </div>
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-success" name="sendCategorie" disabled>Envoyer</button>
+                                <button type="submit" class="btn btn-success" name="sendCategorie" disabled>Valider</button>
                                 &nbsp;
                                 <a href="{{action('CategorieController@index')}}" class="btn btn-info">Retour</a>
                             </div>

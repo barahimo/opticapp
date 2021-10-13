@@ -47,7 +47,7 @@
                                 <span class="fa fa-money form-control-feedback" aria-hidden="true"></span> </div>
                             </div>
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-success" name="sendClient" disabled>Envoyer</button>
+                                <button type="submit" class="btn btn-success" name="sendClient" disabled>Valider</button>
                                 &nbsp;
                                 <a href="{{action('ClientController@index')}}" class="btn btn-info">Retour</a>
                             </div>

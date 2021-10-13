@@ -18,6 +18,21 @@ class FactureController extends Controller
     }
     public function index()
     {
+        $test = Facture::first();
+        $array = $test->reglement;
+        $list = [];
+        $array = explode("','",$array);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        // return $list;
         // $factures = Facture::orderBy('id','desc')->where('total_TTC','>=','120')->get();
         // return $factures;
         // $factures = Facture::orderBy('id','desc')->paginate(3);
@@ -29,7 +44,8 @@ class FactureController extends Controller
         }])
         ->where('user_id',$user_id)
         ->orderBy('id','desc')->get();
-        return view('managements.factures.index', compact('factures'));
+        // return view('managements.factures.index', compact('factures'));
+        return view('managements.factures.index', compact(['factures','test','array','list']));
     }
 
     
