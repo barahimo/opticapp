@@ -235,7 +235,8 @@ class FactureController extends Controller
         // ($count>0)  ? $company = Company::first(): $company = null;
         ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
         $adresse = $this->getAdresse($company);
-        $facture = $facture;
+        // $facture = $facture;
+        $facture = Facture::where('user_id',$user_id)->findOrFail($facture->id);
         $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
         $lignecommandes =  Lignecommande::with('produit')->where('commande_id', '=', $commande->id)->get();
         $prix_HT = 0;
@@ -250,6 +251,8 @@ class FactureController extends Controller
         foreach($lignecommandes as $p){
             $priceTotal = floatval($priceTotal  + $p->total_produit) ;
         }
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('show6',$permission))
         return view('managements.factures.show', [
             'lignecommandes' =>  $lignecommandes,
             'priceTotal'  => $priceTotal,
@@ -262,6 +265,8 @@ class FactureController extends Controller
             'adresse' => $adresse,
             'permission' => $permission
         ]);
+        else
+        return redirect()->back();
     }
 
     public function getAdresse($company){

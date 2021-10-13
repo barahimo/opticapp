@@ -56,10 +56,13 @@ class ProduitController extends Controller
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('create3',$permission))
         return view('managements.produits.create',[
-            // 'categories' => Categorie::all()
             'categories' => $categories
         ]);
+        else
+        return redirect()->back();
     }
 
     
@@ -113,21 +116,35 @@ class ProduitController extends Controller
     
     public function show(Produit $produit)
     {
-        $produit = Produit::with('categorie')->find($produit->id);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
+        $produit = Produit::with('categorie')->where('user_id',$user_id)->findOrFail($produit->id);
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('show3',$permission))
         return view('managements.produits.show', [
             "produit" => $produit
         ]);
+        else
+        return redirect()->back();
     }
 
     
     public function edit(Produit $produit)
     {
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
+        $produit = Produit::with('categorie')->where('user_id',$user_id)->findOrFail($produit->id);
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('edit3',$permission))
         return view('managements.produits.edit')->with([
             "produit" => $produit,
-            // 'categories' => Categorie::all(),
             'categories' => $categories
         ]);
+        else
+        return redirect()->back();
     }
 
     

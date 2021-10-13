@@ -80,11 +80,15 @@ class CommandeController extends Controller
             $user_id = Auth::user()->user_id;
         $categories=Categorie::where('user_id',$user_id)->get();//get data from table
         $clients = Client::where('user_id',$user_id)->get();
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('create4',$permission))
         return view('managements.commandes.create', [
             'clients' =>$clients,
             'categories' => $categories,
             'date' => $date,
         ]);
+        else
+        return redirect()->back();
     }
     // ------------ END CREATE COMMANDE ------------------------------
     // ------------ BEGIN STORE COMMANDE ---------------------------
@@ -255,12 +259,16 @@ class CommandeController extends Controller
         // $categories=Categorie::all();
         $clients = Client::where('user_id',$user_id)->get();
         $categories=Categorie::where('user_id',$user_id)->get();
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('edit4',$permission))
         return view('managements.commandes.edit', [
             'commande' =>$commande,
             'clients' =>$clients,
             'date' =>$date,
             'categories' =>$categories,
         ]);
+        else
+        return redirect()->back();
     }
     // ------------ END EDIT COMMANDE ------------------------------
     // ------------ BEGIN UPDATE COMMANDE ---------------------------
@@ -973,7 +981,10 @@ class CommandeController extends Controller
         // ---------------------        
 
         $cmd_id = $request->commande;
-        $commande = Commande::with('client')->find($cmd_id);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
+        $commande = Commande::with('client')->where('user_id',$user_id)->findOrFail($cmd_id);
         $lignecommandes = Lignecommande::with('produit')->where('commande_id', '=', $cmd_id)->get();
         $HT = 0;
         $TTC = 0;
@@ -988,7 +999,8 @@ class CommandeController extends Controller
         }
 
         $TVA = $TTC - $HT;
-
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('create6',$permission))
         return view('managements.commandes.facture', [
             'cmd_id' =>  $cmd_id, 
             'date' =>  $date, 
@@ -1002,6 +1014,8 @@ class CommandeController extends Controller
             'commande' => $commande,
             // 'factures' => $factures,
         ]);
+        else
+        return redirect()->back();
     }
 
     public function storefacture2( Request $request){

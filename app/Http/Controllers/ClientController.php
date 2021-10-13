@@ -78,7 +78,11 @@ class ClientController extends Controller
 
     public function create()
     {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('create1',$permission))
         return view('managements.clients.create');
+        else
+        return redirect()->back();
     }
 
     
@@ -128,7 +132,12 @@ class ClientController extends Controller
     
     public function show(Client $client)
     {
-        $commandes = Commande::where('client_id', '=', $client->id)->paginate(2);
+        // $commandes = Commande::where('client_id', '=', $client->id)->paginate(2);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
+        $client = Client::where('user_id',$user_id)->findOrFail($client->id);
+        $commandes = Commande::where([['client_id', '=', $client->id],['user_id',$user_id]])->get();
         $cmd = Commande::where('client_id', '=', $client->id)->get();
         $count = $cmd->count();
         $reste = 0;
@@ -137,21 +146,32 @@ class ClientController extends Controller
                 $reste += $commande->reste;
             }
         }
-
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('show1',$permission))
         return view('managements.clients.show')->with([
             'commandes' => $commandes,
             'client' => $client,
             'count' => $count,
             'reste' => $reste
         ]);
+        else
+        return redirect()->back();
     }
 
     
     public function edit(Client $client)
     {
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
+        $client = Client::where('user_id',$user_id)->findOrFail($client->id);
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('edit1',$permission))
         return view('managements.clients.edit')->with([
             "client" => $client
         ]);
+        else
+        return redirect()->back();
     }
 
     
