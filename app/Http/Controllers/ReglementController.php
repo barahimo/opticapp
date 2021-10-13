@@ -19,15 +19,37 @@ class ReglementController extends Controller
         $this->middleware('statususer');
     }
 
+    public function getPermssion($string)
+    {
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        return $list;
+    }
+
     public function index()
     {
+        $permission = $this->getPermssion(Auth::user()->permission);
         $reglements = Reglement::orderBy('id','desc')->paginate(3);
         
         // $clients = Commande::where('id', '=', $reglements->$commande_id);
         
         // dd($clients);     
         // return view('managements.reglements.index', compact('reglements','nom_client'));
-        return view('managements.reglements.index', compact('reglements'));
+        // return view('managements.reglements.index', compact('reglements'));
+        if(in_array('list5',$permission))
+        return view('managements.reglements.index', compact(['reglements','permission']));
+        else
+        return view('application');
     }
 
     public function search(Request $request){
@@ -426,6 +448,7 @@ class ReglementController extends Controller
     }
 
     public function show(Reglement $reglement){
+        $permission = $this->getPermssion(Auth::user()->permission);
         // $companies = Company::get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
@@ -446,6 +469,7 @@ class ReglementController extends Controller
             'reglement' => $reglement,
             'company' => $company,
             'adresse' => $adresse,
+            'permission' => $permission,
         ]);
     }
 

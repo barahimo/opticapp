@@ -15,8 +15,26 @@ class ProduitController extends Controller
         $this->middleware('statususer');
     }
     
+    public function getPermssion($string)
+    {
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        return $list;
+    }
+
     public function index()
     {
+        $permission = $this->getPermssion(Auth::user()->permission);
         // $produits = Produit::with('categorie')->orderBy('id')->paginate(10);
         // $produits = Produit::with('categorie')->orderBy('id','desc')->get();
         $user_id = Auth::user()->id;
@@ -25,7 +43,11 @@ class ProduitController extends Controller
         $produits = Produit::with('categorie')->orderBy('id', 'desc')->where('user_id',$user_id)->get();
         // $categories = Categorie::all();
         // return view('managements.produits.index', compact('produits', 'categories'));
-        return view('managements.produits.index', compact('produits'));
+        // return view('managements.produits.index', compact('produits'));
+        if(in_array('list3',$permission))
+        return view('managements.produits.index', compact(['produits','permission']));
+        else
+        return view('application');
     }
 
     public function create()

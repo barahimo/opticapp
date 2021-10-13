@@ -32,6 +32,7 @@
 {{-- ################################################## --}}
 <!-- Main content -->
 <div class="content">
+    @if(Auth::user()->status == 1)
     <!-- Main row -->
     <div class="row">
         {{-- begin Clients --}}
@@ -243,6 +244,24 @@
             </div>
         </div>
     </div>
+    @else
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6 alert text-center" role="alert" style="color:red; border : 1px dashed black;">
+            <img src="{{asset('images/interdit.png')}}" alt="interdit" style="width:120px">
+            <h4 class="alert-heading">Accès interdit !</h4>
+            <p>Vous n'êtes pas autorisé à accéder à cette application</p>
+            <hr>
+            <p class="mb-0">Merci de contacter votre administrateur.</p>
+        </div>
+        <div class="col"></div>
+    </div>
+    @endif
 </div>
 <!-- /.content --> 
 @endsection

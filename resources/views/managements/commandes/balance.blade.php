@@ -31,7 +31,9 @@
             </div> 
             <div class="col-2">
               <div class="text-right">
+                @if(in_array('print7',$permission))
                 <button onclick="onprint()" class="btn btn-outline-primary"><i class="fa fa-print"></i></button>
+                @endif
               </div>
             </div> 
           </div>

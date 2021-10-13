@@ -24,7 +24,9 @@
                 </div>
                 <br>
                 <div class="col-6 text-center">
+                    @if(in_array('print4',$permission))
                     <button onclick="onprint()" class="btn btn-outline-primary"><i class="fa fa-print"></i></button>
+                    @endif
                 </div>
             </div>
             <div id="content">

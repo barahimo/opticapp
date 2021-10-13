@@ -18,7 +18,9 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
+                    @if(in_array('create2',$permission))
                     <a href="{{route('categorie.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-plus"></i> Catégorie</a>
+                    @endif
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8">
                     <form action="{{route('categorie.search')}}" method="get" class="search-form">
@@ -56,14 +58,20 @@
                                     @endif
                                 </td>
                                 <td>
+                                    @if(in_array('show2',$permission))
                                     <a href="{{ action('CategorieController@show',['categorie'=> $categorie])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                    @endif
                                     @if( Auth::user()->is_admin )
+                                    @if(in_array('edit2',$permission))
                                     <a href="{{route('categorie.edit',['categorie'=> $categorie])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                    @endif
+                                    @if(in_array('delete2',$permission))
                                     <button class="btn btn-outline-danger btn-sm remove-categorie" 
                                     data-id="{{ $categorie->id }}" 
                                     data-action="{{ route('categorie.destroy',$categorie->id) }}"> 
                                     <i class="fas fa-trash"></i>
                                     </button>
+                                    @endif
                                     @endif
                                 </td>
                             </tr>
@@ -102,9 +110,13 @@
                     var url_edit = "{{route('categorie.edit',['categorie'=> ":id"])}}".replace(':id', categorie.id);
                     var url_destroy = "{{ route('categorie.destroy',":id") }}".replace(':id', categorie.id);
                     var url_show = "{{action('CategorieController@show',['categorie'=> ":id"])}}".replace(':id', categorie.id);
-                    var action = `<a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                            @if(Auth::user()->is_admin)
+                    var action = `@if(in_array('show2',$permission))
+                            <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                            @endif
+                            @if(in_array('edit2',$permission))
                             <a href=${url_edit} class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                            @endif
+                            @if(in_array('delete2',$permission))
                             <button class="btn btn-outline-danger btn-sm remove-categorie" 
                                 data-id="${categorie.id}" 
                                 data-action=${url_destroy}> 

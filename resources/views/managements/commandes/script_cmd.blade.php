@@ -114,8 +114,12 @@
                       <td>${reglement.mode_reglement}</td>
                       <td class="text-center">${btnAvoir}</td>
                       <td class="text-center">
+                        @if(in_array('show5',$permission))
                         ${btnPrint}
+                        @endif
+                        @if(in_array('delete5',$permission))
                         ${btnDelete2}
+                        @endif
                       </td>
                     </tr>`;
             }) ;
@@ -126,10 +130,19 @@
             <div class="row">
               <div class="col-8">
                 <span>[${commande.code}]</span>
+                @if(in_array('create6',$permission))
                 <button id="btnFacture${index}" class="btn btn-link" onclick="window.location.assign('${url_fac}')"><i class="fa fa-plus-square"></i>&nbsp;Facture&nbsp;<i class="fas fa-receipt"></i></button>
+                @endif
+                @if(in_array('create5',$permission))
                 <button id="btnStatus${index}" class="btn btn-link" onclick="window.location.assign('${url_reg}')"><i class="fa fa-plus-square"></i>&nbsp;Règlement&nbsp;<i class="fas fa-hand-holding-usd"></i></button>
+                @endif
+                @if(in_array('show4',$permission))
                 <a class="btn btn-outline-info btn-sm" href=${url_show1}><i class="fas fa-print"></i></a>
+                @endif
+                @if(in_array('edit4',$permission))
                 <a class="btn btn-outline-success btn-sm" id="btnEdit${index+1}" href=${url_edit}><i class="fas fa-edit"></i></a>
+                @endif
+                @if(in_array('delete4',$permission))
                 <a 
                   class="btn btn-outline-danger btn-sm" 
                   id="btnDelete1${index+1}" 
@@ -138,8 +151,10 @@
                   href="javascript:deleteCommande(${index+1})">
                     <i class="fas fa-trash-alt fa-0.5px"></i>
                 </a>
+                @endif
               </div>
               <div class="col-4 text-right">
+                  @if(in_array('details5',$permission))
                   <button class="btn btn-outline-success btn-sm"
                     id="btnDetails${index}"
                     data-index="${index}" 
@@ -147,6 +162,7 @@
                     onclick="handleEvent(${index})">
                     <i class="fas fa-angle-down"></i><span>&nbsp;Liste des règlements</span>
                   </button>
+                  @endif
               </div>
             </div>
           `;
@@ -161,12 +177,14 @@
               <td id="viewStatus${index}" style="display : none">${status}</td>
               <td id="viewFacture${index}" style="display : none">${facture}</td>
               <td>
+                @if(in_array('details4',$permission))
                 <i class="fas fa-eye fa-1x"
                   id="btnActions${index}"
                   data-index="${index}" 
                   data-status="false" 
                   onclick="handleActions(event)"
                 ></i>
+                @endif
               </td>
             </tr>
             <tr id="viewActions${index}" style="display : none;">

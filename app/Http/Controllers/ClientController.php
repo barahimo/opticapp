@@ -64,7 +64,10 @@ class ClientController extends Controller
             $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
             #################################
             // return view('managements.clients.index', compact('clients'));
+            if(in_array('list1',$permission))
             return view('managements.clients.index', compact(['clients','permission']));
+            else
+            return view('application');
         // }
         // catch(Throwable $e)
         // {

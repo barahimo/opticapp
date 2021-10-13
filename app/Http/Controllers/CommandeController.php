@@ -27,8 +27,26 @@ class CommandeController extends Controller
         $this->middleware('auth');
         $this->middleware('statususer');
     }
+
+    public function getPermssion($string)
+    {
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        return $list;
+    }
     // ------------ BEGIN INDEX COMMANDE ------------------------------
     public function index(Request $request){
+        $permission = $this->getPermssion(Auth::user()->permission);
         // $commandes = Commande::with(['client','reglements'])->get();
         // $lignecommandes = Lignecommande::get();
         // $reglements = reglement::get();
@@ -40,12 +58,16 @@ class CommandeController extends Controller
         $lignecommandes = Lignecommande::where('user_id',$user_id )->get();
         $reglements = reglement::where('user_id',$user_id )->get();
         $clients = Client::where('user_id',$user_id )->get();
+        if(in_array('list4',$permission))
         return view('managements.commandes.index', [
             'commandes'=>$commandes,
             'lignecommandes'=>$lignecommandes,
             'reglements'=>$reglements,
             'clients' =>$clients,
+            'permission' =>$permission,
         ]);
+        else
+        return view('application');
     }
     // ------------ END INDEX COMMANDE ------------------------------
     // ------------ BEGIN CREATE COMMANDE ---------------------------
@@ -185,6 +207,7 @@ class CommandeController extends Controller
     // ------------ END STORE COMMANDE ------------------------------
     // ------------ BEGIN SHOW COMMANDE ---------------------------
     public function show($cmd_id){
+        $permission = $this->getPermssion(Auth::user()->permission);
         // $companies = Company::get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
@@ -216,6 +239,7 @@ class CommandeController extends Controller
             'TVA' => $TVA,
             'company' => $company,
             'adresse' => $adresse,
+            'permission' => $permission,
         ]);
     }
     // ------------ END SHOW COMMANDE ------------------------------
@@ -1191,6 +1215,7 @@ class CommandeController extends Controller
     }
 
     public function balance(){
+        $permission = $this->getPermssion(Auth::user()->permission);
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -1198,7 +1223,10 @@ class CommandeController extends Controller
         $count = count($companies);
         ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
         $date = Carbon::now();
-        return view('managements.commandes.balance',compact('date','company'));
+        if(in_array('list7',$permission))
+        return view('managements.commandes.balance',compact('date','company','permission'));
+        else
+        return view('application');
     }
 
     public function getBalance(Request $request){

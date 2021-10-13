@@ -10,11 +10,6 @@
     </ol>
 </div>
 {{-- ################## --}}
-<div>
-    @foreach ($list as $item)
-        <p>{{$item}}</p>
-    @endforeach
-</div>
 <!-- Main content -->
 <div class="content">
     <!-- Main card -->
@@ -63,12 +58,14 @@
                                 <td>{{number_format($facture->total_TVA,2)}}</td>
                                 <td>{{number_format($facture->total_TTC,2)}}</td>
                                 <td>
+                                    @if(in_array('show6',$permission))
                                     <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                                    @if( Auth::user()->is_admin )
+                                    @endif
+                                    @if(in_array('delete6',$permission))
                                     <button class="btn btn-outline-danger btn-sm remove-facture" 
-                                        data-id="{{ $facture->id }}" 
-                                        data-action="{{ route('facture.destroy',$facture->id) }}"> 
-                                        <i class="fas fa-trash"></i>
+                                    data-id="{{ $facture->id }}" 
+                                    data-action="{{ route('facture.destroy',$facture->id) }}"> 
+                                    <i class="fas fa-trash"></i>
                                     </button>
                                     @endif
                                 </td>
@@ -106,9 +103,10 @@
                 res.forEach((facture,i) => {
                     var url_show = "{{ action('FactureController@show',['facture'=> ":id"])}}".replace(':id', facture.id);
                     var url_destroy = "{{ route('facture.destroy',":id")}}".replace(':id', facture.id);
-                    var action = `
+                    var action = `@if(in_array('show6',$permission))
                         <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
-                        @if( Auth::user()->is_admin )
+                        @endif
+                        @if(in_array('delete6',$permission))
                         <button class="btn btn-outline-danger btn-sm remove-facture" 
                         data-id="${facture.id}"
                         data-action=${url_destroy} > 

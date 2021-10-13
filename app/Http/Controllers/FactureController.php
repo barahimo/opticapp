@@ -16,12 +16,11 @@ class FactureController extends Controller
         $this->middleware('auth');
         $this->middleware('statususer');
     }
-    public function index()
+
+    public function getPermssion($string)
     {
-        $test = Facture::first();
-        $array = $test->reglement;
         $list = [];
-        $array = explode("','",$array);
+        $array = explode("','",$string);
         foreach ($array as $value) 
             foreach (explode("['",$value) as $val) 
                 if($val != '')
@@ -32,7 +31,12 @@ class FactureController extends Controller
             foreach (explode("']",$value) as $val) 
                 if($val != '')
                     array_push($list, $val);
-        // return $list;
+        return $list;
+    }
+
+    public function index()
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
         // $factures = Facture::orderBy('id','desc')->where('total_TTC','>=','120')->get();
         // return $factures;
         // $factures = Facture::orderBy('id','desc')->paginate(3);
@@ -45,7 +49,10 @@ class FactureController extends Controller
         ->where('user_id',$user_id)
         ->orderBy('id','desc')->get();
         // return view('managements.factures.index', compact('factures'));
-        return view('managements.factures.index', compact(['factures','test','array','list']));
+        if(in_array('list6',$permission))
+        return view('managements.factures.index', compact(['factures','permission']));
+        else
+        return view('application');
     }
 
     
@@ -218,6 +225,7 @@ class FactureController extends Controller
     }
 
     public function show(Request $request, Facture $facture){
+        $permission = $this->getPermssion(Auth::user()->permission);
         // $companies = Company::get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
@@ -251,7 +259,8 @@ class FactureController extends Controller
             'facture' => $facture,
             'company' => $company,
             'count' => $count,
-            'adresse' => $adresse
+            'adresse' => $adresse,
+            'permission' => $permission
         ]);
     }
 

@@ -47,19 +47,83 @@ class UserController extends Controller
 
     public function storePermssion(Request $request)
     {
-        $permission1 = $request['permission1'];
-        $permission2 = $request['permission2'];
-        $permission3 = $request['permission3'];
-        $permission4 = $request['permission4'];
+        $permission10 = $request['permission10'];
+        $permission11 = $request['permission11'];
+        $permission12 = $request['permission12'];
+        $permission13 = $request['permission13'];
+        $permission14 = $request['permission14'];
+        $permission20 = $request['permission20'];
+        $permission21 = $request['permission21'];
+        $permission22 = $request['permission22'];
+        $permission23 = $request['permission23'];
+        $permission24 = $request['permission24'];
+        $permission30 = $request['permission30'];
+        $permission31 = $request['permission31'];
+        $permission32 = $request['permission32'];
+        $permission33 = $request['permission33'];
+        $permission34 = $request['permission34'];
+        $permission40 = $request['permission40'];
+        $permission41 = $request['permission41'];
+        $permission42 = $request['permission42'];
+        $permission43 = $request['permission43'];
+        $permission44 = $request['permission44'];
+        $permission45 = $request['permission45'];
+        $permission46 = $request['permission46'];
+        $permission50 = $request['permission50'];
+        $permission51 = $request['permission51'];
+        $permission52 = $request['permission52'];
+        $permission53 = $request['permission53'];
+        $permission54 = $request['permission54'];
+        $permission55 = $request['permission55'];
+        $permission56 = $request['permission56'];
+        $permission60 = $request['permission60'];
+        $permission61 = $request['permission61'];
+        $permission62 = $request['permission62'];
+        $permission63 = $request['permission63'];
+        $permission64 = $request['permission64'];
+        $permission65 = $request['permission65'];
+        $permission70 = $request['permission70'];
+        $permission71 = $request['permission71'];
+        $permission75 = $request['permission75'];
         $array = [];
-        if($permission1)
-            array_push($array,$permission1);
-        if($permission2)
-            array_push($array,$permission2);
-        if($permission3)
-            array_push($array,$permission3);
-        if($permission4)
-            array_push($array,$permission4);
+        if($permission10) array_push($array,$permission10);
+        if($permission11) array_push($array,$permission11);
+        if($permission12) array_push($array,$permission12);
+        if($permission13) array_push($array,$permission13);
+        if($permission14) array_push($array,$permission14);
+        if($permission20) array_push($array,$permission20);
+        if($permission21) array_push($array,$permission21);
+        if($permission22) array_push($array,$permission22);
+        if($permission23) array_push($array,$permission23);
+        if($permission24) array_push($array,$permission24);
+        if($permission30) array_push($array,$permission30);
+        if($permission31) array_push($array,$permission31);
+        if($permission32) array_push($array,$permission32);
+        if($permission33) array_push($array,$permission33);
+        if($permission34) array_push($array,$permission34);
+        if($permission40) array_push($array,$permission40);
+        if($permission41) array_push($array,$permission41);
+        if($permission42) array_push($array,$permission42);
+        if($permission43) array_push($array,$permission43);
+        if($permission44) array_push($array,$permission44);
+        if($permission45) array_push($array,$permission45);
+        if($permission46) array_push($array,$permission46);
+        if($permission50) array_push($array,$permission50);
+        if($permission51) array_push($array,$permission51);
+        if($permission52) array_push($array,$permission52);
+        if($permission53) array_push($array,$permission53);
+        if($permission54) array_push($array,$permission54);
+        if($permission55) array_push($array,$permission55);
+        if($permission60) array_push($array,$permission60);
+        if($permission61) array_push($array,$permission61);
+        if($permission62) array_push($array,$permission62);
+        if($permission63) array_push($array,$permission63);
+        if($permission64) array_push($array,$permission64);
+        if($permission65) array_push($array,$permission65);
+        if($permission56) array_push($array,$permission56);
+        if($permission70) array_push($array,$permission70);
+        if($permission71) array_push($array,$permission71);
+        if($permission75) array_push($array,$permission75);
         $permission = "[";
         foreach ($array as $key => $value) {
             $permission.="'".$value."'"; 

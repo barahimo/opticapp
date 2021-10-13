@@ -18,7 +18,9 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
+                    @if(in_array('create3',$permission))
                     <a href="{{route('produit.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-plus"></i> Produit</a>
+                    @endif
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8">
                     <form action="{{route('produit.search')}}" method="get" class="search-form">
@@ -60,14 +62,20 @@
                                 <td>{{number_format($produit->prix_produit_TTC,2)}}</td>
                                 <td>{{$produit->categorie->nom_categorie}}</td>
                                 <td>
+                                    @if(in_array('show3',$permission))
                                     <a href="{{ action('ProduitController@show',['produit'=> $produit])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                                    @endif
                                     @if( Auth::user()->is_admin )
+                                    @if(in_array('edit3',$permission))
                                     <a href="{{route('produit.edit',['produit'=> $produit])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                    @endif
+                                    @if(in_array('delete3',$permission))
                                     <button class="btn btn-outline-danger btn-sm remove-produit" 
                                     data-id="{{ $produit->id }}" 
                                     data-action="{{ route('produit.destroy',$produit->id) }}"> 
                                     <i class="fas fa-trash"></i>
                                     </button>
+                                    @endif
                                     @endif
                                 </td>
                             </tr>
@@ -106,14 +114,20 @@
                     var url_edit = "{{route('produit.edit',['produit'=> ":id"])}}".replace(':id', produit.id);
                     var url_destroy = "{{ route('produit.destroy',":id") }}".replace(':id', produit.id);
                     var action = `
+                        @if(in_array('show3',$permission))
                         <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
+                        @endif
                         @if( Auth::user()->is_admin )
+                        @if(in_array('edit3',$permission))
                         <a href=${url_edit} class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                        @endif
+                        @if(in_array('delete3',$permission))
                         <button class="btn btn-outline-danger btn-sm remove-produit" 
                         data-id="${produit.id}"
                         data-action=${url_destroy} > 
                         <i class="fas fa-trash"></i>
                         </button>
+                        @endif
                         @endif
                     `;
                     lignes += `<tr>

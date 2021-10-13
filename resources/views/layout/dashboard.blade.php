@@ -71,6 +71,21 @@
     $logo = asset('images/image.png');
     $nom = '';
   }
+  // getPermission
+  $string = Auth::user()->permission;
+  $list = [];
+  $array = explode("','",$string);
+  foreach ($array as $value) 
+      foreach (explode("['",$value) as $val) 
+          if($val != '')
+              array_push($list, $val);
+  $array = $list;
+  $list = [];
+  foreach ($array as $value) 
+      foreach (explode("']",$value) as $val) 
+          if($val != '')
+              array_push($list, $val);
+  $permission = $list;
   @endphp
 <div class="wrapper boxed-wrapper">
   <header class="main-header"> 
@@ -144,37 +159,61 @@
           </a>
         </li>
         <li class=""> 
+          @if(in_array('list1',$permission))
           <a href="{{route('client.index')}}">
-            <i class="icon-people"></i>  
-            <span>Clients</span>
-          </a>
+          @else
+          <a href="{{route('app.home')}}">
+          @endif
+          <i class="icon-people"></i>  
+          <span>Clients</span>
+        </a>
         </li>
         <li class=""> 
+          @if(in_array('list2',$permission))
           <a href="{{route('categorie.index')}}">
+          @else
+          <a href="{{route('app.home')}}">
+          @endif
             <i class="icon-grid"></i>  
             <span>Catégories</span>
           </a>
         </li>
         <li class=""> 
+          @if(in_array('list3',$permission))
           <a href="{{route('produit.index')}}">
+          @else
+          <a href="{{route('app.home')}}">
+          @endif
             <i class="icon-eyeglass"></i>  
             <span>Produits</span>
           </a>
         </li>
         <li class=""> 
+          @if(in_array('list4',$permission))
           <a href="{{route('commande.index')}}">
+          @else
+          <a href="{{route('app.home')}}">
+          @endif
             <i class="icon-note"></i>  
             <span>Commandes | Règ.</span>
           </a>
         </li>
         <li class=""> 
+          @if(in_array('list6',$permission))
           <a href="{{route('facture.index')}}">
+          @else
+          <a href="{{route('app.home')}}">
+          @endif
             <i class="icon-docs"></i>  
             <span>Factures</span>
           </a>
         </li>
         <li class=""> 
+          @if(in_array('list7',$permission))
           <a href="{{route('commande.balance')}}">
+          @else
+          <a href="{{route('app.home')}}">
+          @endif
             <i class="icon-book-open"></i>  
             <span>Mouvements</span>
           </a>

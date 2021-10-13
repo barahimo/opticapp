@@ -15,14 +15,33 @@ class CategorieController extends Controller
         $this->middleware('statususer');
     }
 
+    public function getPermssion($string)
+    {
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        return $list;
+    }
+
     public function index()
     {
+        $permission = $this->getPermssion(Auth::user()->permission);
         // $categories = Categorie::orderBy('id', 'desc')->get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
-        return view('managements.categories.index', compact('categories'));
+        // return view('managements.categories.index', compact('categories'));
+        return view('managements.categories.index', compact(['categories','permission']));
     }
 
     public function create()

@@ -84,14 +84,95 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
+                                <label class="control-label" for="permission"><strong>Permissions</strong></label>
+                                {{-- Begin - Client --}}
                                 <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission1" id="permission1" onclick="check1()"><u>Client</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission10" id="permission10" value="list1" type="checkbox" @if (in_array('list1',$permission)) checked="checked" @endif>&nbsp;List</label>
+                                        <label><input name="permission11" id="permission11" value="show1" type="checkbox" @if (in_array('show1',$permission)) checked="checked" @endif>&nbsp;Affichage</label>
+                                        <label><input name="permission12" id="permission12" value="create1" type="checkbox" @if (in_array('create1',$permission)) checked="checked" @endif>&nbsp;Création</label>
+                                        <label><input name="permission13" id="permission13" value="edit1" type="checkbox" @if (in_array('edit1',$permission)) checked="checked" @endif>&nbsp;Modification</label>
+                                        <label><input name="permission14" id="permission14" value="delete1" type="checkbox" @if (in_array('delete1',$permission)) checked="checked" @endif>&nbsp;Suppression</label>
+                                    </div>
+                                </div>
+                                {{-- Begin - Catégorie --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission2" id="permission2" onclick="check2()"><u>Catégorie</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission20" id="permission20" value="list2" type="checkbox" @if (in_array('list2',$permission)) checked="checked" @endif>&nbsp;List</label>
+                                        <label><input name="permission21" id="permission21" value="show2" type="checkbox" @if (in_array('show2',$permission)) checked="checked" @endif>&nbsp;Affichage</label>
+                                        <label><input name="permission22" id="permission22" value="create2" type="checkbox" @if (in_array('create2',$permission)) checked="checked" @endif>&nbsp;Création</label>
+                                        <label><input name="permission23" id="permission23" value="edit2" type="checkbox" @if (in_array('edit2',$permission)) checked="checked" @endif>&nbsp;Modification</label>
+                                        <label><input name="permission24" id="permission24" value="delete2" type="checkbox" @if (in_array('delete2',$permission)) checked="checked" @endif>&nbsp;Suppression</label>
+                                    </div>
+                                </div>
+                                {{-- Begin - Produit --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission3" id="permission3" onclick="check3()"><u>Produit</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission30" id="permission30" value="list3" type="checkbox" @if (in_array('list3',$permission)) checked="checked" @endif>&nbsp;List</label>
+                                        <label><input name="permission31" id="permission31" value="show3" type="checkbox" @if (in_array('show3',$permission)) checked="checked" @endif>&nbsp;Affichage</label>
+                                        <label><input name="permission32" id="permission32" value="create3" type="checkbox" @if (in_array('create3',$permission)) checked="checked" @endif>&nbsp;Création</label>
+                                        <label><input name="permission33" id="permission33" value="edit3" type="checkbox" @if (in_array('edit3',$permission)) checked="checked" @endif>&nbsp;Modification</label>
+                                        <label><input name="permission34" id="permission34" value="delete3" type="checkbox" @if (in_array('delete3',$permission)) checked="checked" @endif>&nbsp;Suppression</label>
+                                    </div>
+                                </div>
+                                {{-- Begin - Commande --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission4" id="permission4" onclick="check4()"><u>Commande</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission40" id="permission40" value="list4" type="checkbox" @if (in_array('list4',$permission)) checked="checked" @endif>&nbsp;List</label>
+                                        <label><input name="permission41" id="permission41" value="show4" type="checkbox" @if (in_array('show4',$permission)) checked="checked" @endif>&nbsp;Affichage</label>
+                                        <label><input name="permission42" id="permission42" value="create4" type="checkbox" @if (in_array('create4',$permission)) checked="checked" @endif>&nbsp;Création</label>
+                                        <label><input name="permission43" id="permission43" value="edit4" type="checkbox" @if (in_array('edit4',$permission)) checked="checked" @endif>&nbsp;Modification</label>
+                                        <label><input name="permission44" id="permission44" value="delete4" type="checkbox" @if (in_array('delete4',$permission)) checked="checked" @endif>&nbsp;Suppression</label>
+                                        <label><input name="permission45" id="permission45" value="print4" type="checkbox" @if (in_array('print4',$permission)) checked="checked" @endif>&nbsp;Impression</label>
+                                        <label><input name="permission46" id="permission46" value="details4" type="checkbox"  @if (in_array('details4',$permission)) checked="checked" @endif>&nbsp;Détails</label>
+                                    </div>
+                                </div>
+                                {{-- Begin - Règlement --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission5" id="permission5" onclick="check5()"><u>Règlement</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission50" id="permission50" value="list5" type="checkbox" @if (in_array('list5',$permission)) checked="checked" @endif>&nbsp;List</label>
+                                        <label><input name="permission51" id="permission51" value="show5" type="checkbox" @if (in_array('show5',$permission)) checked="checked" @endif>&nbsp;Affichage</label>
+                                        <label><input name="permission52" id="permission52" value="create5" type="checkbox" @if (in_array('create5',$permission)) checked="checked" @endif>&nbsp;Création</label>
+                                        <label><input name="permission53" id="permission53" value="edit5" type="checkbox" @if (in_array('edit5',$permission)) checked="checked" @endif>&nbsp;Modification</label>
+                                        <label><input name="permission54" id="permission54" value="delete5" type="checkbox" @if (in_array('delete5',$permission)) checked="checked" @endif>&nbsp;Suppression</label>
+                                        <label><input name="permission55" id="permission55" value="print5" type="checkbox" @if (in_array('print5',$permission)) checked="checked" @endif>&nbsp;Impression</label>
+                                        <label><input name="permission56" id="permission56" value="details5" type="checkbox"  @if (in_array('details5',$permission)) checked="checked" @endif>&nbsp;Détails</label>
+                                    </div>
+                                </div>
+                                {{-- Begin - Facture --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission6" id="permission6" onclick="check6()"><u>Facture</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission60" id="permission60" value="list6" type="checkbox" @if (in_array('list6',$permission)) checked="checked" @endif>&nbsp;List</label>
+                                        <label><input name="permission61" id="permission61" value="show6" type="checkbox" @if (in_array('show6',$permission)) checked="checked" @endif>&nbsp;Affichage</label>
+                                        <label><input name="permission62" id="permission62" value="create6" type="checkbox" @if (in_array('create6',$permission)) checked="checked" @endif>&nbsp;Création</label>
+                                        <label><input name="permission63" id="permission63" value="edit6" type="checkbox" @if (in_array('edit6',$permission)) checked="checked" @endif>&nbsp;Modification</label>
+                                        <label><input name="permission64" id="permission64" value="delete6" type="checkbox" @if (in_array('delete6',$permission)) checked="checked" @endif>&nbsp;Suppression</label>
+                                        <label><input name="permission65" id="permission65" value="print6" type="checkbox" @if (in_array('print6',$permission)) checked="checked" @endif>&nbsp;Impression</label>
+                                    </div>
+                                </div>
+                                {{-- Begin - Mouvement --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission7" id="permission7" onclick="check7()"><u>Mouvement</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission70" id="permission70" value="list7" type="checkbox" @if (in_array('list7',$permission)) checked="checked" @endif>&nbsp;List</label>
+                                        <label><input name="permission71" id="permission71" value="show7" type="checkbox" @if (in_array('show7',$permission)) checked="checked" @endif>&nbsp;Affichage</label>
+                                        <label><input name="permission75" id="permission75" value="print7" type="checkbox" @if (in_array('print7',$permission)) checked="checked" @endif>&nbsp;Impression</label>
+                                    </div>
+                                </div>
+                                {{-- <div class="form-group has-feedback">
                                     <label class="control-label" for="permission">Permissions</label>
                                     <input type="checkbox" name="permission1" id="permission1" value="create" @if (in_array('create',$permission)) checked="checked" @endif>create
                                     <input type="checkbox" name="permission2" id="permission2" value="edit"  @if (in_array('edit',$permission)) checked="checked" @endif>edit
                                     <input type="checkbox" name="permission3" id="permission3" value="delete"  @if (in_array('delete',$permission)) checked="checked" @endif>delete
                                     <input type="checkbox" name="permission4" id="permission4" value="show"  @if (in_array('show',$permission)) checked="checked" @endif>show
-                                </div>
+                                </div> --}}
                             </div>
                             @endif
                             <div class="col-md-12">
@@ -110,6 +191,58 @@
 <!-- /.content --> 
 {{-- ################## --}}
 <script type="text/javascript">
+    function check1(){
+        $('#permission10').prop('checked',true);
+        $('#permission11').prop('checked',true);
+        $('#permission12').prop('checked',true);
+        $('#permission13').prop('checked',true);
+        $('#permission14').prop('checked',true);
+    }
+    function check2(){
+        $('#permission20').prop('checked',true);
+        $('#permission21').prop('checked',true);
+        $('#permission22').prop('checked',true);
+        $('#permission23').prop('checked',true);
+        $('#permission24').prop('checked',true);
+    }
+    function check3(){
+        $('#permission30').prop('checked',true);
+        $('#permission31').prop('checked',true);
+        $('#permission32').prop('checked',true);
+        $('#permission33').prop('checked',true);
+        $('#permission34').prop('checked',true);
+    }
+    function check4(){
+        $('#permission40').prop('checked',true);
+        $('#permission41').prop('checked',true);
+        $('#permission42').prop('checked',true);
+        $('#permission43').prop('checked',true);
+        $('#permission44').prop('checked',true);
+        $('#permission45').prop('checked',true);
+        $('#permission46').prop('checked',true);
+    }
+    function check5(){
+        $('#permission50').prop('checked',true);
+        $('#permission51').prop('checked',true);
+        $('#permission52').prop('checked',true);
+        $('#permission53').prop('checked',true);
+        $('#permission54').prop('checked',true);
+        $('#permission55').prop('checked',true);
+        $('#permission56').prop('checked',true);
+    }
+    function check6(){
+        $('#permission60').prop('checked',true);
+        $('#permission61').prop('checked',true);
+        $('#permission62').prop('checked',true);
+        $('#permission63').prop('checked',true);
+        $('#permission64').prop('checked',true);
+        $('#permission65').prop('checked',true);
+    }
+    function check7(){
+        $('#permission70').prop('checked',true);
+        $('#permission71').prop('checked',true);
+        $('#permission75').prop('checked',true);
+    }
     $(document).on('click','button[name=changePasse]',function(e){
         e.preventDefault();
         pass = $('#pass');
