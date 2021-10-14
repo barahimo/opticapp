@@ -86,6 +86,10 @@
           if($val != '')
               array_push($list, $val);
   $permission = $list;
+
+  $companies = App\Company::where('user_id',$user_id)->get();
+  $count = count($companies);
+  ($count > 0) ? $view = 'edit': $view = 'create';
   @endphp
 <div class="wrapper boxed-wrapper">
   <header class="main-header"> 
@@ -114,12 +118,28 @@
                 {{-- <div class="pull-left user-img"><img src="{{$logo}}" class="img-responsive img-circle" alt="User"></div> --}}
                 <p class="text-left">{{ Auth::user()->email }} <small>{{ Auth::user()->name }}</small> </p>
               </li>
-              {{-- @if(Auth::user()->is_admin == 2) --}}
+              @if(in_array('list9',$permission) || Auth::user()->is_admin == 2)
               <li><a href="{{ route('user.editUser',Auth::user()->id) }}"><i class="icon-user"></i> Gestion de compte</a></li>
+              @endif
               @if(Auth::user()->is_admin != 0)
+              @if(in_array('list8',$permission) || Auth::user()->is_admin == 2)
               <li><a href="{{ route('user.index') }}"><i class="icon-people"></i> Gestion des utilisateurs</a></li>
+              @endif
+              @endif
+              @if(in_array('create9',$permission) || in_array('edit9',$permission) || Auth::user()->is_admin == 2)
               <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
               @endif
+
+              {{-- @if($view == "create")
+              @if(in_array('create9',$permission) || Auth::user()->is_admin == 2)
+              <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
+              @endif
+              @elseif($view == "edit")
+              @if(in_array('edit9',$permission) || Auth::user()->is_admin == 2)
+              <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
+              @endif
+              @endif --}}
+
               <li role="separator" class="divider"></li>
               <li>
                 <a class="dropdown-item" href="{{ route('logout') }}"
@@ -159,7 +179,7 @@
           </a>
         </li>
         <li class=""> 
-          @if(in_array('list1',$permission))
+          @if(in_array('list1',$permission) || Auth::user()->is_admin == 2)
           <a href="{{route('client.index')}}">
           @else
           <a href="{{route('app.home')}}">
@@ -169,7 +189,7 @@
         </a>
         </li>
         <li class=""> 
-          @if(in_array('list2',$permission))
+          @if(in_array('list2',$permission) || Auth::user()->is_admin == 2)
           <a href="{{route('categorie.index')}}">
           @else
           <a href="{{route('app.home')}}">
@@ -179,7 +199,7 @@
           </a>
         </li>
         <li class=""> 
-          @if(in_array('list3',$permission))
+          @if(in_array('list3',$permission) || Auth::user()->is_admin == 2)
           <a href="{{route('produit.index')}}">
           @else
           <a href="{{route('app.home')}}">
@@ -189,7 +209,7 @@
           </a>
         </li>
         <li class=""> 
-          @if(in_array('list4',$permission))
+          @if(in_array('list4',$permission) || Auth::user()->is_admin == 2)
           <a href="{{route('commande.index')}}">
           @else
           <a href="{{route('app.home')}}">
@@ -199,7 +219,7 @@
           </a>
         </li>
         <li class=""> 
-          @if(in_array('list6',$permission))
+          @if(in_array('list6',$permission) || Auth::user()->is_admin == 2)
           <a href="{{route('facture.index')}}">
           @else
           <a href="{{route('app.home')}}">
@@ -209,7 +229,7 @@
           </a>
         </li>
         <li class=""> 
-          @if(in_array('list7',$permission))
+          @if(in_array('list7',$permission) || Auth::user()->is_admin == 2)
           <a href="{{route('commande.balance')}}">
           @else
           <a href="{{route('app.home')}}">

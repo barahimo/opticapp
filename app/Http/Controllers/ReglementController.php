@@ -46,7 +46,7 @@ class ReglementController extends Controller
         // dd($clients);     
         // return view('managements.reglements.index', compact('reglements','nom_client'));
         // return view('managements.reglements.index', compact('reglements'));
-        if(in_array('list5',$permission))
+        if(in_array('list5',$permission) || Auth::user()->is_admin == 2)
         return view('managements.reglements.index', compact(['reglements','permission']));
         else
         return view('application');
@@ -306,7 +306,7 @@ class ReglementController extends Controller
             // $commandes = Commande::with('client')->get();
         }
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create5',$permission))
+        if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
         return view('managements.reglements.create2',compact('clients','client','commandes','date'));
         else
         return redirect()->back();
@@ -323,7 +323,7 @@ class ReglementController extends Controller
             $user_id = Auth::user()->user_id;
         $commande = Commande::with('client')->where('user_id',$user_id)->findOrFail($commande_id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create5',$permission))
+        if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
         return view('managements.reglements.create3',compact('commande','date'));
         else
         return redirect()->back();

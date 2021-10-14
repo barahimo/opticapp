@@ -58,7 +58,7 @@ class CommandeController extends Controller
         $lignecommandes = Lignecommande::where('user_id',$user_id )->get();
         $reglements = reglement::where('user_id',$user_id )->get();
         $clients = Client::where('user_id',$user_id )->get();
-        if(in_array('list4',$permission))
+        if(in_array('list4',$permission) || Auth::user()->is_admin == 2)
         return view('managements.commandes.index', [
             'commandes'=>$commandes,
             'lignecommandes'=>$lignecommandes,
@@ -81,7 +81,7 @@ class CommandeController extends Controller
         $categories=Categorie::where('user_id',$user_id)->get();//get data from table
         $clients = Client::where('user_id',$user_id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create4',$permission))
+        if(in_array('create4',$permission) || Auth::user()->is_admin == 2)
         return view('managements.commandes.create', [
             'clients' =>$clients,
             'categories' => $categories,
@@ -260,7 +260,7 @@ class CommandeController extends Controller
         $clients = Client::where('user_id',$user_id)->get();
         $categories=Categorie::where('user_id',$user_id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('edit4',$permission))
+        if(in_array('edit4',$permission) || Auth::user()->is_admin == 2)
         return view('managements.commandes.edit', [
             'commande' =>$commande,
             'clients' =>$clients,
@@ -1000,7 +1000,7 @@ class CommandeController extends Controller
 
         $TVA = $TTC - $HT;
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create6',$permission))
+        if(in_array('create6',$permission) || Auth::user()->is_admin == 2)
         return view('managements.commandes.facture', [
             'cmd_id' =>  $cmd_id, 
             'date' =>  $date, 
@@ -1237,7 +1237,7 @@ class CommandeController extends Controller
         $count = count($companies);
         ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
         $date = Carbon::now();
-        if(in_array('list7',$permission))
+        if(in_array('list7',$permission) || Auth::user()->is_admin == 2)
         return view('managements.commandes.balance',compact('date','company','permission'));
         else
         return view('application');

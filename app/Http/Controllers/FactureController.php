@@ -49,7 +49,7 @@ class FactureController extends Controller
         ->where('user_id',$user_id)
         ->orderBy('id','desc')->get();
         // return view('managements.factures.index', compact('factures'));
-        if(in_array('list6',$permission))
+        if(in_array('list6',$permission) || Auth::user()->is_admin == 2)
         return view('managements.factures.index', compact(['factures','permission']));
         else
         return view('application');
@@ -252,7 +252,7 @@ class FactureController extends Controller
             $priceTotal = floatval($priceTotal  + $p->total_produit) ;
         }
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('show6',$permission))
+        if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
         return view('managements.factures.show', [
             'lignecommandes' =>  $lignecommandes,
             'priceTotal'  => $priceTotal,

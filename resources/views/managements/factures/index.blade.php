@@ -58,10 +58,10 @@
                                 <td>{{number_format($facture->total_TVA,2)}}</td>
                                 <td>{{number_format($facture->total_TTC,2)}}</td>
                                 <td>
-                                    @if(in_array('show6',$permission))
+                                    @if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
                                     <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                     @endif
-                                    @if(in_array('delete6',$permission))
+                                    @if(in_array('delete6',$permission) || Auth::user()->is_admin == 2)
                                     <button class="btn btn-outline-danger btn-sm remove-facture" 
                                     data-id="{{ $facture->id }}" 
                                     data-action="{{ route('facture.destroy',$facture->id) }}"> 
@@ -103,10 +103,10 @@
                 res.forEach((facture,i) => {
                     var url_show = "{{ action('FactureController@show',['facture'=> ":id"])}}".replace(':id', facture.id);
                     var url_destroy = "{{ route('facture.destroy',":id")}}".replace(':id', facture.id);
-                    var action = `@if(in_array('show6',$permission))
+                    var action = `@if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
                         <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                         @endif
-                        @if(in_array('delete6',$permission))
+                        @if(in_array('delete6',$permission) || Auth::user()->is_admin == 2)
                         <button class="btn btn-outline-danger btn-sm remove-facture" 
                         data-id="${facture.id}"
                         data-action=${url_destroy} > 

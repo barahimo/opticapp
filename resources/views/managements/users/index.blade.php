@@ -18,7 +18,9 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
+                    @if(in_array('create8',$permission) || Auth::user()->is_admin == 2)
                     <a href="{{route('user.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-user-circle"></i>  Utilisateur</a>
+                    @endif
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8">
                     
@@ -67,14 +69,18 @@
                             </td>
                             <td>
                                 {{-- <a href="{{ action('UserController@show',['user'=> $user->id])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a> --}}
-                                @if( Auth::user()->is_admin )
+                                {{-- @if( Auth::user()->is_admin ) --}}
+                                @if(in_array('edit8',$permission) || Auth::user()->is_admin == 2)
                                 <a href="{{route('user.edit',['user'=> $user->id])}}" class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
+                                @endif
+                                @if(in_array('delete8',$permission) || Auth::user()->is_admin == 2)
                                 <button class="btn btn-outline-danger btn-sm remove-user" 
                                     data-id="{{ $user->id }}" 
                                     data-action="{{ route('user.destroy',$user->id) }}"> 
                                     <i class="fas fa-trash"></i>
                                 </button>
-                                @endif         
+                                @endif
+                                {{-- @endif          --}}
                             </td>
                         </tr>
                         @endforeach

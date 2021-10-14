@@ -64,7 +64,7 @@ class ClientController extends Controller
             $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
             #################################
             // return view('managements.clients.index', compact('clients'));
-            if(in_array('list1',$permission))
+            if(in_array('list1',$permission) || Auth::user()->is_admin == 2)
             return view('managements.clients.index', compact(['clients','permission']));
             else
             return view('application');
@@ -79,7 +79,7 @@ class ClientController extends Controller
     public function create()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create1',$permission))
+        if(in_array('create1',$permission) || Auth::user()->is_admin == 2)
         return view('managements.clients.create');
         else
         return redirect()->back();
@@ -87,7 +87,6 @@ class ClientController extends Controller
 
     
     public function store(Request $request)
-
     {  
         // $validateData = $request->validate([
         //     'nom_client' => 'required',
@@ -147,7 +146,7 @@ class ClientController extends Controller
             }
         }
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('show1',$permission))
+        if(in_array('show1',$permission) || Auth::user()->is_admin == 2)
         return view('managements.clients.show')->with([
             'commandes' => $commandes,
             'client' => $client,
@@ -166,7 +165,7 @@ class ClientController extends Controller
         $user_id = Auth::user()->user_id;
         $client = Client::where('user_id',$user_id)->findOrFail($client->id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('edit1',$permission))
+        if(in_array('edit1',$permission) || Auth::user()->is_admin == 2)
         return view('managements.clients.edit')->with([
             "client" => $client
         ]);

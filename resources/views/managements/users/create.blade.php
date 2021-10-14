@@ -71,7 +71,7 @@
                                 <label class="control-label" for="permission"><strong>Permissions</strong></label>
                                 {{-- Begin - Client --}}
                                 <div class="form-group has-feedback">
-                                    <label class="control-label" for="permission1" id="permission1" onclick="check1()"><u>Client</u>&nbsp;:&nbsp;</label>
+                                    <label class="control-label" for="permission1" id="permission1" onclick="check1()"><u>Gestions des Clients</u>&nbsp;:&nbsp;</label>
                                     <div class="checkbox">
                                         <label><input name="permission10" id="permission10" value="list1" type="checkbox">&nbsp;List</label>
                                         <label><input name="permission11" id="permission11" value="show1" type="checkbox">&nbsp;Affichage</label>
@@ -82,7 +82,7 @@
                                 </div>
                                 {{-- Begin - Catégorie --}}
                                 <div class="form-group has-feedback">
-                                    <label class="control-label" for="permission2" id="permission2" onclick="check2()"><u>Catégorie</u>&nbsp;:&nbsp;</label>
+                                    <label class="control-label" for="permission2" id="permission2" onclick="check2()"><u>Gestions des Catégories</u>&nbsp;:&nbsp;</label>
                                     <div class="checkbox">
                                         <label><input name="permission20" id="permission20" value="list2" type="checkbox">&nbsp;List</label>
                                         <label><input name="permission21" id="permission21" value="show2" type="checkbox">&nbsp;Affichage</label>
@@ -93,7 +93,7 @@
                                 </div>
                                 {{-- Begin - Produit --}}
                                 <div class="form-group has-feedback">
-                                    <label class="control-label" for="permission3" id="permission3" onclick="check3()"><u>Produit</u>&nbsp;:&nbsp;</label>
+                                    <label class="control-label" for="permission3" id="permission3" onclick="check3()"><u>Gestions des Produits</u>&nbsp;:&nbsp;</label>
                                     <div class="checkbox">
                                         <label><input name="permission30" id="permission30" value="list3" type="checkbox">&nbsp;List</label>
                                         <label><input name="permission31" id="permission31" value="show3" type="checkbox">&nbsp;Affichage</label>
@@ -104,7 +104,7 @@
                                 </div>
                                 {{-- Begin - Commande --}}
                                 <div class="form-group has-feedback">
-                                    <label class="control-label" for="permission4" id="permission4" onclick="check4()"><u>Commande</u>&nbsp;:&nbsp;</label>
+                                    <label class="control-label" for="permission4" id="permission4" onclick="check4()"><u>Gestions des Commandes</u>&nbsp;:&nbsp;</label>
                                     <div class="checkbox">
                                         <label><input name="permission40" id="permission40" value="list4" type="checkbox">&nbsp;List</label>
                                         <label><input name="permission41" id="permission41" value="show4" type="checkbox">&nbsp;Affichage</label>
@@ -117,7 +117,7 @@
                                 </div>
                                 {{-- Begin - Règlement --}}
                                 <div class="form-group has-feedback">
-                                    <label class="control-label" for="permission5" id="permission5" onclick="check5()"><u>Règlement</u>&nbsp;:&nbsp;</label>
+                                    <label class="control-label" for="permission5" id="permission5" onclick="check5()"><u>Gestions des Règlements</u>&nbsp;:&nbsp;</label>
                                     <div class="checkbox">
                                         <label><input name="permission50" id="permission50" value="list5" type="checkbox">&nbsp;List</label>
                                         <label><input name="permission51" id="permission51" value="show5" type="checkbox">&nbsp;Affichage</label>
@@ -130,7 +130,7 @@
                                 </div>
                                 {{-- Begin - Facture --}}
                                 <div class="form-group has-feedback">
-                                    <label class="control-label" for="permission6" id="permission6" onclick="check6()"><u>Facture</u>&nbsp;:&nbsp;</label>
+                                    <label class="control-label" for="permission6" id="permission6" onclick="check6()"><u>Gestions des Factures</u>&nbsp;:&nbsp;</label>
                                     <div class="checkbox">
                                         <label><input name="permission60" id="permission60" value="list6" type="checkbox">&nbsp;List</label>
                                         <label><input name="permission61" id="permission61" value="show6" type="checkbox">&nbsp;Affichage</label>
@@ -142,11 +142,33 @@
                                 </div>
                                 {{-- Begin - Mouvement --}}
                                 <div class="form-group has-feedback">
-                                    <label class="control-label" for="permission7" id="permission7" onclick="check7()"><u>Mouvement</u>&nbsp;:&nbsp;</label>
+                                    <label class="control-label" for="permission7" id="permission7" onclick="check7()"><u>Gestions des Mouvements</u>&nbsp;:&nbsp;</label>
                                     <div class="checkbox">
                                         <label><input name="permission70" id="permission70" value="list7" type="checkbox">&nbsp;List</label>
                                         <label><input name="permission71" id="permission71" value="show7" type="checkbox">&nbsp;Affichage</label>
                                         <label><input name="permission75" id="permission75" value="print7" type="checkbox">&nbsp;Impression</label>
+                                    </div>
+                                </div>
+                                @if(Auth::user()->is_admin == 2)
+                                {{-- Begin - Utilisateur --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission8" id="permission8" onclick="check8()"><u>Gestions des Utilisateurs</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission80" id="permission80" value="list8" type="checkbox">&nbsp;List</label>
+                                        <label><input name="permission81" id="permission81" value="show8" type="checkbox">&nbsp;Affichage</label>
+                                        <label><input name="permission82" id="permission82" value="create8" type="checkbox">&nbsp;Création</label>
+                                        <label><input name="permission83" id="permission83" value="edit8" type="checkbox">&nbsp;Modification</label>
+                                        <label><input name="permission84" id="permission84" value="delete8" type="checkbox">&nbsp;Suppression</label>
+                                    </div>
+                                </div>
+                                @endif
+                                {{-- Begin - Paramètres --}}
+                                <div class="form-group has-feedback">
+                                    <label class="control-label" for="permission9" id="permission9" onclick="check9()"><u>Paramètres</u>&nbsp;:&nbsp;</label>
+                                    <div class="checkbox">
+                                        <label><input name="permission90" id="permission90" value="list9" type="checkbox">&nbsp;Informations de compte</label>
+                                        <label><input name="permission92" id="permission92" value="create9" type="checkbox">&nbsp;Création Formulaire</label>
+                                        <label><input name="permission93" id="permission93" value="edit9" type="checkbox">&nbsp;Modification Formulaire</label>
                                     </div>
                                 </div>
                             </div>
@@ -167,57 +189,209 @@
 <!-- /.content --> 
 {{-- ################## --}}
 <script type="text/javascript">
+    $('#email').val('');
+    $('#password').val('');
     function check1(){
-        $('#permission10').prop('checked',true);
-        $('#permission11').prop('checked',true);
-        $('#permission12').prop('checked',true);
-        $('#permission13').prop('checked',true);
-        $('#permission14').prop('checked',true);
+        if(
+            $('#permission10').prop('checked') == true &&
+            $('#permission11').prop('checked') == true &&
+            $('#permission12').prop('checked') == true &&
+            $('#permission13').prop('checked') == true &&
+            $('#permission14').prop('checked') == true
+        ){
+            $('#permission10').prop('checked',false);
+            $('#permission11').prop('checked',false);
+            $('#permission12').prop('checked',false);
+            $('#permission13').prop('checked',false);
+            $('#permission14').prop('checked',false);
+        }
+        else{
+            $('#permission10').prop('checked',true);
+            $('#permission11').prop('checked',true);
+            $('#permission12').prop('checked',true);
+            $('#permission13').prop('checked',true);
+            $('#permission14').prop('checked',true);
+        }
     }
     function check2(){
-        $('#permission20').prop('checked',true);
-        $('#permission21').prop('checked',true);
-        $('#permission22').prop('checked',true);
-        $('#permission23').prop('checked',true);
-        $('#permission24').prop('checked',true);
+        if(
+            $('#permission20').prop('checked') == true && 
+            $('#permission21').prop('checked') == true && 
+            $('#permission22').prop('checked') == true && 
+            $('#permission23').prop('checked') == true && 
+            $('#permission24').prop('checked') == true
+        ){
+            $('#permission20').prop('checked',false);
+            $('#permission21').prop('checked',false);
+            $('#permission22').prop('checked',false);
+            $('#permission23').prop('checked',false);
+            $('#permission24').prop('checked',false);
+        }
+        else{
+            $('#permission20').prop('checked',true);
+            $('#permission21').prop('checked',true);
+            $('#permission22').prop('checked',true);
+            $('#permission23').prop('checked',true);
+            $('#permission24').prop('checked',true);
+        }
     }
     function check3(){
-        $('#permission30').prop('checked',true);
-        $('#permission31').prop('checked',true);
-        $('#permission32').prop('checked',true);
-        $('#permission33').prop('checked',true);
-        $('#permission34').prop('checked',true);
+        if(
+            $('#permission30').prop('checked') == true && 
+            $('#permission31').prop('checked') == true && 
+            $('#permission32').prop('checked') == true && 
+            $('#permission33').prop('checked') == true && 
+            $('#permission34').prop('checked') == true   
+        ){
+            $('#permission30').prop('checked',false);
+            $('#permission31').prop('checked',false);
+            $('#permission32').prop('checked',false);
+            $('#permission33').prop('checked',false);
+            $('#permission34').prop('checked',false);
+        }
+        else{
+            $('#permission30').prop('checked',true);
+            $('#permission31').prop('checked',true);
+            $('#permission32').prop('checked',true);
+            $('#permission33').prop('checked',true);
+            $('#permission34').prop('checked',true);
+        }
     }
     function check4(){
-        $('#permission40').prop('checked',true);
-        $('#permission41').prop('checked',true);
-        $('#permission42').prop('checked',true);
-        $('#permission43').prop('checked',true);
-        $('#permission44').prop('checked',true);
-        $('#permission45').prop('checked',true);
-        $('#permission46').prop('checked',true);
+        if(
+            $('#permission40').prop('checked') == true &&
+            $('#permission41').prop('checked') == true &&
+            $('#permission42').prop('checked') == true &&
+            $('#permission43').prop('checked') == true &&
+            $('#permission44').prop('checked') == true &&
+            $('#permission45').prop('checked') == true &&
+            $('#permission46').prop('checked') == true
+        ){
+            $('#permission40').prop('checked',false);
+            $('#permission41').prop('checked',false);
+            $('#permission42').prop('checked',false);
+            $('#permission43').prop('checked',false);
+            $('#permission44').prop('checked',false);
+            $('#permission45').prop('checked',false);
+            $('#permission46').prop('checked',false);
+        }
+        else{
+            $('#permission40').prop('checked',true);
+            $('#permission41').prop('checked',true);
+            $('#permission42').prop('checked',true);
+            $('#permission43').prop('checked',true);
+            $('#permission44').prop('checked',true);
+            $('#permission45').prop('checked',true);
+            $('#permission46').prop('checked',true);
+        }
     }
     function check5(){
-        $('#permission50').prop('checked',true);
-        $('#permission51').prop('checked',true);
-        $('#permission52').prop('checked',true);
-        $('#permission53').prop('checked',true);
-        $('#permission54').prop('checked',true);
-        $('#permission55').prop('checked',true);
-        $('#permission56').prop('checked',true);
+        if(
+            $('#permission50').prop('checked') == true &&
+            $('#permission51').prop('checked') == true &&
+            $('#permission52').prop('checked') == true &&
+            $('#permission53').prop('checked') == true &&
+            $('#permission54').prop('checked') == true &&
+            $('#permission55').prop('checked') == true &&
+            $('#permission56').prop('checked') == true
+        ){
+            $('#permission50').prop('checked',false);
+            $('#permission51').prop('checked',false);
+            $('#permission52').prop('checked',false);
+            $('#permission53').prop('checked',false);
+            $('#permission54').prop('checked',false);
+            $('#permission55').prop('checked',false);
+            $('#permission56').prop('checked',false);
+        }
+        else{
+            $('#permission50').prop('checked',true);
+            $('#permission51').prop('checked',true);
+            $('#permission52').prop('checked',true);
+            $('#permission53').prop('checked',true);
+            $('#permission54').prop('checked',true);
+            $('#permission55').prop('checked',true);
+            $('#permission56').prop('checked',true);
+        }
     }
     function check6(){
-        $('#permission60').prop('checked',true);
-        $('#permission61').prop('checked',true);
-        $('#permission62').prop('checked',true);
-        $('#permission63').prop('checked',true);
-        $('#permission64').prop('checked',true);
-        $('#permission65').prop('checked',true);
+        if(
+            $('#permission60').prop('checked') == true &&
+            $('#permission61').prop('checked') == true &&
+            $('#permission62').prop('checked') == true &&
+            $('#permission63').prop('checked') == true &&
+            $('#permission64').prop('checked') == true &&
+            $('#permission65').prop('checked') == true
+        )
+        {
+            $('#permission60').prop('checked',false);
+            $('#permission61').prop('checked',false);
+            $('#permission62').prop('checked',false);
+            $('#permission63').prop('checked',false);
+            $('#permission64').prop('checked',false);
+            $('#permission65').prop('checked',false);
+        }
+        else{
+            $('#permission60').prop('checked',true);
+            $('#permission61').prop('checked',true);
+            $('#permission62').prop('checked',true);
+            $('#permission63').prop('checked',true);
+            $('#permission64').prop('checked',true);
+            $('#permission65').prop('checked',true);
+        }
     }
     function check7(){
-        $('#permission70').prop('checked',true);
-        $('#permission71').prop('checked',true);
-        $('#permission75').prop('checked',true);
+        if(
+            $('#permission70').prop('checked') == true &&
+            $('#permission71').prop('checked') == true &&
+            $('#permission75').prop('checked') == true
+        ){
+            $('#permission70').prop('checked',false);
+            $('#permission71').prop('checked',false);
+            $('#permission75').prop('checked',false);
+        }
+        else{
+            $('#permission70').prop('checked',true);
+            $('#permission71').prop('checked',true);
+            $('#permission75').prop('checked',true);
+        }
+    }
+    function check8(){
+        if(
+            $('#permission80').prop('checked') == true &&
+            $('#permission81').prop('checked') == true &&
+            $('#permission82').prop('checked') == true &&
+            $('#permission83').prop('checked') == true &&
+            $('#permission84').prop('checked') == true 
+        ){
+            $('#permission80').prop('checked',false);
+            $('#permission81').prop('checked',false);
+            $('#permission82').prop('checked',false);
+            $('#permission83').prop('checked',false);
+            $('#permission84').prop('checked',false);
+        }
+        else{
+            $('#permission80').prop('checked',true);
+            $('#permission81').prop('checked',true);
+            $('#permission82').prop('checked',true);
+            $('#permission83').prop('checked',true);
+            $('#permission84').prop('checked',true);
+        }
+    }
+    function check9(){
+        if(
+            $('#permission90').prop('checked') == true &&
+            $('#permission92').prop('checked') == true &&
+            $('#permission93').prop('checked') == true 
+        ){
+            $('#permission90').prop('checked',false);
+            $('#permission92').prop('checked',false);
+            $('#permission93').prop('checked',false);
+        }
+        else{
+            $('#permission90').prop('checked',true);
+            $('#permission92').prop('checked',true);
+            $('#permission93').prop('checked',true);
+        }
     }
     $(document).on('keyup','#name',function(){
         myFunction();

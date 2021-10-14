@@ -9,6 +9,24 @@ use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
+
+    public function getPermssion($string)
+    {
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        $array = $list;
+        $list = [];
+        foreach ($array as $value) 
+            foreach (explode("']",$value) as $val) 
+                if($val != '')
+                    array_push($list, $val);
+        return $list;
+    }
+
     /**
      * Display a listing of the resource.
      * Show the form for creating a new resource or editing the specified resource..
@@ -24,16 +42,24 @@ class CompanyController extends Controller
         $companies = Company::where('user_id',$user_id)->get();
         $count = count($companies);
         ($count > 0) ? $view = 'edit': $view = 'create';
+        
+        $permission = $this->getPermssion(Auth::user()->permission);
         if($view == 'create'){
-            $company = null;
-            $route = route('company.store');
+            if(in_array('create9',$permission) || Auth::user()->is_admin == 2){
+                $company = null;
+                $route = route('company.store');
+                return view('parametres.form',compact('company','route','view'));
+            }
         }
         if($view == 'edit'){
-            // $company = Company::first();
-            $company = Company::where('user_id',$user_id)->first();
-            $route = route('company.update',['company'=>$company->id]);
+            if(in_array('edit9',$permission) || Auth::user()->is_admin == 2){
+                // $company = Company::first();
+                $company = Company::where('user_id',$user_id)->first();
+                $route = route('company.update',['company'=>$company->id]);
+                return view('parametres.form',compact('company','route','view'));
+            }
         }
-        return view('parametres.form',compact('company','route','view'));
+        return view('application');
     }
 
 
@@ -76,7 +102,10 @@ class CompanyController extends Controller
         $company->cnss = $request->cnss;
         $company->banque = $request->banque;
         $company->rib = $request->rib;
-        $company->user_id = Auth::user()->id;
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $company->user_id = $user_id;
     }
 
     /**
@@ -130,7 +159,10 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         // $company = Company::first();
-        $company = Company::where('user_id',Auth::user()->id)->first();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $company = Company::where('user_id',$user_id)->first();
         $path = $this->imageUpdate($request, $company);
         $this->form($request,$company,$path);
         $company->save();

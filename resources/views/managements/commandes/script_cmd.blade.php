@@ -114,10 +114,10 @@
                       <td>${reglement.mode_reglement}</td>
                       <td class="text-center">${btnAvoir}</td>
                       <td class="text-center">
-                        @if(in_array('show5',$permission))
+                        @if(in_array('show5',$permission) || Auth::user()->is_admin == 2)
                         ${btnPrint}
                         @endif
-                        @if(in_array('delete5',$permission))
+                        @if(in_array('delete5',$permission) || Auth::user()->is_admin == 2)
                         ${btnDelete2}
                         @endif
                       </td>
@@ -130,19 +130,19 @@
             <div class="row">
               <div class="col-8">
                 <span>[${commande.code}]</span>
-                @if(in_array('create6',$permission))
+                @if(in_array('create6',$permission) || Auth::user()->is_admin == 2)
                 <button id="btnFacture${index}" class="btn btn-link" onclick="window.location.assign('${url_fac}')"><i class="fa fa-plus-square"></i>&nbsp;Facture&nbsp;<i class="fas fa-receipt"></i></button>
                 @endif
-                @if(in_array('create5',$permission))
+                @if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
                 <button id="btnStatus${index}" class="btn btn-link" onclick="window.location.assign('${url_reg}')"><i class="fa fa-plus-square"></i>&nbsp;Règlement&nbsp;<i class="fas fa-hand-holding-usd"></i></button>
                 @endif
-                @if(in_array('show4',$permission))
+                @if(in_array('show4',$permission) || Auth::user()->is_admin == 2)
                 <a class="btn btn-outline-info btn-sm" href=${url_show1}><i class="fas fa-print"></i></a>
                 @endif
-                @if(in_array('edit4',$permission))
+                @if(in_array('edit4',$permission) || Auth::user()->is_admin == 2)
                 <a class="btn btn-outline-success btn-sm" id="btnEdit${index+1}" href=${url_edit}><i class="fas fa-edit"></i></a>
                 @endif
-                @if(in_array('delete4',$permission))
+                @if(in_array('delete4',$permission) || Auth::user()->is_admin == 2)
                 <a 
                   class="btn btn-outline-danger btn-sm" 
                   id="btnDelete1${index+1}" 
@@ -154,7 +154,7 @@
                 @endif
               </div>
               <div class="col-4 text-right">
-                  @if(in_array('details5',$permission))
+                  @if(in_array('details5',$permission) || Auth::user()->is_admin == 2)
                   <button class="btn btn-outline-success btn-sm"
                     id="btnDetails${index}"
                     data-index="${index}" 
@@ -177,7 +177,7 @@
               <td id="viewStatus${index}" style="display : none">${status}</td>
               <td id="viewFacture${index}" style="display : none">${facture}</td>
               <td>
-                @if(in_array('details4',$permission))
+                @if(in_array('details4',$permission) || Auth::user()->is_admin == 2)
                 <i class="fas fa-eye fa-1x"
                   id="btnActions${index}"
                   data-index="${index}" 

@@ -14,14 +14,14 @@
   <br>
   <div class="row">
     <div class="col text-left">
-      @if(in_array('create5',$permission))
+      @if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
       <a id="create" href="{{route('reglement.create2')}}" class="btn btn-primary m-b-10 ">
         <i class="fa fa-plus"></i>&nbsp;Règlements
       </a>
       @endif
     </div>
     <div class="col text-right">
-      @if(in_array('create4',$permission))
+      @if(in_array('create4',$permission) || Auth::user()->is_admin == 2)
       <a href="{{route('commande.create')}}" class="btn btn-primary m-b-10 ">
         <i class="fa fa-plus"></i>&nbsp;Commande
       </a>

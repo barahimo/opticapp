@@ -44,7 +44,7 @@ class ProduitController extends Controller
         // $categories = Categorie::all();
         // return view('managements.produits.index', compact('produits', 'categories'));
         // return view('managements.produits.index', compact('produits'));
-        if(in_array('list3',$permission))
+        if(in_array('list3',$permission) || Auth::user()->is_admin == 2)
         return view('managements.produits.index', compact(['produits','permission']));
         else
         return view('application');
@@ -57,7 +57,7 @@ class ProduitController extends Controller
             $user_id = Auth::user()->user_id;
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create3',$permission))
+        if(in_array('create3',$permission) || Auth::user()->is_admin == 2)
         return view('managements.produits.create',[
             'categories' => $categories
         ]);
@@ -121,7 +121,7 @@ class ProduitController extends Controller
         $user_id = Auth::user()->user_id;
         $produit = Produit::with('categorie')->where('user_id',$user_id)->findOrFail($produit->id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('show3',$permission))
+        if(in_array('show3',$permission) || Auth::user()->is_admin == 2)
         return view('managements.produits.show', [
             "produit" => $produit
         ]);
@@ -138,7 +138,7 @@ class ProduitController extends Controller
         $produit = Produit::with('categorie')->where('user_id',$user_id)->findOrFail($produit->id);
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('edit3',$permission))
+        if(in_array('edit3',$permission) || Auth::user()->is_admin == 2)
         return view('managements.produits.edit')->with([
             "produit" => $produit,
             'categories' => $categories

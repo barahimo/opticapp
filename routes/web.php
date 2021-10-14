@@ -10,31 +10,31 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Web Welcome
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
 Route::get('/', function () {
     return view('welcome');
 });
-// routes authentification user admin
+/*
+|--------------------------------------------------------------------------
+| Web Users
+|--------------------------------------------------------------------------
+*/
 Auth::routes();
-// Route::get('/admin/login', 'Auth\Admin\LoginController@showLoginForm');
-// Route::post('/admin/login', 'Auth\Admin\LoginController@login')->name('adminlogin');
-
-// Route::get('/admin/register', 'Auth\Admin\RegisterController@showRegisterForm');
-// Route::post('/admin/register', 'Auth\Admin\RegisterController@register')->name('adminregister');
-
-// routes user
 Route::get('findEmail','UserController@findEmail')->name('user.findEmail');
 Route::get('user/{id}/editUser','UserController@editUser')->name('user.editUser');
 Route::resource('user', 'UserController');
-// route clients
+/*
+|--------------------------------------------------------------------------
+| Web Companies
+|--
+/*
+|--------------------------------------------------------------------------
+| Web Clients
+|--------------------------------------------------------------------------
+*/
 Route::resource('client', 'ClientController');
 Route::resource('commande', 'CommandeController')->except('update');
 Route::post('/commande/{commande}', 'CommandeController@update')->name('commande.update');
@@ -44,9 +44,41 @@ Route::post('/storeP', 'CategorieController@storeP')->name('categorie.storeP');
 Route::resource('produit', 'ProduitController');
 Route::resource('reglement', 'ReglementController');
 Route::resource('facture', 'FactureController');
-// Route::post('/updateF/{facture}', 'CommandeController@updateF')->name('update.facturation');
-// Route::get('/index', 'FactureController@index')->name('facture.index');
-// Route::get('/create', 'FactureController@create')->name('facture.create');
+/*
+|--------------------------------------------------------------------------
+| Web Categories
+|--------------------------------------------------------------------------
+*/
+/*
+|--------------------------------------------------------------------------
+| Web Produits
+|--------------------------------------------------------------------------
+*/
+/*
+|--------------------------------------------------------------------------
+| Web LigneCommandes
+|--------------------------------------------------------------------------
+*/
+/*
+|--------------------------------------------------------------------------
+| Web Commandes
+|--------------------------------------------------------------------------
+*/
+/*
+|--------------------------------------------------------------------------
+| Web Règlements
+|--------------------------------------------------------------------------
+*/
+/*
+|--------------------------------------------------------------------------
+| Web Factures
+|--------------------------------------------------------------------------
+*/
+/*
+|--------------------------------------------------------------------------
+| Web n'a pas utlisés
+|--------------------------------------------------------------------------
+*/
 
 
 
@@ -57,8 +89,6 @@ Route::get('/affiche', 'CommandeController@affiche')->name('commande.affiche');
 
 Route::post('/reglement', 'CommandeController@storeLR')->name('commande.storeLR');
 Route::get('/facturation', 'CommandeController@facture')->name('commande.facture');
-// Route::get('/facturation2', 'CommandeController@facture2')->name('commande.facture2');
-// Route::get('/facturation22', 'CommandeController@facture22')->name('commande.facture22');
 Route::get('/codeFacture', 'CommandeController@codeFacture')->name('commande.codeFacture');
 
 Route::get('/prodview','CommandeController@prodfunct');
@@ -82,28 +112,21 @@ Route::put('/lignecommandeupdate/{lignecommande}', 'CommandeController@updateL')
 Route::put('/affecte', 'LignecommandeController@affecte')->name('lgcommande.affecte');
 Route::post('/facture', 'CommandeController@storefacture')->name('facture.store');
 Route::post('/facture2', 'CommandeController@storefacture2')->name('facture.store2');
-// Route::get('/select', 'HomeController@select')->name('select');
-// Route::get('/selectpr', 'HomeController@selectProduit')->name('selectproduit');
 
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/application', 'HomeController@application')->name('app.home');
-// ->middleware('Auth');
 
 
 
 
 // ########################################################
 //Commande
-// Route::get('/commandes', 'CommandeController@index2')->name('commande.index2');//commande.create
 Route::get('/commande22', 'CommandeController@index22')->name('commande.index22');
 Route::get('/gestioncommande', 'CommandeController@index22')->name('commande.index22');
 // ----------------------------------------
 Route::get('/gestioncommande2', 'CommandeController@index222')->name('commande.index222');
 // ----------------------------------------
-// Route::post('/storeCommande','CommandeController@store2')->name('commande.store2');//commande.store
-// Route::get('/edit2/{id}','CommandeController@edit2')->name('commande.edit2');//commande.edit
-// Route::post('/update2','CommandeController@update2')->name('commande.update2');//commande.update
 
 // REglements
 Route::get('/reglements','ReglementController@index2')->name('reglement.index2');
@@ -115,10 +138,6 @@ Route::get('/getReglements2','ReglementController@getReglements2')->name('reglem
 Route::get('/getReglements3','ReglementController@getReglements3')->name('reglement.getReglements3');
 Route::post('/storeReglements','ReglementController@store2')->name('reglement.store2');
 Route::post('/storeReglements3','ReglementController@store3')->name('reglement.store3');
-// Route::get('/facture2/{facture}','FactureController@show2')->name('facture.show2');
-
-// Route::get('/showCommande/{id}','CommandeController@show2')->name('commande.show2');//commande.show
-// Route::get('/showReglement/{id}','ReglementController@show2')->name('reglement.show2');//reglement.show
 
 
 Route::resource('company', 'CompanyController');
@@ -126,9 +145,6 @@ Route::post('/saveImage','CompanyController@saveImage')->name('company.saveImage
 
 
 
-// Route::get('/index5', 'CommandeController@index5')->name('commande.index5');//commande.index
-
-// Route::delete('/deleteCommande/{commande}', 'CommandeController@delete')->name('commande.delete');//commande.destroy
 Route::delete('/deleteReglement/{reglement}', 'ReglementController@delete')->name('reglement.delete');
 
 Route::get('/balance', 'CommandeController@balance')->name('commande.balance');
@@ -173,3 +189,27 @@ Route::get('/link', function () {
     symlink($targetFolder,$linkFolder);
     echo 'Symlink process successfully completed';
 });
+
+
+######################################################################################################
+// Route::get('/admin/login', 'Auth\Admin\LoginController@showLoginForm');
+// Route::post('/admin/login', 'Auth\Admin\LoginController@login')->name('adminlogin');
+// Route::get('/admin/register', 'Auth\Admin\RegisterController@showRegisterForm');
+// Route::post('/admin/register', 'Auth\Admin\RegisterController@register')->name('adminregister');
+// Route::post('/updateF/{facture}', 'CommandeController@updateF')->name('update.facturation');
+// Route::get('/index', 'FactureController@index')->name('facture.index');
+// Route::get('/create', 'FactureController@create')->name('facture.create');
+// Route::get('/facturation2', 'CommandeController@facture2')->name('commande.facture2');
+// Route::get('/facturation22', 'CommandeController@facture22')->name('commande.facture22');
+// Route::get('/select', 'HomeController@select')->name('select');
+// Route::get('/selectpr', 'HomeController@selectProduit')->name('selectproduit');
+// Route::get('/commandes', 'CommandeController@index2')->name('commande.index2');//commande.create
+// Route::post('/storeCommande','CommandeController@store2')->name('commande.store2');//commande.store
+// Route::get('/edit2/{id}','CommandeController@edit2')->name('commande.edit2');//commande.edit
+// Route::post('/update2','CommandeController@update2')->name('commande.update2');//commande.update
+// Route::get('/facture2/{facture}','FactureController@show2')->name('facture.show2');
+// Route::get('/showCommande/{id}','CommandeController@show2')->name('commande.show2');//commande.show
+// Route::get('/showReglement/{id}','ReglementController@show2')->name('reglement.show2');//reglement.show
+// Route::get('/index5', 'CommandeController@index5')->name('commande.index5');//commande.index
+// Route::delete('/deleteCommande/{commande}', 'CommandeController@delete')->name('commande.delete');//commande.destroy
+######################################################################################################

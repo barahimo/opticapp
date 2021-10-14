@@ -52,6 +52,30 @@
     </style>
 </head>
 <body class="hold-transition login-page">
+    @php
+    // getPermission
+    $string = Auth::user()->permission;
+    $list = [];
+    $array = explode("','",$string);
+    foreach ($array as $value) 
+        foreach (explode("['",$value) as $val) 
+            if($val != '')
+                array_push($list, $val);
+    $array = $list;
+    $list = [];
+    foreach ($array as $value) 
+        foreach (explode("']",$value) as $val) 
+            if($val != '')
+                array_push($list, $val);
+    $permission = $list;
+
+    $user_id = Auth::user()->id;
+    if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
+    $companies = Company::where('user_id',$user_id)->get();
+    $count = count($companies);
+    ($count > 0) ? $view = 'edit': $view = 'create';
+    @endphp
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container">
@@ -87,17 +111,37 @@
                             </li>
                             @endif --}}
                         @else
+                            @if(in_array('list9',$permission) || Auth::user()->is_admin == 2)
                             <li class="nav-item links">
                                 <a class="nav-link"  href="{{ route('user.editUser',Auth::user()->id) }}"><i class="icon-user"></i> Gestion de compte</a>
                             </li>
+                            @endif
                             @if(Auth::user()->is_admin != 0)
+                            @if(in_array('list8',$permission) || Auth::user()->is_admin == 2)
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('user.index') }}"><i class="icon-user"></i> Gestion des utilisateurs</a>
                             </li>
+                            @endif
+                            @endif
+                            @if(in_array('create9',$permission) || in_array('edit9',$permission) || Auth::user()->is_admin == 2)
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
                             </li>
                             @endif
+
+                            {{-- @if($view == "create")
+                            @if(in_array('create9',$permission) || Auth::user()->is_admin == 2)
+                            <li class="nav-item links">
+                                <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
+                            </li>
+                            @endif
+                            @elseif($view == "edit")
+                            @if(in_array('edit9',$permission) || Auth::user()->is_admin == 2)
+                            <li class="nav-item links">
+                                <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
+                            </li>
+                            @endif
+                            @endif --}}
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

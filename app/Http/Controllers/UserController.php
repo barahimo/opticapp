@@ -85,6 +85,14 @@ class UserController extends Controller
         $permission70 = $request['permission70'];
         $permission71 = $request['permission71'];
         $permission75 = $request['permission75'];
+        $permission80 = $request['permission80'];
+        $permission81 = $request['permission81'];
+        $permission82 = $request['permission82'];
+        $permission83 = $request['permission83'];
+        $permission84 = $request['permission84'];
+        $permission90 = $request['permission90'];
+        $permission92 = $request['permission92'];
+        $permission93 = $request['permission93'];
         $array = [];
         if($permission10) array_push($array,$permission10);
         if($permission11) array_push($array,$permission11);
@@ -124,6 +132,14 @@ class UserController extends Controller
         if($permission70) array_push($array,$permission70);
         if($permission71) array_push($array,$permission71);
         if($permission75) array_push($array,$permission75);
+        if($permission80) array_push($array,$permission80);
+        if($permission81) array_push($array,$permission81);
+        if($permission82) array_push($array,$permission82);
+        if($permission83) array_push($array,$permission83);
+        if($permission84) array_push($array,$permission84);
+        if($permission90) array_push($array,$permission90);
+        if($permission92) array_push($array,$permission92);
+        if($permission93) array_push($array,$permission93);
         $permission = "[";
         foreach ($array as $key => $value) {
             $permission.="'".$value."'"; 
@@ -143,7 +159,11 @@ class UserController extends Controller
     {
         // $users = User::where('is_admin','!=',2)->orderBy('id','desc')->get();
         $users = User::where([['is_admin','!=',2],['user_id',Auth::user()->id]])->orderBy('id','desc')->get();
-        return view('managements.users.index', compact('users'));
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('list8',$permission) || Auth::user()->is_admin == 2)
+        return view('managements.users.index', compact('users','permission'));
+        else
+        return redirect()->back();
     }
 
     public function findEmail(Request $request){
@@ -163,7 +183,11 @@ class UserController extends Controller
      */
     public function create()
     {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        if(in_array('create8',$permission) || Auth::user()->is_admin == 2)
         return view('managements.users.create');
+        else
+        return redirect()->back();
     }
 
     /**
@@ -232,22 +256,30 @@ class UserController extends Controller
         $user_id = Auth::user()->user_id;
         $user = User::where('user_id',$user_id)->findOrFail($id);
         $permission = $this->getPermssion($user->permission);
+        $permission_edit = $this->getPermssion(Auth::user()->permission);
+        if(in_array('edit8',$permission_edit) || Auth::user()->is_admin == 2)
         return view('managements.users.edit')->with([
             "user" => $user,
             "visibility" => true,
             "permission" => $permission
         ]);
+        else
+        return redirect()->back();
     }
 
     public function editUser($id)
     {
         $user = User::where('id',Auth::user()->id)->findOrFail($id);
         $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_edit = $this->getPermssion(Auth::user()->permission);
+        if(in_array('list9',$permission_edit) || Auth::user()->is_admin == 2)
         return view('managements.users.edit')->with([
             "user" => $user,
             "visibility" => false,
             "permission" => $permission
         ]);
+        else
+        return redirect()->back();
     }
 
     /**
