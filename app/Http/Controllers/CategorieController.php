@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Produit;
 use App\Categorie;
 use App\Lignecommande;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,6 +33,20 @@ class CategorieController extends Controller
         return $list;
     }
 
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
+    
     public function index()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
@@ -41,13 +56,17 @@ class CategorieController extends Controller
             $user_id = Auth::user()->user_id;
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
         // return view('managements.categories.index', compact('categories'));
-        return view('managements.categories.index', compact(['categories','permission']));
+        if($this->hasPermssion('list2') == 'yes')
+            return view('managements.categories.index', compact(['categories','permission']));
+        else
+            return view('application');
     }
 
     public function create()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create2',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('create2',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create2') == 'yes')
         return view('managements.categories.create');
         else
         return redirect()->back();
@@ -88,7 +107,8 @@ class CategorieController extends Controller
         $categorie = categorie::where('user_id',$user_id)->findOrFail($categorie->id);
         $produits =  Produit::where('categorie_id', '=', $categorie->id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('show2',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('show2',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('show2') == 'yes')
         return view('managements.categories.show', [
             "categorie" => $categorie,
             "produits" => $produits 
@@ -105,7 +125,8 @@ class CategorieController extends Controller
         $user_id = Auth::user()->user_id;
         $categorie = categorie::where('user_id',$user_id)->findOrFail($categorie->id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('edit2',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('edit2',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('edit2') == 'yes')
         return view('managements.categories.edit')->with([
             "categorie" => $categorie
         ]);

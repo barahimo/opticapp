@@ -45,6 +45,20 @@ class UserController extends Controller
         return $list;
     }
 
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
+
     public function storePermssion(Request $request)
     {
         $permission10 = $request['permission10'];
@@ -160,7 +174,8 @@ class UserController extends Controller
         // $users = User::where('is_admin','!=',2)->orderBy('id','desc')->get();
         $users = User::where([['is_admin','!=',2],['user_id',Auth::user()->id]])->orderBy('id','desc')->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('list8',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('list8',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list8') == 'yes')
         return view('managements.users.index', compact('users','permission'));
         else
         return redirect()->back();
@@ -184,7 +199,8 @@ class UserController extends Controller
     public function create()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create8',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('create8',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create8') == 'yes')
         return view('managements.users.create');
         else
         return redirect()->back();
@@ -257,7 +273,8 @@ class UserController extends Controller
         $user = User::where('user_id',$user_id)->findOrFail($id);
         $permission = $this->getPermssion($user->permission);
         $permission_edit = $this->getPermssion(Auth::user()->permission);
-        if(in_array('edit8',$permission_edit) || Auth::user()->is_admin == 2)
+        // if(in_array('edit8',$permission_edit) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('edit8') == 'yes')
         return view('managements.users.edit')->with([
             "user" => $user,
             "visibility" => true,
@@ -272,7 +289,8 @@ class UserController extends Controller
         $user = User::where('id',Auth::user()->id)->findOrFail($id);
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_edit = $this->getPermssion(Auth::user()->permission);
-        if(in_array('list9',$permission_edit) || Auth::user()->is_admin == 2)
+        // if(in_array('list9',$permission_edit) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list9') == 'yes')
         return view('managements.users.edit')->with([
             "user" => $user,
             "visibility" => false,
@@ -317,7 +335,7 @@ class UserController extends Controller
         }
         $user->name = $name;
         $user->email = $email;
-        
+
         if($is_pass == 'yes')
             $user->password = $password;
         

@@ -1,5 +1,8 @@
 @extends('layout.dashboard')
 @section('contenu')
+<?php
+    use function App\Providers\hasPermssion;
+?>
 <!-- ##################################################################### -->
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
@@ -14,14 +17,16 @@
   <br>
   <div class="row">
     <div class="col text-left">
-      @if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
+      {{-- @if(in_array('create5',$permission) || Auth::user()->is_admin == 2) --}}
+      @if(hasPermssion('create5') == 'yes') 
       <a id="create" href="{{route('reglement.create2')}}" class="btn btn-primary m-b-10 ">
         <i class="fa fa-plus"></i>&nbsp;Règlements
       </a>
       @endif
     </div>
     <div class="col text-right">
-      @if(in_array('create4',$permission) || Auth::user()->is_admin == 2)
+      {{-- @if(in_array('create4',$permission) || Auth::user()->is_admin == 2) --}}
+      @if(hasPermssion('create4') == 'yes') 
       <a href="{{route('commande.create')}}" class="btn btn-primary m-b-10 ">
         <i class="fa fa-plus"></i>&nbsp;Commande
       </a>

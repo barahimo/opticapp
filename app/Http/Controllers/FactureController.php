@@ -6,6 +6,7 @@ use App\Facture;
 use App\Commande;
 use App\Company;
 use App\Lignecommande;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,20 @@ class FactureController extends Controller
         return $list;
     }
 
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
+
     public function index()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
@@ -49,7 +64,8 @@ class FactureController extends Controller
         ->where('user_id',$user_id)
         ->orderBy('id','desc')->get();
         // return view('managements.factures.index', compact('factures'));
-        if(in_array('list6',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('list6',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list6') == 'yes')
         return view('managements.factures.index', compact(['factures','permission']));
         else
         return view('application');
@@ -252,7 +268,8 @@ class FactureController extends Controller
             $priceTotal = floatval($priceTotal  + $p->total_produit) ;
         }
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('show6') == 'yes')
         return view('managements.factures.show', [
             'lignecommandes' =>  $lignecommandes,
             'priceTotal'  => $priceTotal,

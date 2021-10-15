@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Company;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,6 +32,20 @@ class CompanyController extends Controller
         return $list;
     }
 
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
+    
     /**
      * Display a listing of the resource.
      * Show the form for creating a new resource or editing the specified resource..
@@ -49,14 +64,16 @@ class CompanyController extends Controller
         
         $permission = $this->getPermssion(Auth::user()->permission);
         if($view == 'create'){
-            if(in_array('create9',$permission) || Auth::user()->is_admin == 2){
+            // if(in_array('create9',$permission) || Auth::user()->is_admin == 2){
+            if($this->hasPermssion('create9') == 'yes'){
                 $company = null;
                 $route = route('company.store');
                 return view('parametres.form',compact('company','route','view'));
             }
         }
         if($view == 'edit'){
-            if(in_array('edit9',$permission) || Auth::user()->is_admin == 2){
+            // if(in_array('edit9',$permission) || Auth::user()->is_admin == 2){
+            if($this->hasPermssion('edit9') == 'yes'){
                 // $company = Company::first();
                 $company = Company::where('user_id',$user_id)->first();
                 $route = route('company.update',['company'=>$company->id]);

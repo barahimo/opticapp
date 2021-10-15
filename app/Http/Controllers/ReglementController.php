@@ -6,6 +6,7 @@ use App\Client;
 use App\Commande;
 use App\Reglement;
 use App\Company;
+use App\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,20 @@ class ReglementController extends Controller
         return $list;
     }
 
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
+    
     public function index()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
@@ -46,7 +61,8 @@ class ReglementController extends Controller
         // dd($clients);     
         // return view('managements.reglements.index', compact('reglements','nom_client'));
         // return view('managements.reglements.index', compact('reglements'));
-        if(in_array('list5',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('list5',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list5') == 'yes')
         return view('managements.reglements.index', compact(['reglements','permission']));
         else
         return view('application');
@@ -306,7 +322,8 @@ class ReglementController extends Controller
             // $commandes = Commande::with('client')->get();
         }
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create5') == 'yes')
         return view('managements.reglements.create2',compact('clients','client','commandes','date'));
         else
         return redirect()->back();
@@ -323,7 +340,8 @@ class ReglementController extends Controller
             $user_id = Auth::user()->user_id;
         $commande = Commande::with('client')->where('user_id',$user_id)->findOrFail($commande_id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create5') == 'yes')
         return view('managements.reglements.create3',compact('commande','date'));
         else
         return redirect()->back();

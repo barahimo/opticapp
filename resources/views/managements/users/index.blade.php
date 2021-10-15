@@ -1,5 +1,8 @@
 @extends('layout.dashboard')
 @section('contenu')
+<?php
+    use function App\Providers\hasPermssion;
+?>
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
@@ -18,7 +21,8 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
-                    @if(in_array('create8',$permission) || Auth::user()->is_admin == 2)
+                    {{-- @if(in_array('create8',$permission) || Auth::user()->is_admin == 2) --}}
+                    @if(hasPermssion('create8') == 'yes') 
                     <a href="{{route('user.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-user-circle"></i>  Utilisateur</a>
                     @endif
                 </div>
@@ -70,10 +74,12 @@
                             <td>
                                 {{-- <a href="{{ action('UserController@show',['user'=> $user->id])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a> --}}
                                 {{-- @if( Auth::user()->is_admin ) --}}
-                                @if(in_array('edit8',$permission) || Auth::user()->is_admin == 2)
+                                {{-- @if(in_array('edit8',$permission) || Auth::user()->is_admin == 2) --}}
+                                @if(hasPermssion('edit8') == 'yes') 
                                 <a href="{{route('user.edit',['user'=> $user->id])}}" class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
                                 @endif
-                                @if(in_array('delete8',$permission) || Auth::user()->is_admin == 2)
+                                {{-- @if(in_array('delete8',$permission) || Auth::user()->is_admin == 2) --}}
+                                @if(hasPermssion('delete8') == 'yes') 
                                 <button class="btn btn-outline-danger btn-sm remove-user" 
                                     data-id="{{ $user->id }}" 
                                     data-action="{{ route('user.destroy',$user->id) }}"> 

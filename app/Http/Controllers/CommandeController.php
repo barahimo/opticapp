@@ -10,6 +10,7 @@ use App\Categorie;
 use App\Company;
 use App\Reglement;
 use App\Lignecommande;
+use App\User;
 use Faker\Core\Number;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -44,6 +45,21 @@ class CommandeController extends Controller
                     array_push($list, $val);
         return $list;
     }
+
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
+    
     // ------------ BEGIN INDEX COMMANDE ------------------------------
     public function index(Request $request){
         $permission = $this->getPermssion(Auth::user()->permission);
@@ -58,7 +74,8 @@ class CommandeController extends Controller
         $lignecommandes = Lignecommande::where('user_id',$user_id )->get();
         $reglements = reglement::where('user_id',$user_id )->get();
         $clients = Client::where('user_id',$user_id )->get();
-        if(in_array('list4',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('list4',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list4') == 'yes')
         return view('managements.commandes.index', [
             'commandes'=>$commandes,
             'lignecommandes'=>$lignecommandes,
@@ -81,7 +98,8 @@ class CommandeController extends Controller
         $categories=Categorie::where('user_id',$user_id)->get();//get data from table
         $clients = Client::where('user_id',$user_id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create4',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('create4',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create4') == 'yes')
         return view('managements.commandes.create', [
             'clients' =>$clients,
             'categories' => $categories,
@@ -260,7 +278,8 @@ class CommandeController extends Controller
         $clients = Client::where('user_id',$user_id)->get();
         $categories=Categorie::where('user_id',$user_id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('edit4',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('edit4',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('edit4') == 'yes')
         return view('managements.commandes.edit', [
             'commande' =>$commande,
             'clients' =>$clients,
@@ -1000,7 +1019,8 @@ class CommandeController extends Controller
 
         $TVA = $TTC - $HT;
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create6',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('create6',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create6') == 'yes')
         return view('managements.commandes.facture', [
             'cmd_id' =>  $cmd_id, 
             'date' =>  $date, 
@@ -1237,7 +1257,8 @@ class CommandeController extends Controller
         $count = count($companies);
         ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
         $date = Carbon::now();
-        if(in_array('list7',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('list7',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list7') == 'yes')
         return view('managements.commandes.balance',compact('date','company','permission'));
         else
         return view('application');

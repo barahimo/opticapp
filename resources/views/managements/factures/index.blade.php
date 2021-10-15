@@ -1,5 +1,8 @@
 @extends('layout.dashboard')
 @section('contenu')
+<?php
+    use function App\Providers\hasPermssion;
+?>
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
@@ -58,10 +61,12 @@
                                 <td>{{number_format($facture->total_TVA,2)}}</td>
                                 <td>{{number_format($facture->total_TTC,2)}}</td>
                                 <td>
-                                    @if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
+                                    {{-- @if(in_array('show6',$permission) || Auth::user()->is_admin == 2) --}}
+                                    @if(hasPermssion('show6') == 'yes') 
                                     <a href="{{ action('FactureController@show',['facture'=> $facture])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                     @endif
-                                    @if(in_array('delete6',$permission) || Auth::user()->is_admin == 2)
+                                    {{-- @if(in_array('delete6',$permission) || Auth::user()->is_admin == 2) --}}
+                                    @if(hasPermssion('delete6') == 'yes') 
                                     <button class="btn btn-outline-danger btn-sm remove-facture" 
                                     data-id="{{ $facture->id }}" 
                                     data-action="{{ route('facture.destroy',$facture->id) }}"> 
@@ -102,11 +107,12 @@
                 table.find('tbody').html("");
                 res.forEach((facture,i) => {
                     var url_show = "{{ action('FactureController@show',['facture'=> ":id"])}}".replace(':id', facture.id);
-                    var url_destroy = "{{ route('facture.destroy',":id")}}".replace(':id', facture.id);
-                    var action = `@if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
+                    var url_destroy = "{{ route('facture.destroy',":id")}}".replace(':id', facture.id);   
+                    var action = `
+                        @if(hasPermssion('show6') == 'yes') 
                         <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                         @endif
-                        @if(in_array('delete6',$permission) || Auth::user()->is_admin == 2)
+                        @if(hasPermssion('delete6') == 'yes') 
                         <button class="btn btn-outline-danger btn-sm remove-facture" 
                         data-id="${facture.id}"
                         data-action=${url_destroy} > 

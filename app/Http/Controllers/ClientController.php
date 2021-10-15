@@ -48,11 +48,10 @@ class ClientController extends Controller
         $result = 'yes';
         return $result;
     }
-    
+
     public function index(Request $request)
     {
         $permission = $this->getPermssion(Auth::user()->permission);
-        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         // return in_array('create',$permission);
         // return $permission;
         // $clients = Client::withTrashed()->get();
@@ -78,6 +77,7 @@ class ClientController extends Controller
             $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
             #################################
             // return view('managements.clients.index', compact('clients'));
+            // if(in_array('list1',$permission) || Auth::user()->is_admin == 2)
             if($this->hasPermssion('list1') == 'yes')
             return view('managements.clients.index', compact(['clients','permission']));
             else
@@ -93,13 +93,8 @@ class ClientController extends Controller
     public function create()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
-        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
-        if(in_array('create1',$permission) || Auth::user()->is_admin == 2)
-        // if(
-        //     (Auth::user()->is_admin == 2) ||
-        //     (Auth::user()->is_admin == 1 && in_array('create1',$permission)) ||
-        //     (Auth::user()->is_admin == 0 && in_array('create1',$permission) && in_array('create1',$permission_))
-        // )
+        // if(in_array('create1',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create1') == 'yes')
         return view('managements.clients.create');
         else
         return redirect()->back();
@@ -167,7 +162,8 @@ class ClientController extends Controller
         }
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
-        if(in_array('show1',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('show1',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('show1') == 'yes')
         return view('managements.clients.show')->with([
             'commandes' => $commandes,
             'client' => $client,
@@ -187,7 +183,8 @@ class ClientController extends Controller
         $client = Client::where('user_id',$user_id)->findOrFail($client->id);
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
-        if(in_array('edit1',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('edit1',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('edit1') == 'yes')
         return view('managements.clients.edit')->with([
             "client" => $client
         ]);

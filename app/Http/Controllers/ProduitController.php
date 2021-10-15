@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Produit;
 use App\Categorie;
 use App\Lignecommande;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,6 +33,20 @@ class ProduitController extends Controller
         return $list;
     }
 
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
+
     public function index()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
@@ -44,7 +59,8 @@ class ProduitController extends Controller
         // $categories = Categorie::all();
         // return view('managements.produits.index', compact('produits', 'categories'));
         // return view('managements.produits.index', compact('produits'));
-        if(in_array('list3',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('list3',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list3') == 'yes')
         return view('managements.produits.index', compact(['produits','permission']));
         else
         return view('application');
@@ -57,7 +73,8 @@ class ProduitController extends Controller
             $user_id = Auth::user()->user_id;
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('create3',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('create3',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('create3') == 'yes')
         return view('managements.produits.create',[
             'categories' => $categories
         ]);
@@ -121,7 +138,8 @@ class ProduitController extends Controller
         $user_id = Auth::user()->user_id;
         $produit = Produit::with('categorie')->where('user_id',$user_id)->findOrFail($produit->id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('show3',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('show3',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('show3') == 'yes')
         return view('managements.produits.show', [
             "produit" => $produit
         ]);
@@ -138,7 +156,8 @@ class ProduitController extends Controller
         $produit = Produit::with('categorie')->where('user_id',$user_id)->findOrFail($produit->id);
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',Auth::user()->id)->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        if(in_array('edit3',$permission) || Auth::user()->is_admin == 2)
+        // if(in_array('edit3',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('edit3') == 'yes')
         return view('managements.produits.edit')->with([
             "produit" => $produit,
             'categories' => $categories

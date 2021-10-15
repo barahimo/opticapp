@@ -1,5 +1,8 @@
 @extends('layout.dashboard')
 @section('contenu')
+<?php
+    use function App\Providers\hasPermssion;
+?>
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
@@ -18,7 +21,8 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
-                    @if(in_array('create2',$permission) || Auth::user()->is_admin == 2)
+                    {{-- @if(in_array('create2',$permission) || Auth::user()->is_admin == 2) --}}
+                    @if(hasPermssion('create2') == 'yes')
                     <a href="{{route('categorie.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-plus"></i> Catégorie</a>
                     @endif
                 </div>
@@ -58,20 +62,21 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if(in_array('show2',$permission) || Auth::user()->is_admin == 2)
+                                    {{-- @if(in_array('show2',$permission) || Auth::user()->is_admin == 2) --}}
+                                    @if(hasPermssion('show2') == 'yes')
                                     <a href="{{ action('CategorieController@show',['categorie'=> $categorie])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                     @endif
-                                    @if( Auth::user()->is_admin )
-                                    @if(in_array('edit2',$permission) || Auth::user()->is_admin == 2)
+                                    {{-- @if(in_array('edit2',$permission) || Auth::user()->is_admin == 2) --}}
+                                    @if(hasPermssion('edit2') == 'yes')
                                     <a href="{{route('categorie.edit',['categorie'=> $categorie])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
                                     @endif
-                                    @if(in_array('delete2',$permission) || Auth::user()->is_admin == 2)
+                                    {{-- @if(in_array('delete2',$permission) || Auth::user()->is_admin == 2) --}}
+                                    @if(hasPermssion('delete2') == 'yes')
                                     <button class="btn btn-outline-danger btn-sm remove-categorie" 
                                     data-id="{{ $categorie->id }}" 
                                     data-action="{{ route('categorie.destroy',$categorie->id) }}"> 
                                     <i class="fas fa-trash"></i>
                                     </button>
-                                    @endif
                                     @endif
                                 </td>
                             </tr>
@@ -110,13 +115,14 @@
                     var url_edit = "{{route('categorie.edit',['categorie'=> ":id"])}}".replace(':id', categorie.id);
                     var url_destroy = "{{ route('categorie.destroy',":id") }}".replace(':id', categorie.id);
                     var url_show = "{{action('CategorieController@show',['categorie'=> ":id"])}}".replace(':id', categorie.id);
-                    var action = `@if(in_array('show2',$permission) || Auth::user()->is_admin == 2)
+                    var action = `
+                            @if(hasPermssion('show2') == 'yes')
                             <a href=${url_show} class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                             @endif
-                            @if(in_array('edit2',$permission) || Auth::user()->is_admin == 2)
+                            @if(hasPermssion('edit2') == 'yes')
                             <a href=${url_edit} class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
                             @endif
-                            @if(in_array('delete2',$permission) || Auth::user()->is_admin == 2)
+                            @if(hasPermssion('delete2') == 'yes')
                             <button class="btn btn-outline-danger btn-sm remove-categorie" 
                                 data-id="${categorie.id}" 
                                 data-action=${url_destroy}> 
