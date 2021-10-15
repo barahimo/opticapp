@@ -1,5 +1,8 @@
 @extends('layout.dashboard')
 @section('contenu')
+<?php
+    use function App\Providers\hasPermssion;
+?>
 {{-- ################## --}}
 <!-- Content Header (Page header) -->
 <div class="content-header sty-one">
@@ -31,7 +34,8 @@
             </div> 
             <div class="col-2">
               <div class="text-right">
-                @if(in_array('print7',$permission))
+                {{-- @if(in_array('print7',$permission) || Auth::user()->is_admin == 2) --}}
+                @if(hasPermssion('print7') == 'yes') 
                 <button onclick="onprint()" class="btn btn-outline-primary"><i class="fa fa-print"></i></button>
                 @endif
               </div>

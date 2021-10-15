@@ -16,8 +16,12 @@ class CategorieController extends Controller
         $this->middleware('statususer');
     }
 
-    public function getPermssion($string)
-    {
+    /** 
+    *--------------------------------------------------------------------------
+    * Mes fonctions
+    *--------------------------------------------------------------------------
+    **/
+    public function getPermssion($string){
         $list = [];
         $array = explode("','",$string);
         foreach ($array as $value) 
@@ -33,8 +37,7 @@ class CategorieController extends Controller
         return $list;
     }
 
-    public function hasPermssion($string)
-    {
+    public function hasPermssion($string){
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         $result = 'no';
@@ -46,9 +49,63 @@ class CategorieController extends Controller
         $result = 'yes';
         return $result;
     }
+    /** 
+    *--------------------------------------------------------------------------
+    * ajouteProduit
+    *--------------------------------------------------------------------------
+    **/
+    public function ajouteProduit(Request $request,$id){
+        $categorie=Categorie::find($id);
+        return view('managements.categories.createProduit', [
+            'categorie' => $categorie
+        ]);
+
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * searchCategorie
+    *--------------------------------------------------------------------------
+    **/
+    public function searchCategorie(Request $request){
+        $search = $request->search;
+        // $categories = Categorie::where('nom_categorie','like',"%$search%")
+        //     ->orWhere('description','like',"%$search%")
+        //     ->orderBy('id','desc')
+        //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $categories = Categorie::where([
+            [function ($query) use ($search) {
+                    $query->where('nom_categorie','like',"%$search%")
+                    ->orWhere('description','like',"%$search%");
+            }],
+            ['user_id',$user_id]
+        ])
+        ->orderBy('id','desc')
+        ->get();
+        return $categories;
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * search
+    *--------------------------------------------------------------------------
+    **/
+    public function search(Request $request){
+        $q = $request->input('q');
+
+        $categories =  Categorie::where('nom_categorie', 'like', "%$q%")
+        ->paginate(5);
+
+        return view('managements.categories.search')->with('categories', $categories);  
     
-    public function index()
-    {
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * Ressources
+    *--------------------------------------------------------------------------
+    **/
+    public function index(){
         $permission = $this->getPermssion(Auth::user()->permission);
         // $categories = Categorie::orderBy('id', 'desc')->get();
         $user_id = Auth::user()->id;
@@ -62,8 +119,7 @@ class CategorieController extends Controller
             return view('application');
     }
 
-    public function create()
-    {
+    public function create(){
         $permission = $this->getPermssion(Auth::user()->permission);
         // if(in_array('create2',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('create2') == 'yes')
@@ -72,9 +128,7 @@ class CategorieController extends Controller
         return redirect()->back();
     }
 
-    
-    public function store(Request $request)
-    {  
+    public function store(Request $request){  
             // $validateData = $request->validate([
             //     'nom_client' => 'required',
             //     'telephone' => 'required',
@@ -96,11 +150,8 @@ class CategorieController extends Controller
         $request->session()->flash('status','La catégorie a été bien enregistrée !');
         return redirect()->route('categorie.index');
     }
-
-
     
-    public function show(Categorie $categorie)
-    {
+    public function show(Categorie $categorie){
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
@@ -116,10 +167,8 @@ class CategorieController extends Controller
         else
         return redirect()->back();
     }
-
     
-    public function edit(Categorie $categorie)
-    {
+    public function edit(Categorie $categorie){
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
@@ -133,10 +182,8 @@ class CategorieController extends Controller
         else
         return redirect()->back();
     }
-
     
-    public function update(Request $request, Categorie $categorie)
-    {
+    public function update(Request $request, Categorie $categorie){
         // $this->validate($request, [
 
         //     'code_client' => 'required|min:4|max:100',     
@@ -163,30 +210,7 @@ class CategorieController extends Controller
 
     }
 
-    public function searchCategorie(Request $request)
-    {
-        $search = $request->search;
-        // $categories = Categorie::where('nom_categorie','like',"%$search%")
-        //     ->orWhere('description','like',"%$search%")
-        //     ->orderBy('id','desc')
-        //     ->get();
-        $user_id = Auth::user()->id;
-        if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-        $categories = Categorie::where([
-            [function ($query) use ($search) {
-                    $query->where('nom_categorie','like',"%$search%")
-                    ->orWhere('description','like',"%$search%");
-            }],
-            ['user_id',$user_id]
-        ])
-        ->orderBy('id','desc')
-        ->get();
-        return $categories;
-    }
-
-    public function destroy(Categorie $categorie)
-    {
+    public function destroy(Categorie $categorie){
         $produits = Produit::where('categorie_id','=',$categorie->id)->get();
         if($produits->count()){
             $existe = false;
@@ -219,26 +243,13 @@ class CategorieController extends Controller
             "status" => $msg
         ]); 
     }
-    public function search(Request $request){
-        $q = $request->input('q');
 
-        $categories =  Categorie::where('nom_categorie', 'like', "%$q%")
-        ->paginate(5);
-
-        return view('managements.categories.search')->with('categories', $categories);  
-    
-    }
-
-    public function ajouteProduit(Request $request,$id){
-        $categorie=Categorie::find($id);
-        return view('managements.categories.createProduit', [
-            'categorie' => $categorie
-        ]);
-
-    }
-
-    public function storeP(Request $request )
-    {
+    /** 
+    *--------------------------------------------------------------------------
+    * Autres fonctions
+    *--------------------------------------------------------------------------
+    **/
+    public function storeP(Request $request ){
         $produit = new Produit();
         $produit->nom_produit = $request->input('nom_produit');
         $produit->code_produit = $request->input('code_produit');

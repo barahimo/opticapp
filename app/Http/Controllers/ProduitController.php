@@ -16,6 +16,11 @@ class ProduitController extends Controller
         $this->middleware('statususer');
     }
     
+    /** 
+    *--------------------------------------------------------------------------
+    * Mes fonctions
+    *--------------------------------------------------------------------------
+    **/
     public function getPermssion($string)
     {
         $list = [];
@@ -47,8 +52,64 @@ class ProduitController extends Controller
         return $result;
     }
 
-    public function index()
-    {
+    /** 
+    *--------------------------------------------------------------------------
+    * searchProduit
+    *--------------------------------------------------------------------------
+    **/
+    public function searchProduit(Request $request){
+        $search = $request->search;
+        // $produits = Produit::with('categorie')->where('nom_produit','like',"%$search%")
+        //     ->orWhere('code_produit','like',"%$search%")
+        //     ->orWhere('TVA','like',"%$search%")
+        //     ->orWhere('prix_produit_HT','like',"%$search%")
+        //     ->orWhere('prix_produit_TTC','like',"%$search%")
+        //     ->orWhereHas('categorie',function($query) use($search){
+        //         $query->where('nom_categorie','like',"%$search%");
+        //     })
+        //     ->orderBy('id','desc')
+        //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $produits = Produit::with('categorie')
+            ->where([
+                [function ($query) use ($search) {
+                    $query->where('nom_produit','like',"%$search%")
+                    ->orWhere('code_produit','like',"%$search%")
+                    ->orWhere('TVA','like',"%$search%")
+                    ->orWhere('prix_produit_HT','like',"%$search%")
+                    ->orWhere('prix_produit_TTC','like',"%$search%");
+                }],
+                ['user_id',$user_id]
+            ])
+            ->orWhereHas('categorie',function($query) use($search,$user_id){
+                $query->where([['nom_categorie','like',"%$search%"],['user_id',$user_id]]);
+            })
+            ->orderBy('id','desc')
+            ->get();
+        return $produits;
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * search
+    *--------------------------------------------------------------------------
+    **/
+    public function search(Request $request){
+        $q = $request->input('q');
+
+        $produits =  Produit::where('nom_produit', 'like', "%$q%")
+        ->paginate(5);
+
+            return view('managements.produits.search')->with('produits', $produits);  
+    
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * Ressources
+    *--------------------------------------------------------------------------
+    **/
+    public function index(){
         $permission = $this->getPermssion(Auth::user()->permission);
         // $produits = Produit::with('categorie')->orderBy('id')->paginate(10);
         // $produits = Produit::with('categorie')->orderBy('id','desc')->get();
@@ -66,8 +127,7 @@ class ProduitController extends Controller
         return view('application');
     }
 
-    public function create()
-    {
+    public function create(){
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -82,9 +142,7 @@ class ProduitController extends Controller
         return redirect()->back();
     }
 
-    
-    public function store(Request $request)
-    {  
+    public function store(Request $request){  
         // $validateData = $request->validate([
         //     'nom_produit' => 'required',
         //     'code_produit' => 'required',
@@ -123,16 +181,8 @@ class ProduitController extends Controller
         $request->session()->flash('status','Le produit a été bien enregistré !');
         return redirect()->route('produit.index');
     }
-
-    //   public function search(Request $request){
-    //       $search = $request->get('search');
-    //       $clients = DB::table('clients')->where('nom_client','like', '%'.$search.'%')->paginate(3);
-    //        return view('managements.commandes.index',['clients' => $clients]);
-    //   }
-
     
-    public function show(Produit $produit)
-    {
+    public function show(Produit $produit){
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
@@ -147,9 +197,7 @@ class ProduitController extends Controller
         return redirect()->back();
     }
 
-    
-    public function edit(Produit $produit)
-    {
+    public function edit(Produit $produit){
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
@@ -165,10 +213,8 @@ class ProduitController extends Controller
         else
         return redirect()->back();
     }
-
     
-    public function update(Request $request, Produit $produit)
-    {
+    public function update(Request $request, Produit $produit){
         // $this->validate($request, [
 
         //         'nom_produit' => 'required',
@@ -220,9 +266,7 @@ class ProduitController extends Controller
         return redirect()->route('produit.index');
     }
 
-    
-    public function destroy(Produit $produit)
-    {
+    public function destroy(Produit $produit){
             $existe = false;
             
                 $lgcommande = Lignecommande::where('produit_id', '=', $produit->id )->first();
@@ -253,51 +297,6 @@ class ProduitController extends Controller
         // return redirect()->route('produit.index')->with([
         //     "success" => "le produit a été supprimer avec succès!"
         // ]); 
-    }
-
-    public function search(Request $request){
-        $q = $request->input('q');
-
-        $produits =  Produit::where('nom_produit', 'like', "%$q%")
-        ->paginate(5);
-
-            return view('managements.produits.search')->with('produits', $produits);  
-    
-    }
-    
-    public function searchProduit(Request $request)
-    {
-        $search = $request->search;
-        // $produits = Produit::with('categorie')->where('nom_produit','like',"%$search%")
-        //     ->orWhere('code_produit','like',"%$search%")
-        //     ->orWhere('TVA','like',"%$search%")
-        //     ->orWhere('prix_produit_HT','like',"%$search%")
-        //     ->orWhere('prix_produit_TTC','like',"%$search%")
-        //     ->orWhereHas('categorie',function($query) use($search){
-        //         $query->where('nom_categorie','like',"%$search%");
-        //     })
-        //     ->orderBy('id','desc')
-        //     ->get();
-        $user_id = Auth::user()->id;
-        if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-        $produits = Produit::with('categorie')
-            ->where([
-                [function ($query) use ($search) {
-                    $query->where('nom_produit','like',"%$search%")
-                    ->orWhere('code_produit','like',"%$search%")
-                    ->orWhere('TVA','like',"%$search%")
-                    ->orWhere('prix_produit_HT','like',"%$search%")
-                    ->orWhere('prix_produit_TTC','like',"%$search%");
-                }],
-                ['user_id',$user_id]
-            ])
-            ->orWhereHas('categorie',function($query) use($search,$user_id){
-                $query->where([['nom_categorie','like',"%$search%"],['user_id',$user_id]]);
-            })
-            ->orderBy('id','desc')
-            ->get();
-        return $produits;
     }
     // ---------------------
 }

@@ -358,7 +358,7 @@
       });
   }
   function deleteCommande(index){
-    console.log(index);
+    // console.log(index);
     var btnDelete = $('#btnDelete1'+index);
     var action = btnDelete.data('route');
     Swal.fire({

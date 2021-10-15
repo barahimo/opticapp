@@ -28,8 +28,12 @@ class UserController extends Controller
         $this->middleware('statususer');
     }
 
-    public function getPermssion($string)
-    {
+    /**     
+    *--------------------------------------------------------------------------
+    * Mes fonctions
+    *--------------------------------------------------------------------------
+    **/
+    public function getPermssion($string){
         $list = [];
         $array = explode("','",$string);
         foreach ($array as $value) 
@@ -45,8 +49,7 @@ class UserController extends Controller
         return $list;
     }
 
-    public function hasPermssion($string)
-    {
+    public function hasPermssion($string){
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         $result = 'no';
@@ -59,8 +62,7 @@ class UserController extends Controller
         return $result;
     }
 
-    public function storePermssion(Request $request)
-    {
+    public function storePermssion(Request $request){
         $permission10 = $request['permission10'];
         $permission11 = $request['permission11'];
         $permission12 = $request['permission12'];
@@ -164,13 +166,56 @@ class UserController extends Controller
         return $permission;
     }
 
+    public function rememberToken(Request $request){
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->has('remember')
+        );
+    }
+
+    /**     
+    *--------------------------------------------------------------------------
+    * editUser
+    *--------------------------------------------------------------------------
+    **/
+    public function editUser($id){
+        $user = User::where('id',Auth::user()->id)->findOrFail($id);
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_edit = $this->getPermssion(Auth::user()->permission);
+        // if(in_array('list9',$permission_edit) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list9') == 'yes')
+        return view('managements.users.edit')->with([
+            "user" => $user,
+            "visibility" => false,
+            "permission" => $permission
+        ]);
+        else
+        return redirect()->back();
+    }
+    /**     
+    *--------------------------------------------------------------------------
+    * findEmail
+    *--------------------------------------------------------------------------
+    **/
+    public function findEmail(Request $request){
+        $user_id = Auth::user()->id;
+        // if(Auth::user()->is_admin == 0)
+        //     $user_id = Auth::user()->user_id;
+        $user=User::where('email',$request->email)->where('user_id',$user_id)->first();
+        $existe = false;
+        if($user || $request->email===Auth::user()->email) $existe = true;
+        return $existe;
+	}
+    /**     
+    *--------------------------------------------------------------------------
+    * Ressources
+    *--------------------------------------------------------------------------
+    **/
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         // $users = User::where('is_admin','!=',2)->orderBy('id','desc')->get();
         $users = User::where([['is_admin','!=',2],['user_id',Auth::user()->id]])->orderBy('id','desc')->get();
         $permission = $this->getPermssion(Auth::user()->permission);
@@ -181,23 +226,12 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function findEmail(Request $request){
-        $user_id = Auth::user()->id;
-        // if(Auth::user()->is_admin == 0)
-        //     $user_id = Auth::user()->user_id;
-        $user=User::where('email',$request->email)->where('user_id',$user_id)->first();
-        $existe = false;
-        if($user || $request->email===Auth::user()->email) $existe = true;
-        return $existe;
-	}
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $permission = $this->getPermssion(Auth::user()->permission);
         // if(in_array('create8',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('create8') == 'yes')
@@ -212,8 +246,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $permission = $this->storePermssion($request);
         $name = $request['name'];
         $email = $request['email'];
@@ -240,22 +273,14 @@ class UserController extends Controller
         $request->session()->flash('status','Utilisateur a été bien enregistré !');
         return redirect()->route('user.index');
     }
-
-    public function rememberToken(Request $request)
-    {
-        return $this->guard()->attempt(
-            $this->credentials($request), $request->has('remember')
-        );
-    }
-
+    
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -265,8 +290,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
@@ -284,21 +308,7 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function editUser($id)
-    {
-        $user = User::where('id',Auth::user()->id)->findOrFail($id);
-        $permission = $this->getPermssion(Auth::user()->permission);
-        $permission_edit = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('list9',$permission_edit) || Auth::user()->is_admin == 2)
-        if($this->hasPermssion('list9') == 'yes')
-        return view('managements.users.edit')->with([
-            "user" => $user,
-            "visibility" => false,
-            "permission" => $permission
-        ]);
-        else
-        return redirect()->back();
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -307,8 +317,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $is_pass = $request['is_pass'];
         $permission = $this->storePermssion($request);
         $visibility = $request['visibility'];
@@ -350,14 +359,14 @@ class UserController extends Controller
             return redirect()->route('app.home');
         }
     }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $msg = "Utilisateur est supprimés avec succès !";
         $user_id = $id;
         $user = User::find($id);

@@ -18,8 +18,12 @@ class FactureController extends Controller
         $this->middleware('statususer');
     }
 
-    public function getPermssion($string)
-    {
+    /** 
+    *--------------------------------------------------------------------------
+    * Mes fonctions
+    *--------------------------------------------------------------------------
+    **/
+    public function getPermssion($string){
         $list = [];
         $array = explode("','",$string);
         foreach ($array as $value) 
@@ -35,8 +39,7 @@ class FactureController extends Controller
         return $list;
     }
 
-    public function hasPermssion($string)
-    {
+    public function hasPermssion($string){
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         $result = 'no';
@@ -47,243 +50,6 @@ class FactureController extends Controller
         )
         $result = 'yes';
         return $result;
-    }
-
-    public function index()
-    {
-        $permission = $this->getPermssion(Auth::user()->permission);
-        // $factures = Facture::orderBy('id','desc')->where('total_TTC','>=','120')->get();
-        // return $factures;
-        // $factures = Facture::orderBy('id','desc')->paginate(3);
-        $user_id = Auth::user()->id;
-        if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-        $factures = Facture::with(['commande' => function ($query) {
-            $query->with('client')->get();
-        }])
-        ->where('user_id',$user_id)
-        ->orderBy('id','desc')->get();
-        // return view('managements.factures.index', compact('factures'));
-        // if(in_array('list6',$permission) || Auth::user()->is_admin == 2)
-        if($this->hasPermssion('list6') == 'yes')
-        return view('managements.factures.index', compact(['factures','permission']));
-        else
-        return view('application');
-    }
-
-    
-    public function create()
-    {
-        //
-    }
-
-    
-    public function store(Request $request)
-    {
-        //
-    }
-
-    
-    public function edit(Facture $facture)
-    {
-        $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
-        $lignecommandes =  Lignecommande::with('produit')->where('commande_id', '=', $commande->id)->get();
-        
-        $prix_HT = 0;
-        foreach($lignecommandes as $q){
-        //    dd($q);
-           $prix_HT = $prix_HT +  ($q->produit->prix_produit_HT * $q->quantite);
-        }
-
-    
-        $TVA = 0;
-        foreach($lignecommandes as $q){
-           $TVA = $TVA +  ($q->produit->prix_produit_HT * $q->quantite * $q->produit->TVA) ;
-        }
-
-        $priceTotal = 0;
-        foreach($lignecommandes as $p){
-            $priceTotal = floatval($priceTotal  + $p->total_produit) ;
-            $p->nom_produit = $p->produit->nom_produit;
-        }
-
-        return view('managements.factures.edit')->with([
-            "facture" => $facture,
-            'lignecommandes' =>  $lignecommandes,
-            'priceTotal'  => $priceTotal,
-            'prix_HT' => $prix_HT,
-            'TVA' => $TVA,
-            'commande' => $commande
-        ]);
-    }
-    
-    public function update(Request $request, Facture $facture)
-    {
-        $user_id = Auth::user()->id;
-        $facture->total_HT = $request->input('total_HT');
-        $facture->total_TVA = $request->input('total_TVA');
-        $facture->total_TTC = $request->input('total_TTC');
-        $facture->commande_id = $request->input('commande_id');
-        // $facture->clients_id = $request->input('client_id');
-        $facture->reglement = $request->input('reglement');
-        $facture->user_id = $user_id;
-        // dd($facture);
-        $facture->save();
-
-
-        return redirect()->route('reglement.index')->with([
-            "status" => "la facture a été bien modifier !! veuillez modifier le reglement de la commande N°" .$facture->commande_id
-        ]); 
-    }
-
-    
-    public function destroy(Facture $facture){
-        $facture->commande->facture = 'nf';
-        $facture->commande->save();
-        $facture->delete();
-        return redirect()->route('facture.index')->with(["status" => "La facture a été supprimée avec succès !"]) ; 
-    }
-
-    public function search(Request $request){
-        $q = $request->input('q');
-        $factures =  Facture::where('code', '=', $q)
-            ->orWhere('commande_id', '=', $q)
-            ->get();
-        return view('managements.factures.search')->with('factures', $factures);  
-    }
-
-    public function searchFacture(Request $request){
-        $search = $request->search;
-        // $factures = Facture::with(['commande' => function ($query) {
-        //     $query->with('client')->get();
-        // }])->where('code','like',"%$search%")
-        //     ->orWhere('date','like',"%$search%")
-        //     ->orWhere('total_HT','like',"%$search%")
-        //     ->orWhere('total_TVA','like',"%$search%")
-        //     ->orWhere('total_TTC','like',"%$search%")
-        //     // ->orWhereHas('commande',function($query) use($search){
-        //     //     $query->where('code','like',"%$search%");
-        //     // })
-        //     // ->orWhereHas('commande',function($query) use($search){
-        //     //     $query->WhereHas('client',function($query) use($search){
-        //     //         $query->where('nom_client','like',"%$search%");
-        //     //     });
-        //     // })
-        //     ->orWhereHas('commande',function($query) use($search){
-        //         $query->where('code','like',"%$search%")
-        //             ->orWhereHas('client',function($query) use($search){
-        //             $query->where('nom_client','like',"%$search%");
-        //         });
-        //     })
-        //     ->orderBy('id','desc')
-        //     ->get();
-        $user_id = Auth::user()->id;
-        if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-        $factures = Facture::with(['commande' => function ($query) {
-                $query->with('client')->get();
-            }])
-            ->where([
-                [function ($query) use ($search) {
-                    $query->where('code','like',"%$search%")
-                    ->orWhere('date','like',"%$search%")
-                        ->orWhere('total_HT','like',"%$search%")
-                        ->orWhere('total_TVA','like',"%$search%")
-                        ->orWhere('total_TTC','like',"%$search%");
-                }],
-                ['user_id',$user_id]
-            ])
-            ->orWhereHas('commande',function($query) use($search,$user_id){
-                $query->where([['code','like',"%$search%"],['user_id',$user_id]])
-                    ->orWhereHas('client',function($query) use($search,$user_id){
-                    $query->where([['nom_client','like',"%$search%"],['user_id',$user_id]]);
-                });
-            })
-            ->orderBy('id','desc')
-            ->get();
-        return $factures; 
-    }
-
-    public function show_remove(Request $request, Facture $facture){
-        $facture = $facture;
-        // $lastOne = DB::table('commandes')->latest('id')->first();
-        $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
-        //dd($commande);
-        // $lignecommandes = lignecommande::orderBy('id');
-        $lignecommandes =  Lignecommande::with('produit')->where('commande_id', '=', $commande->id)->get();
-        //  dd($lignecommandes);
-        $prix_HT = 0;
-        foreach($lignecommandes as $q){
-           $prix_HT = $prix_HT +  ($q->produit->prix_produit_HT * $q->quantite);
-        }
-
-    
-        $TVA = 0;
-        foreach($lignecommandes as $q){
-           $TVA = $TVA +  ($q->produit->prix_produit_HT * $q->quantite * $q->produit->TVA) ;
-        }
-
-        $priceTotal = 0;
-        foreach($lignecommandes as $p){
-            $priceTotal = floatval($priceTotal  + $p->total_produit) ;
-        }
-
-
-
-        return view('managements.factures.show_remove', [
-            'lignecommandes' =>  $lignecommandes,
-            'priceTotal'  => $priceTotal,
-            'prix_HT' => $prix_HT,
-            'TVA' => $TVA,
-            'commande' => $commande,
-            'facture' => $facture
-        ]);
-    }
-
-    public function show(Request $request, Facture $facture){
-        $permission = $this->getPermssion(Auth::user()->permission);
-        // $companies = Company::get();
-        $user_id = Auth::user()->id;
-        if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-        $companies = Company::where('user_id',$user_id)->get();
-        $count = count($companies);
-        // ($count>0)  ? $company = Company::first(): $company = null;
-        ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
-        $adresse = $this->getAdresse($company);
-        // $facture = $facture;
-        $facture = Facture::where('user_id',$user_id)->findOrFail($facture->id);
-        $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
-        $lignecommandes =  Lignecommande::with('produit')->where('commande_id', '=', $commande->id)->get();
-        $prix_HT = 0;
-        foreach($lignecommandes as $q){
-           $prix_HT = $prix_HT +  ($q->produit->prix_produit_HT * $q->quantite);
-        }
-        $TVA = 0;
-        foreach($lignecommandes as $q){
-           $TVA = $TVA +  ($q->produit->prix_produit_HT * $q->quantite * $q->produit->TVA) ;
-        }
-        $priceTotal = 0;
-        foreach($lignecommandes as $p){
-            $priceTotal = floatval($priceTotal  + $p->total_produit) ;
-        }
-        $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
-        if($this->hasPermssion('show6') == 'yes')
-        return view('managements.factures.show', [
-            'lignecommandes' =>  $lignecommandes,
-            'priceTotal'  => $priceTotal,
-            'prix_HT' => $prix_HT,
-            'TVA' => $TVA,
-            'commande' => $commande,
-            'facture' => $facture,
-            'company' => $company,
-            'count' => $count,
-            'adresse' => $adresse,
-            'permission' => $permission
-        ]);
-        else
-        return redirect()->back();
     }
 
     public function getAdresse($company){
@@ -348,6 +114,249 @@ class FactureController extends Controller
             $adresse .= $adresse5.'<br>';
         return $adresse;
     }
+    /** 
+    *--------------------------------------------------------------------------
+    * searchFacture
+    *--------------------------------------------------------------------------
+    **/
+    public function searchFacture(Request $request){
+        $search = $request->search;
+        // $factures = Facture::with(['commande' => function ($query) {
+        //     $query->with('client')->get();
+        // }])->where('code','like',"%$search%")
+        //     ->orWhere('date','like',"%$search%")
+        //     ->orWhere('total_HT','like',"%$search%")
+        //     ->orWhere('total_TVA','like',"%$search%")
+        //     ->orWhere('total_TTC','like',"%$search%")
+        //     // ->orWhereHas('commande',function($query) use($search){
+        //     //     $query->where('code','like',"%$search%");
+        //     // })
+        //     // ->orWhereHas('commande',function($query) use($search){
+        //     //     $query->WhereHas('client',function($query) use($search){
+        //     //         $query->where('nom_client','like',"%$search%");
+        //     //     });
+        //     // })
+        //     ->orWhereHas('commande',function($query) use($search){
+        //         $query->where('code','like',"%$search%")
+        //             ->orWhereHas('client',function($query) use($search){
+        //             $query->where('nom_client','like',"%$search%");
+        //         });
+        //     })
+        //     ->orderBy('id','desc')
+        //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $factures = Facture::with(['commande' => function ($query) {
+                $query->with('client')->get();
+            }])
+            ->where([
+                [function ($query) use ($search) {
+                    $query->where('code','like',"%$search%")
+                    ->orWhere('date','like',"%$search%")
+                        ->orWhere('total_HT','like',"%$search%")
+                        ->orWhere('total_TVA','like',"%$search%")
+                        ->orWhere('total_TTC','like',"%$search%");
+                }],
+                ['user_id',$user_id]
+            ])
+            ->orWhereHas('commande',function($query) use($search,$user_id){
+                $query->where([['code','like',"%$search%"],['user_id',$user_id]])
+                    ->orWhereHas('client',function($query) use($search,$user_id){
+                    $query->where([['nom_client','like',"%$search%"],['user_id',$user_id]]);
+                });
+            })
+            ->orderBy('id','desc')
+            ->get();
+        return $factures; 
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * search
+    *--------------------------------------------------------------------------
+    **/
+    public function search(Request $request){
+        $q = $request->input('q');
+        $factures =  Facture::where('code', '=', $q)
+            ->orWhere('commande_id', '=', $q)
+            ->get();
+        return view('managements.factures.search')->with('factures', $factures);  
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * Ressources
+    *--------------------------------------------------------------------------
+    **/
+    public function index(){
+        $permission = $this->getPermssion(Auth::user()->permission);
+        // $factures = Facture::orderBy('id','desc')->where('total_TTC','>=','120')->get();
+        // return $factures;
+        // $factures = Facture::orderBy('id','desc')->paginate(3);
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $factures = Facture::with(['commande' => function ($query) {
+            $query->with('client')->get();
+        }])
+        ->where('user_id',$user_id)
+        ->orderBy('id','desc')->get();
+        // return view('managements.factures.index', compact('factures'));
+        // if(in_array('list6',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('list6') == 'yes')
+        return view('managements.factures.index', compact(['factures','permission']));
+        else
+        return view('application');
+    }
 
+    public function create(){
+        //
+    }
+
+    public function store(Request $request){
+        //
+    }
+    
+    public function show(Request $request, Facture $facture){
+        $permission = $this->getPermssion(Auth::user()->permission);
+        // $companies = Company::get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $companies = Company::where('user_id',$user_id)->get();
+        $count = count($companies);
+        // ($count>0)  ? $company = Company::first(): $company = null;
+        ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
+        $adresse = $this->getAdresse($company);
+        // $facture = $facture;
+        $facture = Facture::where('user_id',$user_id)->findOrFail($facture->id);
+        $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
+        $lignecommandes =  Lignecommande::with('produit')->where('commande_id', '=', $commande->id)->get();
+        $prix_HT = 0;
+        foreach($lignecommandes as $q){
+           $prix_HT = $prix_HT +  ($q->produit->prix_produit_HT * $q->quantite);
+        }
+        $TVA = 0;
+        foreach($lignecommandes as $q){
+           $TVA = $TVA +  ($q->produit->prix_produit_HT * $q->quantite * $q->produit->TVA) ;
+        }
+        $priceTotal = 0;
+        foreach($lignecommandes as $p){
+            $priceTotal = floatval($priceTotal  + $p->total_produit) ;
+        }
+        $permission = $this->getPermssion(Auth::user()->permission);
+        // if(in_array('show6',$permission) || Auth::user()->is_admin == 2)
+        if($this->hasPermssion('show6') == 'yes')
+        return view('managements.factures.show', [
+            'lignecommandes' =>  $lignecommandes,
+            'priceTotal'  => $priceTotal,
+            'prix_HT' => $prix_HT,
+            'TVA' => $TVA,
+            'commande' => $commande,
+            'facture' => $facture,
+            'company' => $company,
+            'count' => $count,
+            'adresse' => $adresse,
+            'permission' => $permission
+        ]);
+        else
+        return redirect()->back();
+    }
+
+    public function edit(Facture $facture){
+        $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
+        $lignecommandes =  Lignecommande::with('produit')->where('commande_id', '=', $commande->id)->get();
+        
+        $prix_HT = 0;
+        foreach($lignecommandes as $q){
+        //    dd($q);
+           $prix_HT = $prix_HT +  ($q->produit->prix_produit_HT * $q->quantite);
+        }
+
+    
+        $TVA = 0;
+        foreach($lignecommandes as $q){
+           $TVA = $TVA +  ($q->produit->prix_produit_HT * $q->quantite * $q->produit->TVA) ;
+        }
+
+        $priceTotal = 0;
+        foreach($lignecommandes as $p){
+            $priceTotal = floatval($priceTotal  + $p->total_produit) ;
+            $p->nom_produit = $p->produit->nom_produit;
+        }
+
+        return view('managements.factures.edit')->with([
+            "facture" => $facture,
+            'lignecommandes' =>  $lignecommandes,
+            'priceTotal'  => $priceTotal,
+            'prix_HT' => $prix_HT,
+            'TVA' => $TVA,
+            'commande' => $commande
+        ]);
+    }
+    
+    public function update(Request $request, Facture $facture){
+        $user_id = Auth::user()->id;
+        $facture->total_HT = $request->input('total_HT');
+        $facture->total_TVA = $request->input('total_TVA');
+        $facture->total_TTC = $request->input('total_TTC');
+        $facture->commande_id = $request->input('commande_id');
+        // $facture->clients_id = $request->input('client_id');
+        $facture->reglement = $request->input('reglement');
+        $facture->user_id = $user_id;
+        // dd($facture);
+        $facture->save();
+
+
+        return redirect()->route('reglement.index')->with([
+            "status" => "la facture a été bien modifier !! veuillez modifier le reglement de la commande N°" .$facture->commande_id
+        ]); 
+    }
+    
+    public function destroy(Facture $facture){
+        $facture->commande->facture = 'nf';
+        $facture->commande->save();
+        $facture->delete();
+        return redirect()->route('facture.index')->with(["status" => "La facture a été supprimée avec succès !"]) ; 
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * Autres fonctions
+    *--------------------------------------------------------------------------
+    **/ 
+    public function show_remove(Request $request, Facture $facture){
+        $facture = $facture;
+        // $lastOne = DB::table('commandes')->latest('id')->first();
+        $commande = Commande::with('client')->where('id', "=", $facture->commande_id)->first();
+        //dd($commande);
+        // $lignecommandes = lignecommande::orderBy('id');
+        $lignecommandes =  Lignecommande::with('produit')->where('commande_id', '=', $commande->id)->get();
+        //  dd($lignecommandes);
+        $prix_HT = 0;
+        foreach($lignecommandes as $q){
+           $prix_HT = $prix_HT +  ($q->produit->prix_produit_HT * $q->quantite);
+        }
+
+    
+        $TVA = 0;
+        foreach($lignecommandes as $q){
+           $TVA = $TVA +  ($q->produit->prix_produit_HT * $q->quantite * $q->produit->TVA) ;
+        }
+
+        $priceTotal = 0;
+        foreach($lignecommandes as $p){
+            $priceTotal = floatval($priceTotal  + $p->total_produit) ;
+        }
+
+
+
+        return view('managements.factures.show_remove', [
+            'lignecommandes' =>  $lignecommandes,
+            'priceTotal'  => $priceTotal,
+            'prix_HT' => $prix_HT,
+            'TVA' => $TVA,
+            'commande' => $commande,
+            'facture' => $facture
+        ]);
+    }
 // ----------------------------------------------
 }

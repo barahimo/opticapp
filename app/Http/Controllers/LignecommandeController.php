@@ -13,20 +13,22 @@ use Illuminate\Support\Facades\DB;
 
 class LignecommandeController extends Controller
 {
+    /** 
+    *--------------------------------------------------------------------------
+    * Ressources
+    *--------------------------------------------------------------------------
+    **/
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-     public function index() 
-    {
-       $lignecommandes = lignecommande::orderBy('id', 'desc')->paginate(3);
-       return view('managements.lignecommande.index', compact('lignecommandes'));
+    public function index() {
+        $lignecommandes = lignecommande::orderBy('id', 'desc')->paginate(3);
+        return view('managements.lignecommande.index', compact('lignecommandes'));
     }
 
-   
-    public function create(Request $request, Commande $commande)
-    {
+    public function create(Request $request, Commande $commande){
 
         $lastOne = DB::table('commandes')->latest('id')->first();
 
@@ -37,7 +39,7 @@ class LignecommandeController extends Controller
         
         $lignecommandes = lignecommande::orderBy('id')->paginate(3);
         $lignecommandes =  Lignecommande::where('commande_id', '=', $lastOne->id)
-         ->paginate(100);
+            ->paginate(100);
         
         $priceTotal = 0;
         foreach($lignecommandes as $p){
@@ -64,8 +66,7 @@ class LignecommandeController extends Controller
        
     }
     // public function ajoute(Request $request, Commande $commande){
-        public function ajoute(Request $request,$id){
-
+    public function ajoute(Request $request,$id){
         // $lastOne = DB::table('commandes')->latest('id')->first();
 
 
@@ -101,91 +102,50 @@ class LignecommandeController extends Controller
 
 
     }
-
     
-    public function store(Request $request)
-
-      {  
-        
-
+    public function store(Request $request){     
         $lignecommande = new Lignecommande();
         $lignecommande->commande_id = $request->input('commande_id');
         $lignecommande->produit_id = $request->input('nom_produit');
         // $lignecommande->nom_produit = $request->input('nom_produit');
         $lignecommande->quantite = $request->input('quantite');
         $lignecommande->total_produit = $request->input('yarbi');
-        
-       
     
         $lignecommande->save();
-        
 
         $request->session()->flash('status','le client a été bien modifié !');
-
-
         return redirect()->route('lignecommande.index');
+    }
 
+    public function createProduit(){
+        return view('managements.lignecommande.createProduit',[
+            'commandes' => Commande::all(),
+            'produits' => Produit::all()
+        ]);
+    }
 
-    
-      }
-
-      public function createProduit()
-      {
-          return view('managements.lignecommande.createProduit',[
-              'commandes' => Commande::all(),
-              'produits' => Produit::all()
-          ]);
-      }
-
-     
-  
-      
-      public function storeProduit(Request $request)
-  
-        {  
-         
-  
-          $lignecommande = new Lignecommande();
-          $lignecommande->commande_id = $request->input('commande_id');
-          $lignecommande->produit_id = $request->input('nom_produit');
+    public function storeProduit(Request $request){  
+        $lignecommande = new Lignecommande();
+        $lignecommande->commande_id = $request->input('commande_id');
+        $lignecommande->produit_id = $request->input('nom_produit');
         //   $lignecommande->nom_produit = $request->input('nom_produit');
-          $lignecommande->quantite = $request->input('quantite');
-          
-  
+        $lignecommande->quantite = $request->input('quantite');
         //   $Produitligne = Produit::where('id','=', $lignecommande->produit_id)->get();
         //   foreach($Produitligne as $var)
         //   {   
         //       $name = $var->nom_produit;
         //   } 
-     
         //   $lignecommande->nom_produit = $name;
-        
-         
-      
-          $lignecommande->save();
-          
-  
+        $lignecommande->save();
         //   $request->session()->flash('status','le client a été bien modifié !');
-  
-  
         $lgcommande = Commande::all();
-
-          return redirect()->route('commande.index');
-  
-
-        }
-
+        return redirect()->route('commande.index');
+    }
     
-
-    
-    public function show(Lignecommande $lignecommande)
-    {
-        
-
+    public function show(Lignecommande $lignecommande){
         $Produitligne = Produit::where('id','=', $lignecommande->produit_id)->get();
         foreach($Produitligne as $var)
         {   
-   
             // $name = $var->nom_produit;
             $tva =  $var->TVA;
             $pu = $var->prix_produit_HT;
@@ -199,56 +159,35 @@ class LignecommandeController extends Controller
             "nom" => $name
         ]);
     }
-
     
-    public function edit(Lignecommande $lignecommande)
-    {
+    public function edit(Lignecommande $lignecommande){
         return view('managements.lignecommande.edit')->with([
-           "lignecommande" => $lignecommande,
-           'produits' => Produit::all(),
-           'commandes' => Commande::all()
-         ]);
+            "lignecommande" => $lignecommande,
+            'produits' => Produit::all(),
+            'commandes' => Commande::all()
+        ]);
     }
-
     
-    public function update(Request $request, Lignecommande $lignecommande)
-    {
-
+    public function update(Request $request, Lignecommande $lignecommande){
         $lignecommande->commande_id = $request->input('commande_id');
         $lignecommande->produit_id = $request->input('nom_produit');
         // $lignecommande->nom_produit = $request->input('nom_produit');
         $lignecommande->quantite = $request->input('quantite');
-       
-
         // $Produitligne = Produit::where('id','=', $lignecommande->produit_id)->get();
         // foreach($Produitligne as $var)
         // {   
-   
         //     $name = $var->nom_produit;
 
         // } 
-   
         // $lignecommande->nom_produit = $name;
-      
-       
-    
         $lignecommande->save();
-
         $request->session()->flash('status','le client a été bien modifié !');
-
-
         return redirect()->route('lignecommande.index');
-
     }
-
     
-    public function destroy(Lignecommande $lignecommande)
-    {
+    public function destroy(Lignecommande $lignecommande){
         $lignecommande->delete();
-
         // Post::destroy($id); supression directement
-
-        
         return redirect()->route('facture.index')->with([
             "status" => "la ligne de commande a été bien supprimer ! veuillez valider les modifications dans  la facture!!"
         ]); 
@@ -256,16 +195,12 @@ class LignecommandeController extends Controller
 
     public function search(Request $request){
         $q = $request->input('q');
+        $lignecommandes =  Lignecommande::where('commande_id', '=', $q)
+            ->paginate(5);
+        return view('managements.lignecommande.search')->with('lignecommandes', $lignecommandes);  
+    }
 
-     $lignecommandes =  Lignecommande::where('commande_id', '=', $q)
-         ->paginate(5);
-
-         return view('managements.lignecommande.search')->with('lignecommandes', $lignecommandes);  
-      
-      }
-
-    public function affecte( Lignecommande $lignecommande, Request $request)
-    {
+    public function affecte( Lignecommande $lignecommande, Request $request){
         // $lignecommande->id =  $request->input('lignecommande_id');
         $lignecommande->commande_id = $request->input('commande_id');
         $lignecommande->produit_id = $request->input('produit_id');
@@ -282,6 +217,4 @@ class LignecommandeController extends Controller
 
 
     }
-
-     
 }

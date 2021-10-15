@@ -15,8 +15,12 @@ class CompanyController extends Controller
         $this->middleware('statususer');
     }
 
-    public function getPermssion($string)
-    {
+    /**     
+    *--------------------------------------------------------------------------
+    * Mes fonctions
+    *--------------------------------------------------------------------------
+    **/
+    public function getPermssion($string){
         $list = [];
         $array = explode("','",$string);
         foreach ($array as $value) 
@@ -32,8 +36,7 @@ class CompanyController extends Controller
         return $list;
     }
 
-    public function hasPermssion($string)
-    {
+    public function hasPermssion($string){
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         $result = 'no';
@@ -45,6 +48,71 @@ class CompanyController extends Controller
         $result = 'yes';
         return $result;
     }
+
+    public function form(Request $request,$company,$path){
+        $company->logo = $path;
+        $company->nom = $request->nom;
+        $company->adresse = $request->adresse;
+        $company->code_postal = $request->code_postal;
+        $company->ville = $request->ville;
+        $company->pays = $request->pays;
+        $company->tel = $request->tel;
+        $company->site = $request->site;
+        $company->email = $request->email;
+        $company->note = $request->note;
+        $company->iff = $request->iff;
+        $company->ice = $request->ice;
+        $company->capital = $request->capital;
+        $company->rc = $request->rc;
+        $company->patente = $request->patente;
+        $company->cnss = $request->cnss;
+        $company->banque = $request->banque;
+        $company->rib = $request->rib;
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $company->user_id = $user_id;
+    }
+    
+    public function imageStore(Request $request){
+        $hasFile = $request->hasFile('logo');
+        $file = $request->file('logo');
+        if ($hasFile)
+            // $path = $file->store('company');
+            $path = Storage::disk('public')->putFile('company',$file);
+        else
+            $path = null;
+        return $path;
+    }
+
+    public function imageUpdate(Request $request, $company){
+        $hasFile = $request->hasFile('logo');
+        $file = $request->file('logo');
+        if ($hasFile) {
+            // $path = $file->store('company');//--env('FILESYSTEM_DRIVER', 'local')--//
+            $path = Storage::disk('public')->putFile('company',$file);
+            Storage::delete($company->logo);
+        } else
+            $path = $company->logo;
+        return $path;
+    }
+    /**     
+    *--------------------------------------------------------------------------
+    * saveImage
+    *--------------------------------------------------------------------------
+    **/
+    public function saveImage(Request $request){
+        $hasFile = $request->hasFile('image');
+        $file = $request->file('image');
+        ($hasFile) ? $path = Storage::disk('public')->putFile('test',$file): $path = null;
+        return $path;
+    }
+    /**     
+    *--------------------------------------------------------------------------
+    * Ressources
+    *--------------------------------------------------------------------------
+    **/
+    
     
     /**
      * Display a listing of the resource.
@@ -52,8 +120,7 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         // $companies = Company::get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
@@ -89,44 +156,10 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         // $route = route('company.store');
         // $view = 'create';
         // return view('parametres.form',compact('route','view'));
-    }
-
-    /**
-     * form storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-    public function form(Request $request,$company,$path)
-    {
-        $company->logo = $path;
-        $company->nom = $request->nom;
-        $company->adresse = $request->adresse;
-        $company->code_postal = $request->code_postal;
-        $company->ville = $request->ville;
-        $company->pays = $request->pays;
-        $company->tel = $request->tel;
-        $company->site = $request->site;
-        $company->email = $request->email;
-        $company->note = $request->note;
-        $company->iff = $request->iff;
-        $company->ice = $request->ice;
-        $company->capital = $request->capital;
-        $company->rc = $request->rc;
-        $company->patente = $request->patente;
-        $company->cnss = $request->cnss;
-        $company->banque = $request->banque;
-        $company->rib = $request->rib;
-        $user_id = Auth::user()->id;
-        if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-        $company->user_id = $user_id;
     }
 
     /**
@@ -135,8 +168,7 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $company = new Company();
         $path = $this->imageStore($request);
         $this->form($request,$company,$path);
@@ -151,8 +183,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -162,8 +193,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         // $company = Company::first();
         // $route = route('company.update',['company'=>$company->id]);
         // $view = 'edit';
@@ -177,8 +207,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         // $company = Company::first();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
@@ -197,53 +226,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         //
-    }
-
-    /**
-     * store the specified image.
-        *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function imageStore(Request $request)
-    {
-        $hasFile = $request->hasFile('logo');
-        $file = $request->file('logo');
-        if ($hasFile)
-            // $path = $file->store('company');
-            $path = Storage::disk('public')->putFile('company',$file);
-        else
-            $path = null;
-        return $path;
-    }
-
-    /**
-     * update the specified image.
-        *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function imageUpdate(Request $request, $company)
-    {
-        $hasFile = $request->hasFile('logo');
-        $file = $request->file('logo');
-        if ($hasFile) {
-            // $path = $file->store('company');//--env('FILESYSTEM_DRIVER', 'local')--//
-            $path = Storage::disk('public')->putFile('company',$file);
-            Storage::delete($company->logo);
-        } else
-            $path = $company->logo;
-        return $path;
-    }
-    
-    public function saveImage(Request $request)
-    {
-        $hasFile = $request->hasFile('image');
-        $file = $request->file('image');
-        ($hasFile) ? $path = Storage::disk('public')->putFile('test',$file): $path = null;
-        return $path;
-    }
+    }  
 }

@@ -1,5 +1,8 @@
 @extends('layout.dashboard')
 @section('contenu')
+<?php
+    use function App\Providers\hasPermssion;
+?>
 <!-- #########################################################" -->
 {{ Html::style(asset('css/reglementstyle.css')) }}
 {{-- ################## --}}
@@ -22,7 +25,8 @@
                 </div>
                 <br>
                 <div class="col-6 text-center">
-                    @if(in_array('print5',$permission))
+                    {{-- @if(in_array('print5',$permission) || Auth::user()->is_admin == 2) --}}
+                    @if(hasPermssion('print5') == 'yes') 
                     <button onclick="onprint()" class="btn btn-outline-primary"><i class="fa fa-print"></i></button>
                     @endif
                 </div>

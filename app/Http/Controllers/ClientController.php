@@ -18,8 +18,12 @@ class ClientController extends Controller
         $this->middleware('statususer');
     }
 
-    public function getPermssion($string)
-    {
+    /** 
+    *--------------------------------------------------------------------------
+    * Mes fonctions
+    *--------------------------------------------------------------------------
+    **/
+    public function getPermssion($string){
         $list = [];
         $array = explode("','",$string);
         foreach ($array as $value) 
@@ -35,8 +39,7 @@ class ClientController extends Controller
         return $list;
     }
 
-    public function hasPermssion($string)
-    {
+    public function hasPermssion($string){
         $permission = $this->getPermssion(Auth::user()->permission);
         $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         $result = 'no';
@@ -48,9 +51,56 @@ class ClientController extends Controller
         $result = 'yes';
         return $result;
     }
-
-    public function index(Request $request)
-    {
+    /** 
+    *--------------------------------------------------------------------------
+    * searchClient
+    *--------------------------------------------------------------------------
+    **/
+    public function searchClient(Request $request){
+        $search = $request->search;
+        // $clients = Client::where('nom_client','like',"%$search%")
+        //     ->orWhere('user_id',Auth::user()->id)
+        //     ->orWhere('code','like',"%$search%")
+        //     ->orWhere('adresse','like',"%$search%")
+        //     ->orWhere('solde','like',"%$search%")
+        //     ->orWhere('telephone','like',"%$search%")
+        //     ->orderBy('id','desc')
+        //     ->get();
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+            $user_id = Auth::user()->user_id;
+        $clients = Client::where([
+            [function ($query) use ($search) {
+                    $query->where('nom_client','like',"%$search%")
+                    ->orWhere('code','like',"%$search%")
+                    ->orWhere('adresse','like',"%$search%")
+                    ->orWhere('solde','like',"%$search%")
+                    ->orWhere('telephone','like',"%$search%");
+            }],
+            ['user_id',$user_id]
+        ])
+        ->orderBy('id','desc')
+        ->get();
+        return $clients;
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * search
+    *--------------------------------------------------------------------------
+    **/
+    public function search(Request $request){
+        $q = $request->input('q');
+        $clients =  Client::where('nom_client', 'like', "%$q%")
+            ->orWhere('code', 'like', "%$q%")
+            ->paginate(5);
+            return view('managements.clients.search')->with('clients', $clients);  
+    }
+    /** 
+    *--------------------------------------------------------------------------
+    * Ressources
+    *--------------------------------------------------------------------------
+    **/
+    public function index(Request $request){
         $permission = $this->getPermssion(Auth::user()->permission);
         // return in_array('create',$permission);
         // return $permission;
@@ -90,8 +140,7 @@ class ClientController extends Controller
         // }
     }
 
-    public function create()
-    {
+    public function create(){
         $permission = $this->getPermssion(Auth::user()->permission);
         // if(in_array('create1',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('create1') == 'yes')
@@ -99,10 +148,8 @@ class ClientController extends Controller
         else
         return redirect()->back();
     }
-
     
-    public function store(Request $request)
-    {  
+    public function store(Request $request){  
         // $validateData = $request->validate([
         //     'nom_client' => 'required',
         //     'telephone' => 'required',
@@ -134,18 +181,8 @@ class ClientController extends Controller
         $request->session()->flash('status','Le client a été bien enregistré !');
         return redirect()->route('client.index');
     }
-
-    public function search(Request $request){
-        $q = $request->input('q');
-        $clients =  Client::where('nom_client', 'like', "%$q%")
-            ->orWhere('code', 'like', "%$q%")
-            ->paginate(5);
-            return view('managements.clients.search')->with('clients', $clients);  
-    }
-
     
-    public function show(Client $client)
-    {
+    public function show(Client $client){
         // $commandes = Commande::where('client_id', '=', $client->id)->paginate(2);
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
@@ -173,10 +210,8 @@ class ClientController extends Controller
         else
         return redirect()->back();
     }
-
     
-    public function edit(Client $client)
-    {
+    public function edit(Client $client){
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
@@ -191,10 +226,8 @@ class ClientController extends Controller
         else
         return redirect()->back();
     }
-
     
-    public function update(Request $request, Client $client)
-    {
+    public function update(Request $request, Client $client){
         // $this->validate($request, [
 
         //     'code' => 'required|min:4|max:100',     
@@ -222,10 +255,8 @@ class ClientController extends Controller
         // return redirect()->route('client.index')->with('status','le client a été bien modifié !');
 
     }
-
     
-    public function destroy(Client $client)
-    {
+    public function destroy(Client $client){
         $commandes = Commande::where('client_id','=',$client->id)->get();
         if($commandes->count() != 0){
             // foreach ($commandes as $commande) {
@@ -242,35 +273,6 @@ class ClientController extends Controller
         //     "status" => "le client, ses commandes et reglements  ont été supprimer avec succès!"
         // ]); 
         return redirect()->route('client.index')->with(["status" => $msg]); 
-    }
-
-    public function searchClient(Request $request)
-    {
-        $search = $request->search;
-        // $clients = Client::where('nom_client','like',"%$search%")
-        //     ->orWhere('user_id',Auth::user()->id)
-        //     ->orWhere('code','like',"%$search%")
-        //     ->orWhere('adresse','like',"%$search%")
-        //     ->orWhere('solde','like',"%$search%")
-        //     ->orWhere('telephone','like',"%$search%")
-        //     ->orderBy('id','desc')
-        //     ->get();
-        $user_id = Auth::user()->id;
-        if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-        $clients = Client::where([
-            [function ($query) use ($search) {
-                    $query->where('nom_client','like',"%$search%")
-                    ->orWhere('code','like',"%$search%")
-                    ->orWhere('adresse','like',"%$search%")
-                    ->orWhere('solde','like',"%$search%")
-                    ->orWhere('telephone','like',"%$search%");
-            }],
-            ['user_id',$user_id]
-        ])
-        ->orderBy('id','desc')
-        ->get();
-        return $clients;
     }
     // ---------------------
 }
