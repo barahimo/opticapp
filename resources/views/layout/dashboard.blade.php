@@ -117,30 +117,17 @@
                 {{-- <div class="pull-left user-img"><img src="{{$logo}}" class="img-responsive img-circle" alt="User"></div> --}}
                 <p class="text-left">{{ Auth::user()->email }} <small>{{ Auth::user()->name }}</small> </p>
               </li>
-              {{-- @if(in_array('list9',$permission) || Auth::user()->is_admin == 2) --}}
               @if(hasPermssion('list9') == 'yes') 
               <li><a href="{{ route('user.editUser',Auth::user()->id) }}"><i class="icon-user"></i> Gestion de compte</a></li>
               @endif
               @if(Auth::user()->is_admin != 0)
-              {{-- @if(in_array('list8',$permission) || Auth::user()->is_admin == 2) --}}
               @if(hasPermssion('list8') == 'yes') 
               <li><a href="{{ route('user.index') }}"><i class="icon-people"></i> Gestion des utilisateurs</a></li>
               @endif
               @endif
-              {{-- @if(in_array('create9',$permission) || in_array('edit9',$permission) || Auth::user()->is_admin == 2) --}}
               @if(hasPermssion('create9') == 'yes' || hasPermssion('edit9') == 'true') 
               <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
               @endif
-
-              {{-- @if($view == "create")
-              @if(in_array('create9',$permission) || Auth::user()->is_admin == 2)
-              <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
-              @endif
-              @elseif($view == "edit")
-              @if(in_array('edit9',$permission) || Auth::user()->is_admin == 2)
-              <li><a href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a></li>
-              @endif
-              @endif --}}
 
               <li role="separator" class="divider"></li>
               <li>
@@ -181,7 +168,6 @@
           </a>
         </li>
         <li class=""> 
-          {{-- @if(in_array('list1',$permission) || Auth::user()->is_admin == 2) --}}
           @if(hasPermssion('list1') == 'yes') 
           <a href="{{route('client.index')}}">
           @else
@@ -192,7 +178,6 @@
         </a>
         </li>
         <li class=""> 
-          {{-- @if(in_array('list2',$permission) || Auth::user()->is_admin == 2) --}}
           @if(hasPermssion('list2') == 'yes') 
           <a href="{{route('categorie.index')}}">
           @else
@@ -203,7 +188,6 @@
           </a>
         </li>
         <li class=""> 
-          {{-- @if(in_array('list3',$permission) || Auth::user()->is_admin == 2) --}}
           @if(hasPermssion('list3') == 'yes') 
           <a href="{{route('produit.index')}}">
           @else
@@ -214,7 +198,6 @@
           </a>
         </li>
         <li class=""> 
-          {{-- @if(in_array('list4',$permission) || Auth::user()->is_admin == 2) --}}
           @if(hasPermssion('list4') == 'yes') 
           <a href="{{route('commande.index')}}">
           @else
@@ -225,7 +208,6 @@
           </a>
         </li>
         <li class=""> 
-          {{-- @if(in_array('list6',$permission) || Auth::user()->is_admin == 2) --}}
           @if(hasPermssion('list6') == 'yes') 
           <a href="{{route('facture.index')}}">
           @else
@@ -236,7 +218,6 @@
           </a>
         </li>
         <li class=""> 
-          {{-- @if(in_array('list7',$permission) || Auth::user()->is_admin == 2) --}}
           @if(hasPermssion('list7') == 'yes') 
           <a href="{{route('commande.balance')}}">
           @else

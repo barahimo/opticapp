@@ -109,40 +109,25 @@
                             </li>
                             @endif --}}
                         @else
-                            {{-- @if(in_array('list9',$permission) || Auth::user()->is_admin == 2) --}}
                             @if(hasPermssion('list9') == 'yes') 
                             <li class="nav-item links">
                                 <a class="nav-link"  href="{{ route('user.editUser',Auth::user()->id) }}"><i class="icon-user"></i> Gestion de compte</a>
                             </li>
                             @endif
                             @if(Auth::user()->is_admin != 0)
-                            {{-- @if(in_array('list8',$permission) || Auth::user()->is_admin == 2) --}}
                             @if(hasPermssion('list8') == 'yes') 
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('user.index') }}"><i class="icon-user"></i> Gestion des utilisateurs</a>
                             </li>
                             @endif
                             @endif
-                            {{-- @if(in_array('create9',$permission) || in_array('edit9',$permission) || Auth::user()->is_admin == 2) --}}
                             @if(hasPermssion('create9') == 'yes' || hasPermssion('edit9') == 'yes')
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
                             </li>
                             @endif
 
-                            {{-- @if($view == "create")
-                            @if(in_array('create9',$permission) || Auth::user()->is_admin == 2)
-                            <li class="nav-item links">
-                                <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
-                            </li>
-                            @endif
-                            @elseif($view == "edit")
-                            @if(in_array('edit9',$permission) || Auth::user()->is_admin == 2)
-                            <li class="nav-item links">
-                                <a class="nav-link" href="{{ route('company.index') }}"><i class="icon-gears"></i> Paramètres</a>
-                            </li>
-                            @endif
-                            @endif --}}
+                            
                             <li class="nav-item links">
                                 <a class="nav-link" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
