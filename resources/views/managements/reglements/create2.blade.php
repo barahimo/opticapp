@@ -427,34 +427,6 @@
     avance2.html(sommeAvance2().toFixed(2));
     reste2.html(sommeReste2().toFixed(2));
   }
-  // function getReglements(param){
-  //   $.ajax({
-  //     type:'get',
-  //     url:'{!!URL::to('getReglements')!!}',
-  //     data:{'client':param,'status':'nr'},
-  //     success:function(data){
-  //       var table = $('#table');
-  //         table.find('tbody').html("");
-  //         var lignes = '';
-  //         data.forEach(ligne => {
-  //           lignes+=`<tr>
-  //                       <td>${ligne.id}</td>
-  //                       <td>${ligne.date}</td>
-  //                       <td>Cmd ${ligne.commande_id}</td>
-  //                       <td>${ligne.client.nom_client}</td>
-  //                       <td>${ligne.commande.total}</td>
-  //                       <td>${ligne.avance}</td>
-  //                       <td>${ligne.reste}</td>
-  //                       <td></td>
-  //                   </tr>`;
-  //         });
-  //         table.find('tbody').append(lignes);
-  //     },
-  //     error:function(){
-  //       console.log([]);    
-  //     }
-  //   });
-  // }
   function getReglements3(param){
     $.ajax({
       type:'get',

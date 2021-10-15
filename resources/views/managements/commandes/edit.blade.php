@@ -584,20 +584,7 @@
     }
     return comp.toFixed(2);
   }
-  // function calculReste(){
-  //   var avance=$("#avance");
-  //   var reste=$('#reste');
-  //   var status=$("#status");
-  //   var NReste = 0;
-  //   if(avance.val()){
-  //     NReste = calculSomme()-parseFloat(avance.val());
-  //     (NReste > 0) ? status.val("non réglée"): status.val("réglée");    
-  //   }
-  //   else{
-  //     status.val("");
-  //   }
-  //   reste.val(NReste.toFixed(2));
-  // }
+
   function getLignes(){
     // var cmd_id = <?php echo $commande->id;?>;
     var cmd_id = '{{$commande->id}}';

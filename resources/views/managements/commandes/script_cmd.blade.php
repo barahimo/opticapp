@@ -1,6 +1,5 @@
 <script type="text/javascript">
   $(document).ready(function(){
-    // searchSelect(null,'all','all',null);
     search();
     // -----------Change Select_Facturée--------------//
     $(document).on('change','#f',function(){
@@ -28,8 +27,6 @@
     // -----------End Select_NonReglée--------------//
     // -----------Change Select_Client--------------//
     $(document).on('change','#client',function(){
-      // var client=$(this).val();
-      // searchSelect(client,null);
       $('#search').val('');
       search();
     });
@@ -41,7 +38,6 @@
     // -----------KeyUp searchCommandes--------------//
   });
   // -----------My function--------------//
-  // function searchSelect(param1,param2,param3){
   function searchSelect(param1,param2,param3,param4){
     var table=$('#table');
     $.ajax({
@@ -49,10 +45,7 @@
       url:'{!!Route('commande.getCommandes5')!!}',
       data:{'client':param1,'facture':param2,'status':param3,'search':param4},
       success:function(data){
-        // console.log(data);
-        // return;
         var lignes = '';
-        // console.log(lignes);
         // ------------------ //
         table.find('tbody').html("");
         var details = ''; 
@@ -310,17 +303,11 @@
       btnDetails.data('status','false');
       btnDetails.parent().parent().parent().find('#viewDetails'+index).prop('style','display: none;');
       btnDetails.find('i').prop('class','fas fa-angle-down');
-      // $('#'+item).prop('class','fas fa-eye');
-      // $('#'+item).prop('class','fas fa-plus');
-      // $('#'+item).prop('class','fas fa-angle-down');
     }
     else{
       btnDetails.data('status','true');
       btnDetails.parent().parent().parent().find('#viewDetails'+index).prop('style','display: contents;');
       btnDetails.find('i').prop('class','fas fa-angle-up');
-      // $('#'+item).prop('class','fas fa-eye-slash');
-      // $('#'+item).prop('class','fas fa-minus');
-      // $('#'+item).prop('class','fas fa-angle-up');
     }
   }
   function handleActions(e){
@@ -331,13 +318,11 @@
       e.target.setAttribute('data-status','false');
       $('#'+item).parent().parent().parent().find('#viewActions'+index).prop('style','display: none;');
       $('#'+item).prop('class','fas fa-eye');
-      // $('#'+item).prop('class','fas fa-angle-up');
     }
     else{
       e.target.setAttribute('data-status','true');
       $('#'+item).parent().parent().parent().find('#viewActions'+index).prop('style','display: contents;');
       $('#'+item).prop('class','fas fa-eye-slash');
-      // $('#'+item).prop('class','fas fa-angle-down');
     }
   }
   function avoir(obj){
@@ -358,7 +343,6 @@
       });
   }
   function deleteCommande(index){
-    // console.log(index);
     var btnDelete = $('#btnDelete1'+index);
     var action = btnDelete.data('route');
     Swal.fire({

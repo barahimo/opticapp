@@ -11,10 +11,9 @@
 
             </div>
             @if(session()->has('status'))
-             <div class="alert  alert-success"> 
-                 {{ session()->get('status')}}
-             </div>
-
+                <div class="alert  alert-success"> 
+                    {{ session()->get('status')}}
+                </div>
             @endif
 
 
@@ -26,18 +25,18 @@
             </div> 
             
 
-             <table class="table">
+            <table class="table">
                     
                 <tr>
-                  <td scope="col">
+                <td scope="col">
 
 
-                      @include('partials.searchlignecommande')
+                    @include('partials.searchlignecommande')
 
-                  </td>
-                  
+                </td>
+                
                 </tr>
-              
+            
             </table> 
 
         </div>
@@ -58,25 +57,25 @@
                     </thead>
                     <tbody>
                         @foreach($lignecommandes as $lignecommande)
-                          <tr>
-                              <th scope="row" >{{$lignecommande->id }}</th>
-                              {{-- <td>{{$lignecommande->cadre}}</td> --}}
-                              <td>{{$lignecommande->commande_id}}</td>
-                              <td>{{$lignecommande->nom_produit}}</td>
-                              <td>{{$lignecommande->quantite}}</td>
+                            <tr>
+                                <th scope="row" >{{$lignecommande->id }}</th>
+                                {{-- <td>{{$lignecommande->cadre}}</td> --}}
+                                <td>{{$lignecommande->commande_id}}</td>
+                                <td>{{$lignecommande->nom_produit}}</td>
+                                <td>{{$lignecommande->quantite}}</td>
                             <td>
                                 <form style="display: inline" method="POST" action="{{route('lignecommande.destroy',['lignecommande'=> $lignecommande])}}">
                                     @csrf 
-                                   @method('DELETE')
-                                   <a href="{{ action('LignecommandeController@show',['lignecommande'=> $lignecommande])}}" class="btn btn-secondary btn-lg">detailler</i></a>
-                                   <a href="{{route('Lignecommande.edit',['lignecommande'=> $lignecommande])}}"class="btn btn-primary btn-lg">editer</i></a>
-                                   <button class="btn btn-danger btn-lg" type="submit">archiver</button>
-                                 </form>  
+                                    @method('DELETE')
+                                    <a href="{{ action('LignecommandeController@show',['lignecommande'=> $lignecommande])}}" class="btn btn-secondary btn-lg">detailler</i></a>
+                                    <a href="{{route('Lignecommande.edit',['lignecommande'=> $lignecommande])}}"class="btn btn-primary btn-lg">editer</i></a>
+                                    <button class="btn btn-danger btn-lg" type="submit">archiver</button>
+                                    </form>  
 
                             </td>
 
-                              
-                          </tr>
+                                
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

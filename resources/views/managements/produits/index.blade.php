@@ -21,7 +21,6 @@
             {{-- ---------------- --}}
             <div class="row">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2">
-                    {{-- @if(in_array('create3',$permission) || Auth::user()->is_admin == 2) --}}
                     @if(hasPermssion('create3') == 'yes') 
                     <a href="{{route('produit.create')}}" class="btn btn-primary m-b-10 "><i class="fa fa-plus"></i> Produit</a>
                     @endif
@@ -66,15 +65,12 @@
                                 <td>{{number_format($produit->prix_produit_TTC,2)}}</td>
                                 <td>{{$produit->categorie->nom_categorie}}</td>
                                 <td>
-                                    {{-- @if(in_array('show3',$permission) || Auth::user()->is_admin == 2) --}}
                                     @if(hasPermssion('show3') == 'yes') 
                                     <a href="{{ action('ProduitController@show',['produit'=> $produit])}}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info"></i></a>
                                     @endif
-                                    {{-- @if(in_array('edit3',$permission) || Auth::user()->is_admin == 2) --}}
                                     @if(hasPermssion('edit3') == 'yes') 
                                     <a href="{{route('produit.edit',['produit'=> $produit])}}"class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i></a>
                                     @endif
-                                    {{-- @if(in_array('delete3',$permission) || Auth::user()->is_admin == 2) --}}
                                     @if(hasPermssion('delete3') == 'yes') 
                                     <button class="btn btn-outline-danger btn-sm remove-produit" 
                                     data-id="{{ $produit->id }}" 
