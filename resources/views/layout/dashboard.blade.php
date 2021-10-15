@@ -258,7 +258,12 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">Version 1.0</div>
-    Copyright © 2021 - itic-solution.com - tous les droits sont réservés.
+    @php
+      // $year = date('Y',strtotime('2022/01/01'));
+      $datetime = Carbon\Carbon::now();
+      $year = $datetime->isoFormat('YYYY');
+    @endphp
+    Copyright © <span>{{$year}}</span> - itic-solution.com - tous les droits sont réservés.
   </footer>
 </div>
 
