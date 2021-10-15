@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Client;
+use App\User;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +21,11 @@ class StatusUser
         if (Auth::user()->status == 0) {
             return redirect()->route('app.home');
         }
+        $user = User::find(Auth::user()->user_id);
+        if (Auth::user()->is_admin == 0 && $user->status == 0) {
+            return redirect()->route('app.home');
+        }
+        
         return $next($request);
     }
 }

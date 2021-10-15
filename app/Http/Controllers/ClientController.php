@@ -34,16 +34,30 @@ class ClientController extends Controller
                     array_push($list, $val);
         return $list;
     }
+
+    public function hasPermssion($string)
+    {
+        $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
+        $result = 'no';
+        if(
+            (Auth::user()->is_admin == 2) ||
+            (Auth::user()->is_admin == 1 && in_array($string,$permission)) ||
+            (Auth::user()->is_admin == 0 && in_array($string,$permission) && in_array($string,$permission_))
+        )
+        $result = 'yes';
+        return $result;
+    }
     
     public function index(Request $request)
     {
         $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         // return in_array('create',$permission);
         // return $permission;
         // $clients = Client::withTrashed()->get();
         // $clients = Client::onlyTrashed()->get();
-        // return $clients;
-
+        // return $clients;    
         // try{ 
             // -------------------------------------- //
             // if( Auth::user()->id == 1)
@@ -60,11 +74,11 @@ class ClientController extends Controller
             #################################
             $user_id = Auth::user()->id;
             if(Auth::user()->is_admin == 0)
-                $user_id = Auth::user()->user_id;
+            $user_id = Auth::user()->user_id;
             $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
             #################################
             // return view('managements.clients.index', compact('clients'));
-            if(in_array('list1',$permission) || Auth::user()->is_admin == 2)
+            if($this->hasPermssion('list1') == 'yes')
             return view('managements.clients.index', compact(['clients','permission']));
             else
             return view('application');
@@ -79,7 +93,13 @@ class ClientController extends Controller
     public function create()
     {
         $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         if(in_array('create1',$permission) || Auth::user()->is_admin == 2)
+        // if(
+        //     (Auth::user()->is_admin == 2) ||
+        //     (Auth::user()->is_admin == 1 && in_array('create1',$permission)) ||
+        //     (Auth::user()->is_admin == 0 && in_array('create1',$permission) && in_array('create1',$permission_))
+        // )
         return view('managements.clients.create');
         else
         return redirect()->back();
@@ -146,6 +166,7 @@ class ClientController extends Controller
             }
         }
         $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         if(in_array('show1',$permission) || Auth::user()->is_admin == 2)
         return view('managements.clients.show')->with([
             'commandes' => $commandes,
@@ -165,6 +186,7 @@ class ClientController extends Controller
         $user_id = Auth::user()->user_id;
         $client = Client::where('user_id',$user_id)->findOrFail($client->id);
         $permission = $this->getPermssion(Auth::user()->permission);
+        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
         if(in_array('edit1',$permission) || Auth::user()->is_admin == 2)
         return view('managements.clients.edit')->with([
             "client" => $client

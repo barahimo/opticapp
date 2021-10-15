@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware('statususer');
+    }
 
     public function getPermssion($string)
     {

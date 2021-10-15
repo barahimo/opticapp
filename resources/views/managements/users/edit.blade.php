@@ -44,6 +44,7 @@
                             <div class="col-md-12">
                                 &nbsp;&nbsp;
                             </div>
+                            <input type="hidden" name="is_pass" id="is_pass" value='no'>
                             <div class="col-12" id="pass" style="display : none">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -411,11 +412,13 @@
     $(document).on('click','button[name=changePasse]',function(e){
         e.preventDefault();
         pass = $('#pass');
+        is_pass = $('#is_pass');
         isDisplay = pass.prop('style').display;
         if(isDisplay == 'none'){
             pass.prop('style','display : content');
+            is_pass.val('yes');
             var btn = $('button[name=updateUser]');
-            btn.prop('disabled',true);
+            btn.prop('disabled','yes');
             var password = $('#password');
             var password_confirmation = $('#password_confirmation');
             password.val('');
@@ -423,6 +426,7 @@
         }
         else{
             pass.prop('style','display : none');
+            is_pass.val('no');
         }
         myFunction();
     })

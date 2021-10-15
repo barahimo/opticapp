@@ -54,27 +54,22 @@
 <body class="hold-transition login-page">
     @php
     // getPermission
-    $string = Auth::user()->permission;
-    $list = [];
-    $array = explode("','",$string);
-    foreach ($array as $value) 
-        foreach (explode("['",$value) as $val) 
+    if(Auth::check()){
+        $string = Auth::user()->permission;
+        $list = [];
+        $array = explode("','",$string);
+        foreach ($array as $value) 
+            foreach (explode("['",$value) as $val) 
             if($val != '')
-                array_push($list, $val);
-    $array = $list;
-    $list = [];
-    foreach ($array as $value) 
+                    array_push($list, $val);
+                    $array = $list;
+                    $list = [];
+        foreach ($array as $value) 
         foreach (explode("']",$value) as $val) 
-            if($val != '')
-                array_push($list, $val);
-    $permission = $list;
-
-    $user_id = Auth::user()->id;
-    if(Auth::user()->is_admin == 0)
-        $user_id = Auth::user()->user_id;
-    $companies = Company::where('user_id',$user_id)->get();
-    $count = count($companies);
-    ($count > 0) ? $view = 'edit': $view = 'create';
+        if($val != '')
+        array_push($list, $val);
+        $permission = $list;
+    }
     @endphp
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light shadow-sm">

@@ -86,10 +86,6 @@
           if($val != '')
               array_push($list, $val);
   $permission = $list;
-
-  $companies = App\Company::where('user_id',$user_id)->get();
-  $count = count($companies);
-  ($count > 0) ? $view = 'edit': $view = 'create';
   @endphp
 <div class="wrapper boxed-wrapper">
   <header class="main-header"> 

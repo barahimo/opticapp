@@ -291,6 +291,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $is_pass = $request['is_pass'];
         $permission = $this->storePermssion($request);
         $visibility = $request['visibility'];
         $name = $request['name'];
@@ -299,10 +300,10 @@ class UserController extends Controller
         $status = $request['status'];
         $is_admin = 0;
         if(Auth::user()->is_admin == 2)
-            $is_admin = 1;
+        $is_admin = 1;
         $user_id = Auth::user()->id;
         $password = Hash::make($request['password']);
-
+        
         if ($visibility) {
             $user = User::where('user_id',Auth::user()->id)->find($id);
             $user->status = $status;
@@ -316,7 +317,10 @@ class UserController extends Controller
         }
         $user->name = $name;
         $user->email = $email;
-        $user->password = $password;
+        
+        if($is_pass == 'yes')
+            $user->password = $password;
+        
         $user->save();
 
         if($visibility){

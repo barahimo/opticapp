@@ -32,7 +32,11 @@
 {{-- ################################################## --}}
 <!-- Main content -->
 <div class="content">
-    @if(Auth::user()->status == 1)
+    @if(
+        (Auth::user()->is_admin == 2) ||
+        (Auth::user()->is_admin == 1 && Auth::user()->status == 1) ||
+        (Auth::user()->is_admin == 0 && Auth::user()->status == 1 && App\User::find(Auth::user()->user_id)->status == 1)
+    )
     <!-- Main row -->
     <div class="row">
         {{-- begin Clients --}}
@@ -244,6 +248,7 @@
             </div>
         </div>
     </div>
+    {{-- @elseif((Auth::user()->status == 0) || (Auth::user()->is_admin == 0 && User::find(Auth::user()->user_id)->status == 0)) --}}
     @else
     <br>
     <br>
