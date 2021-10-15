@@ -56,7 +56,6 @@ class ReglementController extends Controller
 
     public function getAdresse($company){
         // ############################################################### //
-        // Siège social : ITIC SOLUTION - 3 ,immeuble Karoum, Av Alkhansaa, Cité Azmani , 83350 , OULED TEIMA , MAROC<br>
         $adresse1 = '';
         // ############################################################### //
         ($company && ($company->nom || $company->nom != null)) ? $adresse1 .= 'Siège social : '.$company->nom.' - ' : $adresse1 .= 'Siège social : nom_societé';
@@ -69,7 +68,6 @@ class ReglementController extends Controller
         // -------------------------------------//
         ($company && ($company->pays || $company->pays != null)) ? $adresse1 .= $company->pays : $adresse1 .= '';
         // ############################################################### //
-        // Capital : 100000 - ICE : 123456789012345  - I.F. : 12345678 - <br>
         $adresse2 = '';
         // ############################################################### //
         ($company && ($company->capital || $company->capital != null)) ? $adresse2 .= 'Capital : '.$company->capital.' - ' : $adresse2 .= '';
@@ -78,7 +76,6 @@ class ReglementController extends Controller
         // -------------------------------------//
         ($company && ($company->iff || $company->iff != null)) ? $adresse2 .= 'I.F. : '.$company->iff.' - ' : $adresse2 .= '';
         // ############################################################### //
-        // R.C. : 1234 -Patente : 12345678 - CNSS : 87654321 <br>
         $adresse3 = '';
         // ############################################################### //
         ($company && ($company->rc || $company->rc != null)) ? $adresse3 .= 'R.C. : '.$company->rc.' - ' : $adresse3 .= '';
@@ -87,7 +84,6 @@ class ReglementController extends Controller
         // -------------------------------------//
         ($company && ($company->cnss || $company->cnss != null)) ? $adresse3 .= 'CNSS : '.$company->cnss.' - ' : $adresse3 .= '';
         // ############################################################### //
-        // Tél : 0857854354 - site : https://itic-solution.com/ - email : Contact@itic-solution.com<br>
         $adresse4 = '';
         // ############################################################### //
         ($company && ($company->tel || $company->tel != null)) ? $adresse4 .= 'Tél : '.$company->tel.' - ' : $adresse4 .= '';
@@ -96,7 +92,6 @@ class ReglementController extends Controller
         // -------------------------------------//
         ($company && ($company->email || $company->email != null)) ? $adresse4 .= 'Email : '.$company->email.' - ' : $adresse4 .= '';
         // ############################################################### //
-        // BANQUE : BMCE - RIB : 12345678912345<br>
         $adresse5 = '';
         // ############################################################### //
         ($company && ($company->banque || $company->banque != null)) ? $adresse5 .= 'BANQUE : '.$company->banque.' - ' : $adresse5 .= '';
@@ -141,13 +136,11 @@ class ReglementController extends Controller
                 foreach ($lignes as $ligne) {
                     $reglement = new Reglement();
                     $reglement->date = $date;
-                    // $reglement->nom_client = Client::find($client)->nom_client;
                     $reglement->mode_reglement = $mode;
                     $reglement->avance = $ligne['avance'];
                     $reglement->reste = $ligne['reste'];
                     $reglement->status = $ligne['status'];
                     // -----------------------------------------------------
-                    // $reglements = Reglement::get();
                     $reglements = Reglement::where('user_id',$user_id)->get();
                     (count($reglements)>0) ? $lastcode = $reglements->last()->code : $lastcode = null;
                     $str = 1;
@@ -189,7 +182,7 @@ class ReglementController extends Controller
     *  store3
     * --------------------------------------------------------------------------
     **/
-    // enregistrer une seule reglement
+    // Enregistrer une seule règlement
     public function store3(Request $request){ 
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
@@ -203,7 +196,6 @@ class ReglementController extends Controller
             $year = date('y',$time);
             $month = date('m',$time);
             // -----------------------------------------------------
-            // $reglements = Reglement::get();
             $reglements = Reglement::where('user_id',$user_id)->get();
             (count($reglements)>0) ? $lastcode = $reglements->last()->code : $lastcode = null;
             $str = 1;
@@ -223,7 +215,6 @@ class ReglementController extends Controller
                     $reglement = new Reglement();
                     $reglement->date = $date;
                     $reglement->mode_reglement = $mode;
-                    // $reglement->nom_client = $ligne['client'];
                     $reglement->avance = $ligne['avance'];
                     $reglement->reste = $ligne['reste'];
                     $reglement->status = $ligne['status'];
@@ -313,7 +304,6 @@ class ReglementController extends Controller
     **/
     //regler plusieurs commandes 
     public function create2(Request $request){
-        // $clients = Client::get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -322,27 +312,15 @@ class ReglementController extends Controller
         $date = Carbon::now();
         if($client){
             $nom_client = Client::find($client)->nom_client;
-            // $commandes = Commande::where('reste', '>', 0)->where('nom_client',$nom_client)->get();
-            // $commandes = Commande::where('reste', '>', 0)
-            //     ->whereHas('client',function($query) use ($nom_client){
-            //         $query->where('nom_client',$nom_client);
-            //     })->get();
-            // $commandes = Commande::with(['client'=>function($query) use ($nom_client){
-            //         $query->where('nom_client',$nom_client);
-            //     }])->where('reste', '>', 0)->get();
-            // $commandes = Commande::with(['client'=>function($query) use ($nom_client){
-            //         $query->where('nom_client',$nom_client);
-            //     }])->get();
+            
             $commandes = Commande::with('client')->whereHas('client',function($query) use ($nom_client){
                         $query->where('nom_client',$nom_client);
                     })->where('reste', '>', 0)->get();
         }
         else{
             $commandes = Commande::with('client')->where('reste', '>', 0)->get();
-            // $commandes = Commande::with('client')->get();
         }
         $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('create5') == 'yes')
         return view('managements.reglements.create2',compact('clients','client','commandes','date'));
         else
@@ -357,14 +335,11 @@ class ReglementController extends Controller
     public function create3(Request $request){
         $commande_id = $request->commande;
         $date = Carbon::now();
-        // $commande = Commande::with('client')->find($commande_id);
-        // $commande = Commande::with('client')->where('user_id',Auth::user()->id)->find($commande_id);
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
         $commande = Commande::with('client')->where('user_id',$user_id)->findOrFail($commande_id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('create5',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('create5') == 'yes')
         return view('managements.reglements.create3',compact('commande','date'));
         else
@@ -375,7 +350,6 @@ class ReglementController extends Controller
     *  delete
     * --------------------------------------------------------------------------
     **/
-    // public function delete(Reglement $reglement)
     public function delete($id){
         $reglement = Reglement::find($id);
         $commande = Commande::find($reglement->commande_id);
@@ -405,12 +379,7 @@ class ReglementController extends Controller
         $permission = $this->getPermssion(Auth::user()->permission);
         $reglements = Reglement::orderBy('id','desc')->paginate(3);
         
-        // $clients = Commande::where('id', '=', $reglements->$commande_id);
         
-        // dd($clients);     
-        // return view('managements.reglements.index', compact('reglements','nom_client'));
-        // return view('managements.reglements.index', compact('reglements'));
-        // if(in_array('list5',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('list5') == 'yes')
         return view('managements.reglements.index', compact(['reglements','permission']));
         else
@@ -427,24 +396,17 @@ class ReglementController extends Controller
 
     public function show(Reglement $reglement){
         $permission = $this->getPermssion(Auth::user()->permission);
-        // $companies = Company::get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
         $companies = Company::where('user_id',$user_id)->get();
         $count = count($companies);
-        // ($count>0)  ? $company = Company::first(): $company = null;
         ($count>0)  ? $company = Company::where('user_id',$user_id)->first(): $company = null;
         $adresse = $this->getAdresse($company);
 
-        // $reglement = Reglement::with(['commande' => function($query){$query->with('client');}])->find($reglement->id);
         $reglement = Reglement::with(['commande' => function($query){$query->with('client');}])
         ->where('user_id',$user_id)->findOrFail($reglement->id);
-        // return $reglement;
-        // return view('managements.reglements.show2', [
-        //     'reglement' => $reglement
-        // ]);
-        // return view('managements.reglements.view1', [
+        
         if($this->hasPermssion('show5') == 'yes')
         return view('managements.reglements.show', [
             'reglement' => $reglement,
@@ -464,7 +426,6 @@ class ReglementController extends Controller
     }
 
     public function update(Request $request, Reglement $reglement){
-        // $reglement->nom_client= $request->input('nom_client');
         $reglement->mode_reglement = $request->input('mode_reglement');
         $reglement->avance = $request->input('avance');
         $reglement->reste = $request->input('reste');
@@ -476,16 +437,12 @@ class ReglementController extends Controller
         $reglement->save();
         $request->session()->flash('status','le règlement a été bien modifié !');
 
-
         return redirect()->route('reglement.index');
-
     }
 
     public function destroy(Reglement $reglement){
         
         $reglement->delete();
-
-        // Post::destroy($id); supression directement
 
         return redirect()->route('reglement.index')->with([
             "success" => "le réglement a été supprimer avec succès!"
@@ -496,199 +453,6 @@ class ReglementController extends Controller
     * Autres fonctions
     *--------------------------------------------------------------------------
     **/
-    public function search(Request $request){
-        $q = $request->input('q');
-
-        //  $reglements =  Reglement::where('nom_client', 'like', "%$q%")
-        $reglements =  Reglement::paginate(5);
-
-        return view('managements.reglements.search')->with('reglements');  
-    }
-    public function show_remove(Reglement $reglement){
-        // $commande= Commande::with('client')->where('id',$reglement->commande_id )->first();
-        $commande= Commande::with('client')->find($reglement->commande_id);
-
-        // dd($commande->client);
-        return view('managements.reglements.show', [
-        
-            'commande' => $commande,
-            'reglement' => $reglement
-
-        ]);
-    }
-    
-    public function index22(){
-        $commandes = Commande::with('reglements')->get();
-        $clients = Client::get();
-        
-        return view('managements.reglements.index22', [
-            'commandes' => $commandes,
-            'clients'=>$clients
-        ]);
-    }
-
-    public function index2(){
-        $reglements = Reglement::get();
-        $clients = Client::get();
-        
-        return view('managements.reglements.index2', [
-            'reglements' => $reglements,
-            'clients'=>$clients
-        ]);
-    }
-
-    public function getReglements(Request $request){
-        $client = $request->client;
-        $status = $request->status;
-        if($client){
-            $nom_client = Client::find($client)->nom_client;
-            if($status){
-                if($status == 'nr'){
-                    $reglements = Reglement::with('commande')
-                        ->whereHas('commande' , function($query){$query->where('reste', '>', 0);})
-                        ->where('nom_client',$nom_client)->get();
-                }
-                else if($status == 'r'){
-                    $reglements = Reglement::with('commande')
-                        ->whereHas('commande' , function($query){$query->where('reste', '<=', 0);})
-                        ->where('nom_client',$nom_client)->get();
-                }
-                else if($status == 'all'){
-                    $reglements = Reglement::with('commande')->where('nom_client',$nom_client)->get();
-                }
-            }
-            else 
-                $reglements = [];
-        }
-        else{
-            if($status){
-                if($status == 'nr'){
-                    $reglements = Reglement::with('commande')
-                            ->whereHas('commande' , function($query){$query->where('reste', '>', 0);})
-                        ->get();
-                }
-                else if($status == 'r'){
-                    $reglements = Reglement::with('commande')
-                        ->whereHas('commande' , function($query){$query->where('reste', '<=', 0);})
-                        ->get();
-                }
-                else if($status == 'all'){
-                    $reglements = Reglement::with('commande')->get();
-                }
-            }
-            else 
-                $reglements = [];
-        }        
-        return response()->json($reglements);
-    }
-
-    public function getReglements2(Request $request){
-        $client = $request->client;
-        $status = $request->status;
-        if($client){
-            $nom_client = Client::find($client)->nom_client;
-            if($status){
-                if($status == 'nr'){
-                    $commandes = Commande::with(['client','reglements'])
-                        ->whereHas('client',function($query) use ($nom_client){
-                            $query->where('nom_client',$nom_client);
-                        })
-                        ->where('reste', '>', 0)
-                        ->get();
-                }
-                else if($status == 'r'){
-                    $commandes = Commande::with(['client','reglements'])
-                        ->whereHas('client',function($query) use ($nom_client){
-                            $query->where('nom_client',$nom_client);
-                        })
-                        ->where('reste', '<=', 0)
-                        ->get();
-                }
-                else if($status == 'all'){
-                    $commandes = Commande::with(['client','reglements'])
-                    ->whereHas('client',function($query) use ($nom_client){
-                        $query->where('nom_client',$nom_client);
-                    })
-                    ->get();
-                }
-            }
-            else 
-                $commandes = [];
-        }
-        else{
-            if($status){
-                if($status == 'nr'){
-                    $commandes = Commande::with('reglements')
-                        ->where('reste', '>', 0)
-                        ->get();
-                }
-                else if($status == 'r'){
-                    $commandes = Commande::with('reglements')
-                        ->where('reste', '<=', 0)
-                        ->get();
-                }
-                else if($status == 'all'){
-                    $commandes = Commande::with('reglements')->get();
-                }
-            }
-            else 
-                $commandes = [];
-        }        
-        return response()->json($commandes);
-    }
-
-    // // Generate PDF
-    // public function createPDF() {
-    //     // retreive all records from db
-    //     $data = Reglement::all();
-    //     // $data = ["a","b","c"];
-    //     // $data = [];
-    //     // return $data;
-    //     // share data to view
-    //     view()->share('reglement',$data);
-    //     // $pdf = PDF::loadView('pdf_view', $data);
-    //     // $pdf = PDF::loadView('managements.reglements.view', $data);
-    //     $pdf = PDF::loadView('managements.reglements.view2');
-    //     // download PDF file with download method
-    //     return $pdf->download('pdf_file.pdf');
-    // }
-    // public function preview()
-    // {
-    //     $data = array("a","b","c");
-    //     // $data = "aa";
-    //     // $data = [];
-    //     // return $data;
-    //     // $data = Reglement::all();
-    //     view()->share('reglement',json_encode($data));
-    //     return view('managements.reglements.view2');
-    //     // return view('preview');
-    //     // $pdf = PDF::loadView('managements.reglements.view');    
-    //     // return $pdf->download('demo.pdf');
-    // }
-    // // public function generatePDF()
-    // // {
-    // //     // $pdf = PDF::loadView('preview');    
-    // //     $pdf = PDF::loadView('managements.reglements.view2');    
-    // //     return $pdf->download('demo.pdf');
-    // // }
-    // public function generatePDF($reg_id)
-    // {
-    //     $reglement = Reglement::with(['commande' => function($query){$query->with('client');}])->find($reg_id);
-    //     // return $reglement;
-    //     view()->share(['reglement'=>$reglement]);
-    //     //Preview
-    //     // return view('managements.reglements.view0');
-    //     // download PDF file
-    //     PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-    //     $pdf = PDF::loadView('managements.reglements.view0')->setPaper('A5', 'landscape');
-    //     // PDF::loadHTML($html)->setPaper('a4', 'landscape')->setWarnings(false)->save('myfile.pdf');
-    //     // ->setWarnings(false)
-    //     // ->save('ALUMNI-LIST-AS-OF-'. Carbon::now()
-    //     // ->format('d-M-Y') .'.pdf');
-    //     return $pdf->download('demo.pdf');
-    // }
-
-    
     // ----------------------------
     
     // ----------------------------

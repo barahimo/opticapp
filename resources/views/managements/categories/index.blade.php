@@ -27,7 +27,7 @@
                     @endif
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8">
-                    <form action="{{route('categorie.search')}}" method="get" class="search-form">
+                    <form action="" method="get" class="search-form">
                         <div class="input-group">
                             <input name="q" class="form-control" placeholder="search..." type="text">
                             <span class="input-group-btn">

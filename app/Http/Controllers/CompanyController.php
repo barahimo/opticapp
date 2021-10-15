@@ -121,7 +121,6 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        // $companies = Company::get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -131,7 +130,6 @@ class CompanyController extends Controller
         
         $permission = $this->getPermssion(Auth::user()->permission);
         if($view == 'create'){
-            // if(in_array('create9',$permission) || Auth::user()->is_admin == 2){
             if($this->hasPermssion('create9') == 'yes'){
                 $company = null;
                 $route = route('company.store');
@@ -139,9 +137,7 @@ class CompanyController extends Controller
             }
         }
         if($view == 'edit'){
-            // if(in_array('edit9',$permission) || Auth::user()->is_admin == 2){
             if($this->hasPermssion('edit9') == 'yes'){
-                // $company = Company::first();
                 $company = Company::where('user_id',$user_id)->first();
                 $route = route('company.update',['company'=>$company->id]);
                 return view('parametres.form',compact('company','route','view'));
@@ -157,9 +153,7 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        // $route = route('company.store');
-        // $view = 'create';
-        // return view('parametres.form',compact('route','view'));
+        //
     }
 
     /**
@@ -194,10 +188,7 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id){
-        // $company = Company::first();
-        // $route = route('company.update',['company'=>$company->id]);
-        // $view = 'edit';
-        // return view('parametres.form',compact('company','route','view'));
+        //
     }
 
     /**
@@ -208,7 +199,6 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        // $company = Company::first();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;

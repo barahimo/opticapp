@@ -58,14 +58,6 @@ class ClientController extends Controller
     **/
     public function searchClient(Request $request){
         $search = $request->search;
-        // $clients = Client::where('nom_client','like',"%$search%")
-        //     ->orWhere('user_id',Auth::user()->id)
-        //     ->orWhere('code','like',"%$search%")
-        //     ->orWhere('adresse','like',"%$search%")
-        //     ->orWhere('solde','like',"%$search%")
-        //     ->orWhere('telephone','like',"%$search%")
-        //     ->orderBy('id','desc')
-        //     ->get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -85,64 +77,24 @@ class ClientController extends Controller
     }
     /** 
     *--------------------------------------------------------------------------
-    * search
-    *--------------------------------------------------------------------------
-    **/
-    public function search(Request $request){
-        $q = $request->input('q');
-        $clients =  Client::where('nom_client', 'like', "%$q%")
-            ->orWhere('code', 'like', "%$q%")
-            ->paginate(5);
-            return view('managements.clients.search')->with('clients', $clients);  
-    }
-    /** 
-    *--------------------------------------------------------------------------
     * Ressources
     *--------------------------------------------------------------------------
     **/
     public function index(Request $request){
         $permission = $this->getPermssion(Auth::user()->permission);
-        // return in_array('create',$permission);
-        // return $permission;
-        // $clients = Client::withTrashed()->get();
-        // $clients = Client::onlyTrashed()->get();
-        // return $clients;    
-        // try{ 
-            // -------------------------------------- //
-            // if( Auth::user()->id == 1)
-            // $clients = DB::connection('mysql')->table('clients')->orderBy('id','desc')->get();
-            // elseif( Auth::user()->id == 2)
-            // $clients = DB::connection('mysql2')->table('clients')->orderBy('id','desc')->get();
-            // dd($clients);
-            // $clients = DB::SELECT('select * from clients');
-            // $clients = DB::table('clients')->get();
-            // $clients = Client::get();
-            // dd($clients);
-            // -------------------------------------- //
-            // $clients = Client::orderBy('id','desc')->get();
-            #################################
-            $user_id = Auth::user()->id;
-            if(Auth::user()->is_admin == 0)
-            $user_id = Auth::user()->user_id;
-            $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
-            #################################
-            // return view('managements.clients.index', compact('clients'));
-            // if(in_array('list1',$permission) || Auth::user()->is_admin == 2)
-            if($this->hasPermssion('list1') == 'yes')
-            return view('managements.clients.index', compact(['clients','permission']));
-            else
-            return view('application');
-        // }
-        // catch(Throwable $e)
-        // {
-        //     $request->session()->flash('status', $e->getMessage());
-        //     return view('error');
-        // }
+        #################################
+        $user_id = Auth::user()->id;
+        if(Auth::user()->is_admin == 0)
+        $user_id = Auth::user()->user_id;
+        $clients = Client::orderBy('id','desc')->where('user_id',$user_id)->get();
+        #################################
+        if($this->hasPermssion('list1') == 'yes')
+        return view('managements.clients.index', compact(['clients','permission']));
+        else
+        return view('application');
     }
 
     public function create(){
-        $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('create1',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('create1') == 'yes')
         return view('managements.clients.create');
         else
@@ -150,13 +102,6 @@ class ClientController extends Controller
     }
     
     public function store(Request $request){  
-        // $validateData = $request->validate([
-        //     'nom_client' => 'required',
-        //     'telephone' => 'required',
-        //     'adresse' => 'required' ,
-        //     'solde' => 'required',
-        //     'code' => 'required|min:4|max:100' 
-        // ]);
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -183,7 +128,6 @@ class ClientController extends Controller
     }
     
     public function show(Client $client){
-        // $commandes = Commande::where('client_id', '=', $client->id)->paginate(2);
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
@@ -197,9 +141,6 @@ class ClientController extends Controller
                 $reste += $commande->reste;
             }
         }
-        $permission = $this->getPermssion(Auth::user()->permission);
-        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
-        // if(in_array('show1',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('show1') == 'yes')
         return view('managements.clients.show')->with([
             'commandes' => $commandes,
@@ -216,9 +157,6 @@ class ClientController extends Controller
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
         $client = Client::where('user_id',$user_id)->findOrFail($client->id);
-        $permission = $this->getPermssion(Auth::user()->permission);
-        $permission_ = $this->getPermssion(User::find(Auth::user()->user_id)->permission);
-        // if(in_array('edit1',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('edit1') == 'yes')
         return view('managements.clients.edit')->with([
             "client" => $client
@@ -228,15 +166,6 @@ class ClientController extends Controller
     }
     
     public function update(Request $request, Client $client){
-        // $this->validate($request, [
-
-        //     'code' => 'required|min:4|max:100',     
-        //     'nom_client' => 'required',
-        //     'telephone' => 'required',
-        //     'adresse' => 'required',
-        //     'solde' => 'required',
-
-        // ]);
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -251,27 +180,17 @@ class ClientController extends Controller
 
         $request->session()->flash('status','Le client a été bien modifié !');
         return redirect()->route('client.index');
-
-        // return redirect()->route('client.index')->with('status','le client a été bien modifié !');
-
     }
     
     public function destroy(Client $client){
         $commandes = Commande::where('client_id','=',$client->id)->get();
         if($commandes->count() != 0){
-            // foreach ($commandes as $commande) {
-            //     $commande->delete();
-            // }
             $msg = "Erreur, Le client déja passer une commande !";
         }
         elseif($commandes->count() == 0){
             $client->delete();
             $msg = "Le client a été supprimé avec succès";
         }
-        // Post::destroy($id); supression directement
-        // return redirect()->route('client.index')->with([
-        //     "status" => "le client, ses commandes et reglements  ont été supprimer avec succès!"
-        // ]); 
         return redirect()->route('client.index')->with(["status" => $msg]); 
     }
     // ---------------------

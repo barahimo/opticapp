@@ -180,8 +180,6 @@ class UserController extends Controller
     public function editUser($id){
         $user = User::where('id',Auth::user()->id)->findOrFail($id);
         $permission = $this->getPermssion(Auth::user()->permission);
-        $permission_edit = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('list9',$permission_edit) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('list9') == 'yes')
         return view('managements.users.edit')->with([
             "user" => $user,
@@ -198,8 +196,6 @@ class UserController extends Controller
     **/
     public function findEmail(Request $request){
         $user_id = Auth::user()->id;
-        // if(Auth::user()->is_admin == 0)
-        //     $user_id = Auth::user()->user_id;
         $user=User::where('email',$request->email)->where('user_id',$user_id)->first();
         $existe = false;
         if($user || $request->email===Auth::user()->email) $existe = true;
@@ -216,10 +212,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        // $users = User::where('is_admin','!=',2)->orderBy('id','desc')->get();
         $users = User::where([['is_admin','!=',2],['user_id',Auth::user()->id]])->orderBy('id','desc')->get();
         $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('list8',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('list8') == 'yes')
         return view('managements.users.index', compact('users','permission'));
         else
@@ -232,8 +226,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('create8',$permission) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('create8') == 'yes')
         return view('managements.users.create');
         else
@@ -251,7 +243,7 @@ class UserController extends Controller
         $name = $request['name'];
         $email = $request['email'];
         $password = Hash::make($request['password']);
-        // $is_admin = $request['is_admin'];
+
         $status = $request['status'];
         $is_admin = 0;
         if(Auth::user()->is_admin == 2)
@@ -296,8 +288,6 @@ class UserController extends Controller
         $user_id = Auth::user()->user_id;
         $user = User::where('user_id',$user_id)->findOrFail($id);
         $permission = $this->getPermssion($user->permission);
-        $permission_edit = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('edit8',$permission_edit) || Auth::user()->is_admin == 2)
         if($this->hasPermssion('edit8') == 'yes')
         return view('managements.users.edit')->with([
             "user" => $user,
@@ -307,8 +297,6 @@ class UserController extends Controller
         else
         return redirect()->back();
     }
-
-    
 
     /**
      * Update the specified resource in storage.
@@ -323,7 +311,7 @@ class UserController extends Controller
         $visibility = $request['visibility'];
         $name = $request['name'];
         $email = $request['email'];
-        // $is_admin = $request['is_admin'];
+
         $status = $request['status'];
         $is_admin = 0;
         if(Auth::user()->is_admin == 2)

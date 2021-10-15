@@ -59,7 +59,6 @@ class CategorieController extends Controller
         return view('managements.categories.createProduit', [
             'categorie' => $categorie
         ]);
-
     }
     /** 
     *--------------------------------------------------------------------------
@@ -68,10 +67,6 @@ class CategorieController extends Controller
     **/
     public function searchCategorie(Request $request){
         $search = $request->search;
-        // $categories = Categorie::where('nom_categorie','like',"%$search%")
-        //     ->orWhere('description','like',"%$search%")
-        //     ->orderBy('id','desc')
-        //     ->get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
@@ -88,31 +83,15 @@ class CategorieController extends Controller
     }
     /** 
     *--------------------------------------------------------------------------
-    * search
-    *--------------------------------------------------------------------------
-    **/
-    public function search(Request $request){
-        $q = $request->input('q');
-
-        $categories =  Categorie::where('nom_categorie', 'like', "%$q%")
-        ->paginate(5);
-
-        return view('managements.categories.search')->with('categories', $categories);  
-    
-    }
-    /** 
-    *--------------------------------------------------------------------------
     * Ressources
     *--------------------------------------------------------------------------
     **/
     public function index(){
         $permission = $this->getPermssion(Auth::user()->permission);
-        // $categories = Categorie::orderBy('id', 'desc')->get();
         $user_id = Auth::user()->id;
         if(Auth::user()->is_admin == 0)
             $user_id = Auth::user()->user_id;
         $categories = Categorie::orderBy('id', 'desc')->where('user_id',$user_id)->get();
-        // return view('managements.categories.index', compact('categories'));
         if($this->hasPermssion('list2') == 'yes')
             return view('managements.categories.index', compact(['categories','permission']));
         else
@@ -129,14 +108,6 @@ class CategorieController extends Controller
     }
 
     public function store(Request $request){  
-            // $validateData = $request->validate([
-            //     'nom_client' => 'required',
-            //     'telephone' => 'required',
-            //     'adresse' => 'required' ,
-            //     'solde' => 'required',
-            //     'code_client' => 'required|min:4|max:100' 
-                        
-            // ]);
         $user_id = Auth::user()->id;
             if(Auth::user()->is_admin == 0)
                 $user_id = Auth::user()->user_id;
@@ -157,8 +128,7 @@ class CategorieController extends Controller
         $user_id = Auth::user()->user_id;
         $categorie = categorie::where('user_id',$user_id)->findOrFail($categorie->id);
         $produits =  Produit::where('categorie_id', '=', $categorie->id)->get();
-        $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('show2',$permission) || Auth::user()->is_admin == 2)
+    
         if($this->hasPermssion('show2') == 'yes')
         return view('managements.categories.show', [
             "categorie" => $categorie,
@@ -173,8 +143,7 @@ class CategorieController extends Controller
         if(Auth::user()->is_admin == 0)
         $user_id = Auth::user()->user_id;
         $categorie = categorie::where('user_id',$user_id)->findOrFail($categorie->id);
-        $permission = $this->getPermssion(Auth::user()->permission);
-        // if(in_array('edit2',$permission) || Auth::user()->is_admin == 2)
+        
         if($this->hasPermssion('edit2') == 'yes')
         return view('managements.categories.edit')->with([
             "categorie" => $categorie
@@ -183,16 +152,7 @@ class CategorieController extends Controller
         return redirect()->back();
     }
     
-    public function update(Request $request, Categorie $categorie){
-        // $this->validate($request, [
-
-        //     'code_client' => 'required|min:4|max:100',     
-        //     'nom_client' => 'required',
-        //     'telephone' => 'required',
-        //     'adresse' => 'required',
-        //     'solde' => 'required',
-
-        // ]);
+    public function update(Request $request, Categorie $categorie){ 
         $user_id = Auth::user()->id;
             if(Auth::user()->is_admin == 0)
                 $user_id = Auth::user()->user_id;
@@ -237,8 +197,6 @@ class CategorieController extends Controller
             $msg = "La catégorie a été supprimée avec succès !";
         }
 
-        // Post::destroy($id); supression directement
-
         return redirect()->route('categorie.index')->with([
             "status" => $msg
         ]); 
@@ -249,25 +207,4 @@ class CategorieController extends Controller
     * Autres fonctions
     *--------------------------------------------------------------------------
     **/
-    public function storeP(Request $request ){
-        $produit = new Produit();
-        $produit->nom_produit = $request->input('nom_produit');
-        $produit->code_produit = $request->input('code_produit');
-        $produit->TVA = $request->input('TVA');
-        $produit->prix_produit_HT = $request->input('prix_produit_HT');
-        $produit->description = $request->input('description');
-        $produit->nom_categorie =  $request->input('nom_categorie');
-
-        // dd($produit);
-
-        $categorieligne = Categorie::where('nom_categorie','like', $produit->nom_categorie)->first();
-        $produit->categorie_id = $categorieligne->id;
-        
-
-        $produit->save();
-
-        $request->session()->flash('status','le produit a été ajouter à cette catégorie !');
-        return redirect()->route('categorie.index');
-
-    }
 }
